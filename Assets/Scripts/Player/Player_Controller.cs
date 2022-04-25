@@ -111,6 +111,10 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
+        if(!canRecieveInput)
+        {
+            return;
+        }
         if(!weaponDrawn)
         {
             return;
@@ -231,6 +235,9 @@ public class Player_Controller : Singleton<Player_Controller>
         pAnimations.Roll();
         pMovement.Roll();
     }
+
+   
+
     private void OnTriggerEnter(Collider hit)
     {
         if(hit.transform.gameObject.GetComponent<GatheringSpots>() != null)

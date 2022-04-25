@@ -21,6 +21,12 @@ public class Animation_Gathering : StateMachineBehaviour
     {
         GameObject gs = Player_Controller.instance.gatheringItem;
         GatheringSpots GS = gs?.GetComponent<GatheringSpots>();
+        Debug.Log(GS?.GatherItem());
+        if (GS?.GatherItem() == "Nothing")
+        {
+            CanvasManager.instance.ShowGatheredItem("You Got " + GS?.GatherItem(), 5f);
+            return;
+        }
         CanvasManager.instance.ShowGatheredItem("You have recieved " + GS?.GatherItem() + " x" + GS.amount + "!", 5f);
     }
 

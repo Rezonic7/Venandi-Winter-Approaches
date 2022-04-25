@@ -146,4 +146,13 @@ public class Player_Movement : Singleton<Player_Movement>
         }
         timeForMaxAccel = timeToReachMaxAccel;
     }
+
+    public void On_PlayerCollision()
+    {
+        playerController.detectCollisions = true;
+    }
+    public void Off_PlayerCollision()
+    {
+        playerController.detectCollisions = false;
+    }
 }

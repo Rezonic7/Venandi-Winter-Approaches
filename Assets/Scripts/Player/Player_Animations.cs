@@ -13,6 +13,11 @@ public class Player_Animations : Singleton<Player_Animations>
         anim = this.GetComponentInChildren<Animator>();
     }
 
+    public void LightDamage()
+    {
+        anim.SetTrigger("Hit_Light");
+    }
+
     public void LightClubStart()
     {
         anim.SetTrigger("LC_Start");
@@ -30,7 +35,7 @@ public class Player_Animations : Singleton<Player_Animations>
 
     public void LCDrawn(bool isTrue)
     {
-        anim.SetBool("LC_Drawn", true);
+        anim.SetBool("LC_Drawn", isTrue);
     }
 
     public void HCDrawn(bool isTrue)

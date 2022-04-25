@@ -37,7 +37,8 @@ public class Player_Variables : Singleton<Player_Variables>
 
         if (currentHealth - value >= 0)
         {
-          
+            Player_Controller.instance.canRecieveInput = false;
+            Player_Animations.instance.LightDamage();  
         }
         else
         {
