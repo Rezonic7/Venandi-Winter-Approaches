@@ -143879,7 +143879,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.8666667
-    functionName: DefMV
+    functionName: Add_MotionValue
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -143914,10 +143914,10 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 2.4333334
-    functionName: LC_HMV
+    functionName: Add_MotionValue
     data: 
     objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
+    floatParameter: 0.3
     intParameter: 0
     messageOptions: 0
   - time: 2.8

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21e4bf4fb15c3044683c721aacd34f84, type: 3}
+  m_Name: Base Armor
+  m_EditorClassIdentifier: 
+  _armorName: Base Armor
+  _defenceValue: 1
+  _modelPrefab: {fileID: 2279184472734261201, guid: ee9742e0198d98e41a202de2fac5741c, type: 3}

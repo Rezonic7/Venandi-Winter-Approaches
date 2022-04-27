@@ -89,6 +89,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a0340a9-c3e6-4e3e-b941-dcb93b446ae7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -212,6 +221,17 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""action"": ""Hide Weapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ffa5dd2-2a9c-463f-9616-748929a17611"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -227,6 +247,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player3DMovement_LookAround = m_Player3DMovement.FindAction("LookAround", throwIfNotFound: true);
         m_Player3DMovement_Interact = m_Player3DMovement.FindAction("Interact", throwIfNotFound: true);
         m_Player3DMovement_HideWeapon = m_Player3DMovement.FindAction("Hide Weapon", throwIfNotFound: true);
+        m_Player3DMovement_Aim = m_Player3DMovement.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -293,6 +314,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player3DMovement_LookAround;
     private readonly InputAction m_Player3DMovement_Interact;
     private readonly InputAction m_Player3DMovement_HideWeapon;
+    private readonly InputAction m_Player3DMovement_Aim;
     public struct Player3DMovementActions
     {
         private @PlayerInputs m_Wrapper;
@@ -304,6 +326,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @LookAround => m_Wrapper.m_Player3DMovement_LookAround;
         public InputAction @Interact => m_Wrapper.m_Player3DMovement_Interact;
         public InputAction @HideWeapon => m_Wrapper.m_Player3DMovement_HideWeapon;
+        public InputAction @Aim => m_Wrapper.m_Player3DMovement_Aim;
         public InputActionMap Get() { return m_Wrapper.m_Player3DMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -334,6 +357,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @HideWeapon.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnHideWeapon;
                 @HideWeapon.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnHideWeapon;
                 @HideWeapon.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnHideWeapon;
+                @Aim.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnAim;
             }
             m_Wrapper.m_Player3DMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -359,6 +385,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @HideWeapon.started += instance.OnHideWeapon;
                 @HideWeapon.performed += instance.OnHideWeapon;
                 @HideWeapon.canceled += instance.OnHideWeapon;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
             }
         }
     }
@@ -372,5 +401,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnLookAround(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnHideWeapon(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }

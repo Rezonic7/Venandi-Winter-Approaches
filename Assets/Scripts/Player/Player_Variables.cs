@@ -32,16 +32,28 @@ public class Player_Variables : Singleton<Player_Variables>
 
     public void TakeDamage(float value)
     {
-        currentHealth -= value;
-        healthBar.value = currentHealth;
-
+        int armorValue = Player_Equipment.instance.totalArmor;
+        if (value - armorValue <= 0)
+        {
+            value = 1;
+        }
+        else
+        {
+            value = value - armorValue;
+        }
+        Debug.Log(value);
         if (currentHealth - value >= 0)
         {
+            currentHealth -= value;
+            healthBar.value = currentHealth;
+
             Player_Controller.instance.canRecieveInput = false;
             Player_Animations.instance.LightDamage();  
         }
         else
         {
+            currentHealth = 0;
+            healthBar.value = currentHealth;
             Debug.Log("Player Died");
         }
     }
