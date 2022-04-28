@@ -9,8 +9,8 @@ public class TrainingDummy : MonoBehaviour
     private float currentHealth;
     private Animator anim;
 
-    public float maxHealth = 100;
-    public float respawnTime = 5;
+    [SerializeField] private float maxHealth = 100;
+    [SerializeField] private float respawnTime = 5;
     private void Start()
     {
         healthBar = GetComponentInChildren<Slider>();

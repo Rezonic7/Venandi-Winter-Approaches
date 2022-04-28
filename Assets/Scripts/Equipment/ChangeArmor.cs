@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class ChangeArmor : MonoBehaviour
 {
-    public ArmorData armorData;
+    [SerializeField] private ArmorData _armorData;
+    public ArmorData ArmorData { get { return _armorData; } }
 }

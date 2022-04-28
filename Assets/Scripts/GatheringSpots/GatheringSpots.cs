@@ -5,13 +5,16 @@ using UnityEngine;
 public class GatheringSpots : MonoBehaviour
 {
     [SerializeField] private GatheringTypeData gatheringData;
-    public int amount;
 
-    public int gatheringTimes;
+    private int _amount;
+    private int _gatheringTimes;
+
+    public int Amount { get { return _amount; } }
+    public int GatheringTimes { set { _gatheringTimes = value; } }
 
     private void Start()
     {
-        gatheringTimes = RandomTimes();
+        _gatheringTimes = RandomTimes();
     }
     
     float total;
@@ -27,15 +30,15 @@ public class GatheringSpots : MonoBehaviour
             if(random <= item.InitialGatherPercentage)
             {
                 total = 0;
-                gatheringTimes -= 1;
-                if(gatheringTimes <= 0)
+                _gatheringTimes -= 1;
+                if(_gatheringTimes <= 0)
                 {
                     Player_Controller.instance.canGather = false;
                     Player_Controller.instance.gatheringItem = null;
                     GatheringSpotManager.instance.Respawn(gameObject.GetComponent<GatheringSpots>(), RandomTimes());
                     gameObject.SetActive(false);
                 }
-                amount = Random.Range(item.MinAmount, item.MaxAmount + 1);
+                _amount = Random.Range(item.MinAmount, item.MaxAmount + 1);
                 return item.Item.Name;
             }
             else

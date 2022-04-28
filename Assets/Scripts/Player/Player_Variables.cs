@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class Player_Variables : Singleton<Player_Variables>
 {
-    public Slider healthBar;
-    public Slider staminaBar;
+    [SerializeField] private Slider healthBar;
+    [SerializeField] private Slider staminaBar;
 
     private float maxHealth = 100;
     private float currentHealth;
@@ -32,7 +32,7 @@ public class Player_Variables : Singleton<Player_Variables>
 
     public void TakeDamage(float value)
     {
-        int armorValue = Player_Equipment.instance.totalArmor;
+        int armorValue = Player_Equipment.instance.TotalArmor;
         if (value - armorValue <= 0)
         {
             value = 1;

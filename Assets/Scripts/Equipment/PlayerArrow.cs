@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class PlayerArrow : MonoBehaviour
 {
-    public float arrowSpeed;
-    public int damage;
+    [SerializeField] private float arrowSpeed;
     private Rigidbody rb;
+    private int _damage;
+    
+    public int Damage { set { _damage = value; } }
+
     private void Start()
     {
          rb = GetComponent<Rigidbody>();
@@ -22,9 +25,9 @@ public class PlayerArrow : MonoBehaviour
         if (collision.transform.gameObject.GetComponent<TrainingDummy>() != null)
         {
             TrainingDummy TD = collision.transform.gameObject.GetComponent<TrainingDummy>();
-            TD.TakeDamage(damage);
+            TD.TakeDamage(_damage);
             Vector3 spawnPos = Camera.main.WorldToScreenPoint(transform.position);
-            CanvasManager.instance.SpawnDamage(damage, spawnPos);
+            CanvasManager.instance.SpawnDamage(_damage, spawnPos);
 
             Destroy(gameObject);
         }

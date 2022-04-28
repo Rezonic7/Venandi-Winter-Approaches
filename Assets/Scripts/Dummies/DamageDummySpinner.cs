@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DamageDummySpinner : MonoBehaviour
 {
-    public int damage;
+    [SerializeField] private int damage;
 
     private void OnTriggerEnter(Collider other)
     {

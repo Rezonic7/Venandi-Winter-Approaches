@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Weapons : Singleton<Weapons>
 {
-    public int damageValue;
-    public bool hasDamaged = false;
+    private int _damageValue;
+    private bool _hasDamaged;
+    public int DamageValue { get { return _damageValue; } set { _damageValue = value; } }
+    public bool HasDamaged { get { return _hasDamaged; } set { _hasDamaged = value; } }
 
     private void Start()
     {
-        hasDamaged = false;
+        HasDamaged = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -18,14 +20,14 @@ public class Weapons : Singleton<Weapons>
         {
             return;
         }
-        if(hasDamaged)
+        if(HasDamaged)
         {
             return;
         }
-        hasDamaged = true;
+        HasDamaged = true;
         TrainingDummy TD = other.gameObject.GetComponent<TrainingDummy>();
-        TD.TakeDamage(damageValue);
+        TD.TakeDamage(_damageValue);
         Vector3 spawnPos = Camera.main.WorldToScreenPoint(transform.position);
-        CanvasManager.instance.SpawnDamage(damageValue, spawnPos);
+        CanvasManager.instance.SpawnDamage(_damageValue, spawnPos);
     }
 }

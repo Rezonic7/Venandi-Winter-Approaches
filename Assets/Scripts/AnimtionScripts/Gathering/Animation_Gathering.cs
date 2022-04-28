@@ -27,7 +27,7 @@ public class Animation_Gathering : StateMachineBehaviour
             CanvasManager.instance.ShowGatheredItem("You Got " + GS?.GatherItem(), 5f);
             return;
         }
-        CanvasManager.instance.ShowGatheredItem("You have recieved " + GS?.GatherItem() + " x" + GS.amount + "!", 5f);
+        CanvasManager.instance.ShowGatheredItem("You have recieved " + GS?.GatherItem() + " x" + GS.Amount + "!", 5f);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

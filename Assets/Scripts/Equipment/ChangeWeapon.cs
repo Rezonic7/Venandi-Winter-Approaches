@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class ChangeWeapon : MonoBehaviour
 {
-    public WeaponTypeData weaponData;
+    [SerializeField] private WeaponTypeData _weaponData;
+    public WeaponTypeData WeaponData { get { return _weaponData; } }
 }

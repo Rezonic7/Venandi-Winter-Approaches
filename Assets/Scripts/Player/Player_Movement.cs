@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Player_Movement : Singleton<Player_Movement>
 {
-    private Camera camera;
+    private Camera mainCamera;
     private CharacterController playerController;
 
     private float defaultMinTurningSpeed;
@@ -15,19 +15,20 @@ public class Player_Movement : Singleton<Player_Movement>
     private float timeForMaxAccel;
     private float timeForRoll;
 
-    public float aimTurnSpeed = 0.2f;
-    public float defaultTurningSpeed = 0.2f;
+    [SerializeField] private float aimTurnSpeed = 0.2f;
+    [SerializeField] private float defaultTurningSpeed = 0.2f;
+    [SerializeField] private float gravity = 9.81f;
+    [SerializeField] private float rollMultiplier = 6f;
+    [SerializeField] private float RollDuration = 5f;
+
+    [SerializeField] private GameObject aimPivot;
+    [SerializeField] private GameObject aimAt;
+    [SerializeField] private GameObject aimPos;
+
     public float moveSpeed;
     public float maxSpeed;
     public float timeToReachMaxAccel;
-    public float gravity = 9.81f;
-    public float rollMultiplier = 6f;
-    public float RollDuration = 5f;
-
-    public GameObject aimPivot;
-    public GameObject aimAt;
-    public GameObject aimPos;
-    public Vector3 gravityForce;
+    private Vector3 gravityForce;
 
     public Vector2 captureDirection;
     public Vector2 movement;
@@ -39,7 +40,7 @@ public class Player_Movement : Singleton<Player_Movement>
     void Start()
     {
         playerController = GetComponent<CharacterController>();
-        camera = Camera.main;
+        mainCamera = Camera.main;
 
         defaultMinTurningSpeed = defaultTurningSpeed;
 
@@ -58,11 +59,11 @@ public class Player_Movement : Singleton<Player_Movement>
         }
         if (Player_Controller.instance.aiming)
         {
-            float targetAngle = camera.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, defaultTurningSpeed);
+            float targetAngle = mainCamera.transform.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, aimTurnSpeed);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            aimPivot.transform.rotation = camera.transform.rotation;
+            aimPivot.transform.rotation = mainCamera.transform.rotation;
 
             aimAt.transform.position = aimPos.transform.position;
         }
@@ -132,7 +133,7 @@ public class Player_Movement : Singleton<Player_Movement>
             
             if (!Player_Controller.instance.aiming)
             {
-                float targetAngle = Mathf.Atan2(MovePosition.x, MovePosition.z) * Mathf.Rad2Deg + camera.transform.eulerAngles.y;
+                float targetAngle = Mathf.Atan2(MovePosition.x, MovePosition.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, defaultMinTurningSpeed);
 
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
@@ -144,7 +145,7 @@ public class Player_Movement : Singleton<Player_Movement>
             }
             else
             {
-                float targetAngle = Mathf.Atan2(MovePosition.x, MovePosition.z) * Mathf.Rad2Deg + camera.transform.eulerAngles.y;
+                float targetAngle = Mathf.Atan2(MovePosition.x, MovePosition.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
                 Vector3 MoveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
                 playerController.Move(MoveDirection * Time.deltaTime * currentSpeed);
@@ -159,7 +160,7 @@ public class Player_Movement : Singleton<Player_Movement>
     public void RollAction(Vector2 movement)
     {
         Vector3 Movement = new Vector3(movement.x, 0, movement.y);
-        float targetAngle = Mathf.Atan2(Movement.x, Movement.z) * Mathf.Rad2Deg + camera.transform.eulerAngles.y;
+        float targetAngle = Mathf.Atan2(Movement.x, Movement.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
         transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
         
         if(timeForRoll <= RollDuration && movement.magnitude != 0)

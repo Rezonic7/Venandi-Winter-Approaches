@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DamageDummy : MonoBehaviour
 {
-    public GameObject arrowPrefab;
-    public GameObject arrowSpawnPos;
-    public float shootCDDuration;
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private GameObject arrowSpawnPos;
+    [SerializeField] private float shootCDDuration;
 
     private Animator anim;
     private float shootCDTimer;

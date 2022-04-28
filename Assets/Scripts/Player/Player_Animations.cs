@@ -5,8 +5,8 @@ using UnityEngine.Animations.Rigging;
 
 public class Player_Animations : Singleton<Player_Animations>
 {
-    private Animator anim;
     [SerializeField] private Rig bowWeight;
+    private Animator anim;
 
     private void Start()
     {

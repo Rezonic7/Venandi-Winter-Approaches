@@ -277,7 +277,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 212817168}
-  m_LocalRotation: {x: 0.17121492, y: -0, z: -0, w: 0.9852337}
+  m_LocalRotation: {x: 0.17121492, y: -1e-45, z: -0, w: 0.9852337}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: -0.3405566, z: -1.708758}
+  m_FollowOffset: {x: 0, y: 2, z: -5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -466,8 +466,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15c41754adb11346be8be8a80cf285e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageValue: 0
-  hasDamaged: 0
 --- !u!54 &320768432
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2090,7 +2088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: -0.3405566, z: -1.708758}
+  m_FollowOffset: {x: 0, y: 2, z: -5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -3062,7 +3060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: -0.3405566, z: -1.708758}
+  m_FollowOffset: {x: 0, y: 2, z: -5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -3430,6 +3428,10 @@ PrefabInstance:
       propertyPath: weaponData
       value: 
       objectReference: {fileID: 11400000, guid: a76aa1034893410408ea7db05a7fa1d3, type: 2}
+    - target: {fileID: 4932177788167003878, guid: 704a97a3024a3d34a9cd4318bc46f2f8, type: 3}
+      propertyPath: _weaponData
+      value: 
+      objectReference: {fileID: 11400000, guid: a76aa1034893410408ea7db05a7fa1d3, type: 2}
     - target: {fileID: 4932177788167003879, guid: 704a97a3024a3d34a9cd4318bc46f2f8, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -3729,6 +3731,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0647527768d8f94aa15bc82796fe584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defCinemachine: {fileID: 4975616848199923469}
+  aimCinemachine: {fileID: 1448084653}
+  reticle: {fileID: 512272146}
   canRecieveInput: 0
   inputRecieved: 0
   readyforFirstAttack: 0
@@ -3736,9 +3741,6 @@ MonoBehaviour:
   weaponDrawn: 0
   canAim: 0
   aiming: 0
-  defCinemachine: {fileID: 4975616848199923469}
-  aimCinemachine: {fileID: 1448084653}
-  reticle: {fileID: 512272146}
   gatheringItem: {fileID: 0}
   weaponData: {fileID: 0}
   armorData: {fileID: 0}
@@ -3771,16 +3773,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aimTurnSpeed: 0.2
   defaultTurningSpeed: 0.1
-  moveSpeed: 1
-  maxSpeed: 5
-  timeToReachMaxAccel: 1
   gravity: 9.8
   rollMultiplier: 8
   RollDuration: 5
   aimPivot: {fileID: 2038851569}
   aimAt: {fileID: 448922053}
   aimPos: {fileID: 1942894877}
-  gravityForce: {x: 0, y: 0, z: 0}
+  moveSpeed: 1
+  maxSpeed: 5
+  timeToReachMaxAccel: 1
   captureDirection: {x: 0, y: 0}
   movement: {x: 0, y: 0}
   isRunning: 0
@@ -3825,17 +3826,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1f1be9d7262ff0429fc55c1201c96ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponData: {fileID: 11400000, guid: 3decd077514691243818e134b08468e9, type: 2}
-  armorData: {fileID: 11400000, guid: 5d40c45ad6a750e4ea76fc016e0d18dc, type: 2}
-  totalDamage: 0
-  totalArmor: 0
+  _weaponData: {fileID: 11400000, guid: 3decd077514691243818e134b08468e9, type: 2}
+  _armorData: {fileID: 11400000, guid: 149a07e2cc0120f4a8d209bd2644a46c, type: 2}
   armorParent: {fileID: 1926725246}
   SheathedParent: {fileID: 1545540323}
   DrawnParent: {fileID: 320768429}
   BowParent: {fileID: 1124567461}
   arrowPrefab: {fileID: 7231758409848430661, guid: e775d6f9fbb62b740bffd1e90a6f5f41, type: 3}
   arrowOrigin: {fileID: 1124567461}
-  arrowDirection: {fileID: 1942894878}
 --- !u!95 &1681325151
 Animator:
   serializedVersion: 3
@@ -4055,7 +4053,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797639196}
-  m_LocalRotation: {x: 0.15331317, y: -0, z: -0, w: 0.98817766}
+  m_LocalRotation: {x: 0.15331317, y: 1e-45, z: -0, w: 0.98817766}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5644,7 +5642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24fbd3728950eb46852442135a8255c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armorData: {fileID: 11400000, guid: 5d40c45ad6a750e4ea76fc016e0d18dc, type: 2}
+  _armorData: {fileID: 11400000, guid: 5d40c45ad6a750e4ea76fc016e0d18dc, type: 2}
 --- !u!135 &3724551710275426782
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5985,6 +5983,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3724551710863337932, guid: c4933286fada3d14db737f6df7c9f6d8, type: 3}
+      propertyPath: _weaponData
+      value: 
+      objectReference: {fileID: 11400000, guid: 3decd077514691243818e134b08468e9, type: 2}
     - target: {fileID: 3724551710863337933, guid: c4933286fada3d14db737f6df7c9f6d8, type: 3}
       propertyPath: m_Name
       value: ChangeWeapon_HeavyClub
@@ -6366,7 +6368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24fbd3728950eb46852442135a8255c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armorData: {fileID: 11400000, guid: 149a07e2cc0120f4a8d209bd2644a46c, type: 2}
+  _armorData: {fileID: 11400000, guid: 149a07e2cc0120f4a8d209bd2644a46c, type: 2}
 --- !u!4 &4932177788990658381
 Transform:
   m_ObjectHideFlags: 0
@@ -6575,6 +6577,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChangeWeapon_LightClub
       objectReference: {fileID: 0}
+    - target: {fileID: 4932177788167003878, guid: 704a97a3024a3d34a9cd4318bc46f2f8, type: 3}
+      propertyPath: _weaponData
+      value: 
+      objectReference: {fileID: 11400000, guid: b54c8d0002769694c8f85ffdf6565139, type: 2}
     - target: {fileID: 4932177788167003879, guid: 704a97a3024a3d34a9cd4318bc46f2f8, type: 3}
       propertyPath: m_RootOrder
       value: 0

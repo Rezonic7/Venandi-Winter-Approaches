@@ -9,21 +9,20 @@ public class Player_Controller : Singleton<Player_Controller>
     private Player_Animations pAnimations;
     private Player_Variables pVariables;
     private Player_Equipment pEquipment;
+    private bool canChangeWeapon = false;
+    private bool canChangeArmor = false;
+
+    [SerializeField] private GameObject defCinemachine;
+    [SerializeField] private GameObject aimCinemachine;
+    [SerializeField] private GameObject reticle;
 
     public bool canRecieveInput = true;
     public bool inputRecieved;
     public bool readyforFirstAttack = true;
     public bool canGather = false;
-    bool canChangeWeapon = false;
-    bool canChangeArmor = false;
     public bool weaponDrawn = false;
     public bool canAim = false;
     public bool aiming = false;
-
-
-    public GameObject defCinemachine;
-    public GameObject aimCinemachine;
-    public GameObject reticle;
 
     public GameObject gatheringItem;
     public WeaponTypeData weaponData;
@@ -44,7 +43,6 @@ public class Player_Controller : Singleton<Player_Controller>
 
     private void Update()
     {
-       
         if(pMovement.isRunning)
         {
             if(pVariables.UseStamina(0.1f))
@@ -67,92 +65,6 @@ public class Player_Controller : Singleton<Player_Controller>
             pAnimations.Walk(false);
         }
     }
-
-    public void OnMovement(InputAction.CallbackContext value)
-    {
-        Vector2 inputMovement = value.ReadValue<Vector2>();
-        pMovement.movement = inputMovement;
-    }
-    public void OnAttack(InputAction.CallbackContext value)
-    {
-        if (!value.started)
-        {
-            return;
-        }
-        if(!canRecieveInput)
-        {
-            return;
-        }
-
-        inputRecieved = true;
-        canRecieveInput = false;
-
-        if(aiming)
-        {
-            pAnimations.BowFire();
-        }
-
-        if (!readyforFirstAttack)
-        {
-            return;
-        }
-
-        readyforFirstAttack = false;
-        weaponDrawn = true;
-
-        switch (pEquipment.weaponData.WeaponType)
-        {
-            case WeaponTypeData.WeaponTypes.LightClub:
-                pAnimations.LightClubStart();
-                pAnimations.LCDrawn(weaponDrawn);
-                break;
-            case WeaponTypeData.WeaponTypes.HeavyClub:
-                pAnimations.HeavyClubStart();
-                pAnimations.HCDrawn(weaponDrawn);
-                break;
-            case WeaponTypeData.WeaponTypes.Bow:
-                pAnimations.BowStart();
-                pAnimations.BowDrawn(weaponDrawn);
-                pEquipment.BowDrawn(weaponDrawn);
-                canAim = true;
-                return;
-                break;
-        }
-        if(!weaponDrawn)
-        {
-            return;
-        }
-        pAnimations.WeaponDrawn(weaponDrawn);
-        pEquipment.WeaponDrawn(weaponDrawn);
-
-    }
-
-    public void OnHideWeapon(InputAction.CallbackContext value)
-    {
-        if(!value.started)
-        {
-            return;
-        }
-        if(!canRecieveInput)
-        {
-            return;
-        }
-        if(!weaponDrawn)
-        {
-            return;
-        }
-        weaponDrawn = false;
-        pAnimations.LCDrawn(weaponDrawn);
-        pAnimations.HCDrawn(weaponDrawn);
-        pAnimations.BowDrawn(weaponDrawn);
-        pEquipment.BowDrawn(weaponDrawn);
-        canAim = false;
-
-        pAnimations.SheathWeight(1);
-        pAnimations.WeaponDrawn(weaponDrawn);
-        pEquipment.WeaponDrawn(weaponDrawn);
-    }
-
     public void InputManager()
     {
         if(!canRecieveInput)
@@ -163,6 +75,11 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             inputRecieved = false;
         }
+    }
+    public void OnMovement(InputAction.CallbackContext value)
+    {
+        Vector2 inputMovement = value.ReadValue<Vector2>();
+        pMovement.movement = inputMovement;
     }
     public void OnRun(InputAction.CallbackContext value)
     {
@@ -196,7 +113,134 @@ public class Player_Controller : Singleton<Player_Controller>
         pMovement.isRunning = true;
         pMovement.maxSpeed = pMovement.maxSpeed * 1.5f;
     }
+    public void OnRoll(InputAction.CallbackContext value)
+    {
+        if(!value.started)
+        {
+            return;
+        }
+        if(!canRecieveInput)
+        {
+            return;
+        }
+        if (pMovement.movement.magnitude <= 0.1f)
+        {
+            return;
+        }
+        if(pMovement.isRolling)
+        {
+            return;
+        }
+        if (!pVariables.UseStamina(25))
+        {
+            return;
+        }
+        pMovement.captureDirection = pMovement.movement;
+        pAnimations.Roll();
+        pMovement.Roll();
+    }
+    public void OnAttack(InputAction.CallbackContext value)
+    {
+        if (!value.started)
+        {
+            return;
+        }
+        if(!canRecieveInput)
+        {
+            return;
+        }
+        inputRecieved = true;
+        canRecieveInput = false;
 
+        if(aiming)
+        {
+            pAnimations.BowFire();
+        }
+
+        if (!readyforFirstAttack)
+        {
+            return;
+        }
+
+        readyforFirstAttack = false;
+        weaponDrawn = true;
+        pMovement.isRunning = false;
+
+        switch (pEquipment.WeaponData.WeaponType)
+        {
+            case WeaponTypeData.WeaponTypes.LightClub:
+                pAnimations.LightClubStart();
+                pAnimations.LCDrawn(weaponDrawn);
+                break;
+            case WeaponTypeData.WeaponTypes.HeavyClub:
+                pAnimations.HeavyClubStart();
+                pAnimations.HCDrawn(weaponDrawn);
+                break;
+            case WeaponTypeData.WeaponTypes.Bow:
+                pAnimations.BowStart();
+                pAnimations.BowDrawn(weaponDrawn);
+                pEquipment.BowDrawn(weaponDrawn);
+                canAim = true;
+                break;
+        }
+        pAnimations.WeaponDrawn(weaponDrawn);
+        pEquipment.WeaponDrawn(weaponDrawn);
+    }
+    public void OnAim(InputAction.CallbackContext value)
+    {
+        if(!canAim)
+        {
+            return;
+        }
+        if(value.canceled)
+        {
+            Debug.Log("Not Aiming");
+            aiming = false;
+            pAnimations.IsAiming(aiming);
+            defCinemachine.SetActive(true);
+            aimCinemachine.SetActive(false);
+            reticle.SetActive(false);
+            pAnimations.StartAimBow(0);
+        }
+        if(!value.performed)
+        {
+            return;
+        }
+        pAnimations.StartAimBow(1);
+        Debug.Log("Aiming");
+        aiming = true;
+        pAnimations.IsAiming(aiming);
+        aimCinemachine.SetActive(true);
+        defCinemachine.SetActive(false);
+        reticle.SetActive(true);
+        
+    }
+    public void OnHideWeapon(InputAction.CallbackContext value)
+    {
+        if(!value.started)
+        {
+            return;
+        }
+        if(!canRecieveInput)
+        {
+            return;
+        }
+        if(!weaponDrawn)
+        {
+            return;
+        }
+        weaponDrawn = false;
+        pAnimations.LCDrawn(weaponDrawn);
+        pAnimations.HCDrawn(weaponDrawn);
+
+        pAnimations.BowDrawn(weaponDrawn);
+        pEquipment.BowDrawn(weaponDrawn);
+        canAim = false;
+
+        pAnimations.SheathWeight(1);
+        pAnimations.WeaponDrawn(weaponDrawn);
+        pEquipment.WeaponDrawn(weaponDrawn);
+    }
     public void OnInteract(InputAction.CallbackContext value)
     {
         if(!value.started)
@@ -239,68 +283,6 @@ public class Player_Controller : Singleton<Player_Controller>
         pAnimations.Gather();
        
     }
-    public void OnAim(InputAction.CallbackContext value)
-    {
-     
-        if(!canAim)
-        {
-            return;
-        }
-        if(value.canceled)
-        {
-            Debug.Log("Not Aiming");
-            aiming = false;
-            pAnimations.IsAiming(aiming);
-            defCinemachine.SetActive(true);
-            aimCinemachine.SetActive(false);
-            reticle.SetActive(false);
-            pAnimations.StartAimBow(0);
-        }
-        if(!value.performed)
-        {
-            return;
-        }
-
-       
-
-
-        pAnimations.StartAimBow(1);
-        Debug.Log("Aiming");
-        aiming = true;
-        pAnimations.IsAiming(aiming);
-        aimCinemachine.SetActive(true);
-        defCinemachine.SetActive(false);
-        reticle.SetActive(true);
-        
-    }
-    public void OnRoll(InputAction.CallbackContext value)
-    {
-        if(!value.started)
-        {
-            return;
-        }
-        if(!canRecieveInput)
-        {
-            return;
-        }
-        if (pMovement.movement.magnitude <= 0.1f)
-        {
-            return;
-        }
-        if(pMovement.isRolling)
-        {
-            return;
-        }
-        if (!pVariables.UseStamina(25))
-        {
-            return;
-        }
-        pMovement.captureDirection = pMovement.movement;
-        pAnimations.Roll();
-        pMovement.Roll();
-    }
-
-    
 
     private void OnTriggerEnter(Collider hit)
     {
@@ -315,14 +297,14 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             CanvasManager.instance.ShowGatheredItem("Press F to interact", 0.5f);
             canChangeWeapon = true;
-            weaponData = hit.GetComponent<ChangeWeapon>().weaponData;
+            weaponData = hit.GetComponent<ChangeWeapon>().WeaponData;
 
         }
         else if (hit.transform.gameObject.GetComponent<ChangeArmor>() != null)
         {
             CanvasManager.instance.ShowGatheredItem("Press F to interact", 0.5f);
             canChangeArmor = true;
-            armorData = hit.GetComponent<ChangeArmor>().armorData;
+            armorData = hit.GetComponent<ChangeArmor>().ArmorData;
 
         }
     }

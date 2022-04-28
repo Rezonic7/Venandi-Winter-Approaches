@@ -10,27 +10,30 @@ public class Player_Equipment : Singleton<Player_Equipment>
 
     private GameObject weaponPrefab;
     private Collider weaponCollider;
-
     private GameObject armorPrefab;
 
     private Vector3 weaponPostition;
     private Quaternion weaponRotation;
     private Vector3 weaponScale;
 
-    public WeaponTypeData weaponData;
-    public ArmorData armorData;
-    public int totalDamage;
-    public int totalArmor;
+    [SerializeField] private WeaponTypeData _weaponData;
+    [SerializeField] private ArmorData _armorData;
+    private int _totalDamage;
+    private int _totalArmor;
 
-    public GameObject armorParent;
-    public GameObject SheathedParent;
-    public GameObject DrawnParent;
-    public GameObject BowParent;
+    [SerializeField] private GameObject armorParent;
 
-    public GameObject arrowPrefab;
-    public GameObject arrowOrigin;
-    public Transform arrowDirection;
+    [SerializeField] private GameObject SheathedParent;
+    [SerializeField] private GameObject DrawnParent;
+    
+    [SerializeField] private GameObject BowParent;
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private GameObject arrowOrigin;
 
+    public WeaponTypeData WeaponData { get { return _weaponData; } set { _weaponData = value; } }
+    public ArmorData ArmorData { get { return _armorData; } set { _armorData = value; } }
+    public int TotalDamage { get { return _totalDamage; } }
+    public int TotalArmor { get { return _totalArmor; } }
 
     // Start is called before the first frame update
     void Start()
@@ -38,58 +41,34 @@ public class Player_Equipment : Singleton<Player_Equipment>
         baseDamage = 1;
         baseArmor = 1;
 
-        totalDamage = baseDamage;
-        totalArmor = baseArmor;
+        _totalDamage = baseDamage;
+        _totalArmor = baseArmor;
 
-        if (weaponData != null)
+        if (_weaponData != null)
         {
-            UpdateSpawnWeapon(weaponData);
+            UpdateSpawnWeapon(_weaponData);
         }
-        if (armorData != null)
+        if (_armorData != null)
         {
-            UpdateSpawnArmor(armorData);
+            UpdateSpawnArmor(_armorData);
         }
     }
-
-    public void SpawnArrow()
-    {
-        float angle = 0f;
-        RaycastHit hit;
-        Vector3 hitPos = Vector3.zero;
-        if (Physics.Raycast(arrowOrigin.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity))
-        {
-            hitPos = hit.point;
-            Debug.DrawLine(arrowOrigin.transform.position, hit.point, Color.blue, 5f);
-            Vector3 direction = hit.point - arrowOrigin.transform.position;
-            angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        }
-        Quaternion rotation = Quaternion.Euler(0, angle, 0);
-
-        GameObject playerArrow = Instantiate(arrowPrefab, arrowOrigin.transform.position, rotation);
-        PlayerArrow pA = playerArrow.GetComponent<PlayerArrow>();
-        pA.damage = totalDamage;
-        playerArrow.transform.LookAt(hitPos);
-
-    }
-
     public void UpdateSpawnArmor(ArmorData newArmorData)
     {
-        armorData = newArmorData;
+        _armorData = newArmorData;
         if (armorPrefab != null)
         {
             Destroy(armorPrefab);
         }
-        armorPrefab = Instantiate(armorData.ModelPrefab, armorParent.transform);
+        armorPrefab = Instantiate(_armorData.ModelPrefab, armorParent.transform);
 
-        totalArmor = baseArmor * UpdateArmorValue(armorData.DefenceValue);
+        _totalArmor = baseArmor * UpdateArmorValue(_armorData.DefenceValue);
     }
-
     private int UpdateArmorValue(int newArmorValue)
     {
         int newValue = baseArmor * newArmorValue;
         return newValue;
     }
-
     public void WeaponDrawn(bool isDrawn)
     {
         if (isDrawn)
@@ -122,12 +101,12 @@ public class Player_Equipment : Singleton<Player_Equipment>
     }
     public void UpdateSpawnWeapon(WeaponTypeData newWeaponData)
     {
-        weaponData = newWeaponData;
+        _weaponData = newWeaponData;
         if (weaponPrefab != null)
         {
             Destroy(weaponPrefab);
         }
-        weaponPrefab = Instantiate(weaponData.ModelPrefab, SheathedParent.transform);
+        weaponPrefab = Instantiate(_weaponData.ModelPrefab, SheathedParent.transform);
 
         weaponPostition = weaponPrefab.transform.localPosition;
         weaponRotation = weaponPrefab.transform.localRotation;
@@ -135,45 +114,62 @@ public class Player_Equipment : Singleton<Player_Equipment>
 
         weaponCollider = weaponPrefab?.GetComponent<Collider>();
 
-        weaponTotal = baseDamage * WeaponTotal(weaponData);
-        totalDamage = weaponTotal;
+        weaponTotal = baseDamage * WeaponTotal(_weaponData);
+        _totalDamage = weaponTotal;
 
-        Weapons.instance.damageValue = totalDamage;
+        Weapons.instance.DamageValue = _totalDamage;
     }
-
     void ResetWeaponTransform()
     {
         weaponPrefab.transform.localPosition = weaponPostition;
         weaponPrefab.transform.localRotation = weaponRotation;
         weaponPrefab.transform.localScale = weaponScale;
     }
+    public void SpawnArrow()
+    {
+        float angle = 0f;
+        RaycastHit hit;
+        Vector3 hitPos = Vector3.zero;
+        if (Physics.Raycast(arrowOrigin.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity))
+        {
+            hitPos = hit.point;
+            Debug.DrawLine(arrowOrigin.transform.position, hit.point, Color.blue, 5f);
+            Vector3 direction = hit.point - arrowOrigin.transform.position;
+            angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        }
+        Quaternion rotation = Quaternion.Euler(0, angle, 0);
 
+        GameObject playerArrow = Instantiate(arrowPrefab, arrowOrigin.transform.position, rotation);
+        PlayerArrow pA = playerArrow.GetComponent<PlayerArrow>();
+        pA.Damage = _totalDamage;
+        playerArrow.transform.LookAt(hitPos);
+
+    }
     private int WeaponTotal(WeaponTypeData atkData)
     {
         int totalAtk = 0;
         switch (atkData.WeaponType)
         {
             case WeaponTypeData.WeaponTypes.LightClub:
-                return totalAtk = MotionValue(atkData.WeaponData.AttackValue, -0.1f);
+                totalAtk = MotionValue(atkData.WeaponData.AttackValue, -0.1f);
                 break;
             case WeaponTypeData.WeaponTypes.HeavyClub:
-                return totalAtk = MotionValue(atkData.WeaponData.AttackValue, 0.5f);
+                totalAtk = MotionValue(atkData.WeaponData.AttackValue, 0.5f);
                 break;
             case WeaponTypeData.WeaponTypes.Bow:
-                return totalAtk = MotionValue(atkData.WeaponData.AttackValue, 0.15f);
+                totalAtk = MotionValue(atkData.WeaponData.AttackValue, 0.15f);
+                break;
         }
         return totalAtk;
     }
-
     private int MotionValue(int WeaponDamage, float PercentageModifier)
     {
         int totalValue = (int)((float)WeaponDamage + (float)((float)WeaponDamage * PercentageModifier));
         return totalValue;
     }
-
     public void EnableWeaponCollision()
     {
-        Weapons.instance.hasDamaged = false;
+        Weapons.instance.HasDamaged = false;
         weaponCollider.enabled = true;
     }
     public void DisableWeaponCollision()
@@ -182,7 +178,7 @@ public class Player_Equipment : Singleton<Player_Equipment>
     }
     public void Add_MotionValue(float percentage)
     {
-        totalDamage = MotionValue(weaponTotal, percentage);
-        Weapons.instance.damageValue = totalDamage;
+        _totalDamage = MotionValue(weaponTotal, percentage);
+        Weapons.instance.DamageValue = TotalDamage;
     }
 }
