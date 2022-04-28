@@ -19,15 +19,23 @@ public class Animation_Gathering : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GameObject gs = Player_Controller.instance.gatheringItem;
-        GatheringSpots GS = gs?.GetComponent<GatheringSpots>();
-        Debug.Log(GS?.GatherItem());
-        if (GS?.GatherItem() == "Nothing")
+        GatheringSpots GS = Player_Controller.instance.gatheringItem?.GetComponent<GatheringSpots>();
+        GatherableMaterialData item = GS?.GatherItem();
+        int amount = Random.Range(item.MinAmount, item.MaxAmount + 1);
+
+        Debug.Log(item.Item.Name + amount);
+        if (item.Item.Name == "Nothing")
         {
-            CanvasManager.instance.ShowGatheredItem("You Got " + GS?.GatherItem(), 5f);
+            CanvasManager.instance.ShowInfo("You Got Nothing", 5f);
             return;
         }
-        CanvasManager.instance.ShowGatheredItem("You have recieved " + GS?.GatherItem() + " x" + GS.Amount + "!", 5f);
+        if (amount <= 0)
+        {
+            CanvasManager.instance.ShowInfo("You Got Nothing", 5f);
+            return;
+        }
+        Player_Inventory.instance.AddItem(item.Item, amount);
+        CanvasManager.instance.ShowInfo("You have recieved " + item.Item.Name + " x" + amount + "!", 5f);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

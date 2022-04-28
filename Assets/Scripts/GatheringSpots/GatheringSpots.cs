@@ -6,10 +6,7 @@ public class GatheringSpots : MonoBehaviour
 {
     [SerializeField] private GatheringTypeData gatheringData;
 
-    private int _amount;
     private int _gatheringTimes;
-
-    public int Amount { get { return _amount; } }
     public int GatheringTimes { set { _gatheringTimes = value; } }
 
     private void Start()
@@ -18,7 +15,8 @@ public class GatheringSpots : MonoBehaviour
     }
     
     float total;
-    public string GatherItem()
+   
+    public GatherableMaterialData GatherItem()
     {
         foreach(var item in gatheringData.ListOfGatherableMaterials)
         {
@@ -29,8 +27,8 @@ public class GatheringSpots : MonoBehaviour
         {
             if(random <= item.InitialGatherPercentage)
             {
-                total = 0;
                 _gatheringTimes -= 1;
+                total = 0;
                 if(_gatheringTimes <= 0)
                 {
                     Player_Controller.instance.canGather = false;
@@ -38,8 +36,7 @@ public class GatheringSpots : MonoBehaviour
                     GatheringSpotManager.instance.Respawn(gameObject.GetComponent<GatheringSpots>(), RandomTimes());
                     gameObject.SetActive(false);
                 }
-                _amount = Random.Range(item.MinAmount, item.MaxAmount + 1);
-                return item.Item.Name;
+                return item;
             }
             else
             {
@@ -47,7 +44,7 @@ public class GatheringSpots : MonoBehaviour
             }
         }
         total = 0;
-        return "You got nothing";
+        return null;
     }
 
     private int RandomTimes()

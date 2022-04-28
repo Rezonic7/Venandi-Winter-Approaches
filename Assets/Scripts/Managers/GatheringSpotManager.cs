@@ -11,7 +11,7 @@ public class GatheringSpotManager : Singleton<GatheringSpotManager>
 
     IEnumerator RespawnTimer(GatheringSpots gs, int newRandomTimes)
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(10);
         gs.GatheringTimes = newRandomTimes;
         gs.gameObject.SetActive(true);
     }

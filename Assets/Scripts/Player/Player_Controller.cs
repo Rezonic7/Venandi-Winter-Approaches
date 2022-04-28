@@ -9,6 +9,7 @@ public class Player_Controller : Singleton<Player_Controller>
     private Player_Animations pAnimations;
     private Player_Variables pVariables;
     private Player_Equipment pEquipment;
+    private Player_Inventory pInventory;
     private bool canChangeWeapon = false;
     private bool canChangeArmor = false;
 
@@ -30,6 +31,7 @@ public class Player_Controller : Singleton<Player_Controller>
 
     private void Start()
     {
+        canAim = false;
         canRecieveInput = true;
         readyforFirstAttack = true;
         canGather = false;
@@ -39,6 +41,7 @@ public class Player_Controller : Singleton<Player_Controller>
         pAnimations = GetComponent<Player_Animations>();
         pVariables = GetComponent<Player_Variables>();
         pEquipment = GetComponent<Player_Equipment>();
+        pInventory = GetComponent<Player_Inventory>();
     }
 
     private void Update()
@@ -85,6 +88,10 @@ public class Player_Controller : Singleton<Player_Controller>
     {
         if (value.canceled)
         {
+            if(!pMovement.isRunning)
+            {
+                return;
+            }
             if(weaponDrawn)
             {
                 return;
@@ -98,6 +105,10 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
+        if(!canRecieveInput)
+        {
+            return;
+        }
         if (pMovement.movement.magnitude <= 0.1f)
         {
             return;
@@ -108,7 +119,21 @@ public class Player_Controller : Singleton<Player_Controller>
         }
         if (weaponDrawn)
         {
-            return;
+            if (aiming)
+            {
+                return;
+            }
+            weaponDrawn = false;
+            pAnimations.LCDrawn(weaponDrawn);
+            pAnimations.HCDrawn(weaponDrawn);
+
+            pAnimations.BowDrawn(weaponDrawn);
+            pEquipment.BowDrawn(weaponDrawn);
+            canAim = false;
+
+            pAnimations.SheathWeight(1);
+            pAnimations.WeaponDrawn(weaponDrawn);
+            pEquipment.WeaponDrawn(weaponDrawn);
         }
         pMovement.isRunning = true;
         pMovement.maxSpeed = pMovement.maxSpeed * 1.5f;
@@ -131,6 +156,10 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
+        if(aiming)
+        {
+            return;
+        }
         if (!pVariables.UseStamina(25))
         {
             return;
@@ -149,13 +178,20 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
+        if(canAim)
+        {
+            if (aiming)
+            {
+                inputRecieved = true;
+                canRecieveInput = false;
+                pAnimations.BowFire();
+                return;
+            }
+            return;
+        }
+
         inputRecieved = true;
         canRecieveInput = false;
-
-        if(aiming)
-        {
-            pAnimations.BowFire();
-        }
 
         if (!readyforFirstAttack)
         {
@@ -182,6 +218,10 @@ public class Player_Controller : Singleton<Player_Controller>
                 pEquipment.BowDrawn(weaponDrawn);
                 canAim = true;
                 break;
+        }
+        if(canAim)
+        {
+            return;
         }
         pAnimations.WeaponDrawn(weaponDrawn);
         pEquipment.WeaponDrawn(weaponDrawn);
@@ -229,6 +269,10 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
+        if(aiming)
+        {
+            return;
+        }
         weaponDrawn = false;
         pAnimations.LCDrawn(weaponDrawn);
         pAnimations.HCDrawn(weaponDrawn);
@@ -253,7 +297,7 @@ public class Player_Controller : Singleton<Player_Controller>
         }
         if(canChangeWeapon)
         {
-            CanvasManager.instance.ShowGatheredItem("You changed your weapon!", 1f);
+            CanvasManager.instance.ShowInfo("You changed your weapon!", 1f);
             weaponDrawn = false;
             pAnimations.LCDrawn(weaponDrawn);
             pAnimations.HCDrawn(weaponDrawn);
@@ -267,7 +311,7 @@ public class Player_Controller : Singleton<Player_Controller>
         }
         if(canChangeArmor)
         {
-            CanvasManager.instance.ShowGatheredItem("You changed your Armor!", 1f);
+            CanvasManager.instance.ShowInfo("You changed your Armor!", 1f);
             pEquipment.UpdateSpawnArmor(armorData);
         }
         if (!canGather)
@@ -288,21 +332,21 @@ public class Player_Controller : Singleton<Player_Controller>
     {
         if(hit.transform.gameObject.GetComponent<GatheringSpots>() != null)
         {
-            CanvasManager.instance.ShowGatheredItem("Press F to interact", 0.5f);
+            CanvasManager.instance.ShowInfo("Press F to interact", 0.5f);
             canGather = true;
             gatheringItem = hit.gameObject;
             
         }
         else if(hit.transform.gameObject.GetComponent<ChangeWeapon>() != null)
         {
-            CanvasManager.instance.ShowGatheredItem("Press F to interact", 0.5f);
+            CanvasManager.instance.ShowInfo("Press F to interact", 0.5f);
             canChangeWeapon = true;
             weaponData = hit.GetComponent<ChangeWeapon>().WeaponData;
 
         }
         else if (hit.transform.gameObject.GetComponent<ChangeArmor>() != null)
         {
-            CanvasManager.instance.ShowGatheredItem("Press F to interact", 0.5f);
+            CanvasManager.instance.ShowInfo("Press F to interact", 0.5f);
             canChangeArmor = true;
             armorData = hit.GetComponent<ChangeArmor>().ArmorData;
 

@@ -27,7 +27,7 @@ public class CanvasManager : Singleton<CanvasManager>
         g.textValue = damage.ToString();
         Destroy(g.gameObject, 1f);
     }
-    public void ShowGatheredItem(string info, float timeToDestroy)
+    public void ShowInfo(string info, float timeToDestroy)
     {
         InformationText g;
         Vector3 middleOfScreenOffset = middleOfScreen;
