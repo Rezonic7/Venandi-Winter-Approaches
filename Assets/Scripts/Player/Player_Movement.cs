@@ -27,6 +27,10 @@ public class Player_Movement : Singleton<Player_Movement>
 
     public float moveSpeed;
     public float maxSpeed;
+
+    public float runSpeed;
+    public float walkSpeed;
+
     public float timeToReachMaxAccel;
     private Vector3 gravityForce;
 
@@ -41,6 +45,9 @@ public class Player_Movement : Singleton<Player_Movement>
     {
         playerController = GetComponent<CharacterController>();
         mainCamera = Camera.main;
+
+        walkSpeed = maxSpeed;
+        runSpeed = maxSpeed * 1.5f;
 
         defaultMinTurningSpeed = defaultTurningSpeed;
 

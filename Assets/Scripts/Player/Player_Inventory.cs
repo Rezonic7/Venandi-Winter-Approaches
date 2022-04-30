@@ -2,15 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class Player_Inventory : Singleton<Player_Inventory>
 {
-    public List<ItemData> items;
-    public List<int> currentStacks;
-    public List<Image> Image;
+    [SerializeField] private GameObject slotHolder;
 
-    public void AddItem(ItemData newItem, int amount)
+    public List<ItemClass> items = new List<ItemClass>();
+    public int[] currentStacks;
+
+    private GameObject[] slots;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        if(items.Count >= 10)
+        slots = new GameObject[slotHolder.transform.childCount];
+        currentStacks = new int[slotHolder.transform.childCount];
+        for (int i = 0; i < slotHolder.transform.childCount; i++)
+        {
+            slots[i] = slotHolder.transform.GetChild(i).gameObject;
+        }
+        RefreshUI();
+    }
+
+    public void AddItem(ItemClass newItem, int amount)
+    {
+        if (items.Count >= slots.Length + 1)
         {
             Debug.Log("Inventory Full");
             return;
@@ -21,18 +37,16 @@ public class Player_Inventory : Singleton<Player_Inventory>
             return;
         }
         items.Add(newItem);
-        UpdateInventory();
         Stack(newItem, amount);
+        RefreshUI();
     }
 
-    void Stack(ItemData newItem, int amount)
+    void Stack(ItemClass newItem, int amount)
     {
         if (currentStacks[items.IndexOf(newItem)] + amount <= newItem.MaxStack)
         {
             int totalAmount = currentStacks[items.IndexOf(newItem)] + amount;
             currentStacks[items.IndexOf(newItem)] = totalAmount;
-            Image[items.IndexOf(newItem)].sprite = newItem.ImageSprite;
-            Image[items.IndexOf(newItem)].gameObject.GetComponentInChildren<Text>().text = totalAmount.ToString();
         }
         else
         {
@@ -40,18 +54,24 @@ public class Player_Inventory : Singleton<Player_Inventory>
             currentStacks[items.IndexOf(newItem)] = newItem.MaxStack;
         }
     }
-    void UpdateInventory()
-    {
-        for(int i = 0; i < items.Count; i++)
-        {
 
-            if (items.Count != currentStacks.Count)
+    public void RefreshUI()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            try
             {
-                currentStacks.Add(0);
+                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
+                slots[i].transform.GetChild(1).GetComponent<Text>().enabled = true;
+                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i].ImageSprite;
+                slots[i].transform.GetChild(1).GetComponent<Text>().text = currentStacks[i].ToString();
             }
-            else
+            catch
             {
-                return;
+                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = false;
+                slots[i].transform.GetChild(1).GetComponent<Text>().enabled = false;
+                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = null;
+                slots[i].transform.GetChild(1).GetComponent<Text>().text = 0.ToString();
             }
         }
     }

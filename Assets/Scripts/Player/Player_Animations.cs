@@ -82,6 +82,11 @@ public class Player_Animations : Singleton<Player_Animations>
         anim.SetBool("isWalking", isTrue);
     }
 
+    public void JumpAttack()
+    {
+        anim.SetTrigger("JumpAttack");
+    }
+
     public void Run(bool isTrue)
     {
         anim.SetBool("isRunning", isTrue);

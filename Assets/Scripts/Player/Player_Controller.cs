@@ -16,6 +16,7 @@ public class Player_Controller : Singleton<Player_Controller>
     [SerializeField] private GameObject defCinemachine;
     [SerializeField] private GameObject aimCinemachine;
     [SerializeField] private GameObject reticle;
+    [SerializeField] private GameObject inventory;
 
     public bool canRecieveInput = true;
     public bool inputRecieved;
@@ -36,6 +37,7 @@ public class Player_Controller : Singleton<Player_Controller>
         readyforFirstAttack = true;
         canGather = false;
         canChangeWeapon = false;
+        inventory.SetActive(false);
 
         pMovement = GetComponent<Player_Movement>();
         pAnimations = GetComponent<Player_Animations>();
@@ -51,13 +53,19 @@ public class Player_Controller : Singleton<Player_Controller>
             if(pVariables.UseStamina(0.1f))
             {
                 pAnimations.Run(true);
+                pMovement.maxSpeed = pMovement.maxSpeed = pMovement.runSpeed;
             }
             else
             {
                 pMovement.isRunning = false;
                 pAnimations.Run(false);
-                pMovement.maxSpeed = pMovement.maxSpeed / 1.5f;
+                pMovement.maxSpeed = pMovement.maxSpeed = pMovement.walkSpeed;
             }
+        }
+        else
+        {
+            pAnimations.Run(false);
+            pMovement.maxSpeed = pMovement.maxSpeed = pMovement.walkSpeed;
         }
         if(pMovement.movement.magnitude >= 0.1f)
         {
@@ -66,6 +74,21 @@ public class Player_Controller : Singleton<Player_Controller>
         else
         {
             pAnimations.Walk(false);
+        }
+    }
+    public void OnToggleInventory(InputAction.CallbackContext value)
+    {
+        if(!value.started)
+        {
+            return;
+        }
+        if(inventory.activeSelf)
+        {
+            inventory.SetActive(false);
+        }
+        else
+        {
+            inventory.SetActive(true);
         }
     }
     public void InputManager()
@@ -97,8 +120,6 @@ public class Player_Controller : Singleton<Player_Controller>
                 return;
             }
             pMovement.isRunning = false;
-            pAnimations.Run(false);
-            pMovement.maxSpeed = pMovement.maxSpeed / 1.5f;
         }
 
         if (!value.started)
@@ -123,20 +144,9 @@ public class Player_Controller : Singleton<Player_Controller>
             {
                 return;
             }
-            weaponDrawn = false;
-            pAnimations.LCDrawn(weaponDrawn);
-            pAnimations.HCDrawn(weaponDrawn);
-
-            pAnimations.BowDrawn(weaponDrawn);
-            pEquipment.BowDrawn(weaponDrawn);
-            canAim = false;
-
-            pAnimations.SheathWeight(1);
-            pAnimations.WeaponDrawn(weaponDrawn);
-            pEquipment.WeaponDrawn(weaponDrawn);
+            SheathWeapon();
         }
         pMovement.isRunning = true;
-        pMovement.maxSpeed = pMovement.maxSpeed * 1.5f;
     }
     public void OnRoll(InputAction.CallbackContext value)
     {
@@ -192,6 +202,24 @@ public class Player_Controller : Singleton<Player_Controller>
 
         inputRecieved = true;
         canRecieveInput = false;
+        weaponDrawn = true;
+
+        if(pMovement.isRunning)
+        {
+            pAnimations.JumpAttack();
+            switch (pEquipment.WeaponData.WeaponType)
+            {
+                case WeaponTypeData.WeaponTypes.LightClub:
+                    pAnimations.LCDrawn(weaponDrawn);
+                    break;
+                case WeaponTypeData.WeaponTypes.HeavyClub:
+                    pAnimations.HCDrawn(weaponDrawn);
+                    break;
+            }
+            pAnimations.WeaponDrawn(weaponDrawn);
+            pEquipment.WeaponDrawn(weaponDrawn);
+            return;
+        }
 
         if (!readyforFirstAttack)
         {
@@ -199,8 +227,6 @@ public class Player_Controller : Singleton<Player_Controller>
         }
 
         readyforFirstAttack = false;
-        weaponDrawn = true;
-        pMovement.isRunning = false;
 
         switch (pEquipment.WeaponData.WeaponType)
         {
@@ -219,7 +245,8 @@ public class Player_Controller : Singleton<Player_Controller>
                 canAim = true;
                 break;
         }
-        if(canAim)
+
+        if (canAim)
         {
             return;
         }
@@ -273,18 +300,9 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        weaponDrawn = false;
-        pAnimations.LCDrawn(weaponDrawn);
-        pAnimations.HCDrawn(weaponDrawn);
-
-        pAnimations.BowDrawn(weaponDrawn);
-        pEquipment.BowDrawn(weaponDrawn);
-        canAim = false;
-
-        pAnimations.SheathWeight(1);
-        pAnimations.WeaponDrawn(weaponDrawn);
-        pEquipment.WeaponDrawn(weaponDrawn);
+        SheathWeapon();
     }
+
     public void OnInteract(InputAction.CallbackContext value)
     {
         if(!value.started)
@@ -326,6 +344,20 @@ public class Player_Controller : Singleton<Player_Controller>
         canRecieveInput = false;
         pAnimations.Gather();
        
+    }
+    void SheathWeapon()
+    {
+        weaponDrawn = false;
+        pAnimations.LCDrawn(weaponDrawn);
+        pAnimations.HCDrawn(weaponDrawn);
+
+        pAnimations.BowDrawn(weaponDrawn);
+        pEquipment.BowDrawn(weaponDrawn);
+        canAim = false;
+
+        pAnimations.SheathWeight(1);
+        pAnimations.WeaponDrawn(weaponDrawn);
+        pEquipment.WeaponDrawn(weaponDrawn);
     }
 
     private void OnTriggerEnter(Collider hit)

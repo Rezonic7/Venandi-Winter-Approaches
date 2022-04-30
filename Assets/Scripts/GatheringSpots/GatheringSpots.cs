@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GatheringSpots : MonoBehaviour
 {
-    [SerializeField] private GatheringTypeData gatheringData;
+    [SerializeField] private GatheringSpotType gatheringData;
 
     private int _gatheringTimes;
     public int GatheringTimes { set { _gatheringTimes = value; } }
@@ -16,14 +16,14 @@ public class GatheringSpots : MonoBehaviour
     
     float total;
    
-    public GatherableMaterialData GatherItem()
+    public GatherableItems GatherItem()
     {
-        foreach(var item in gatheringData.ListOfGatherableMaterials)
+        foreach(var item in gatheringData.ListOfGatherableItems)
         {
             total += item.InitialGatherPercentage;
         }
         float random = Random.Range(0, total);
-        foreach (var item in gatheringData.ListOfGatherableMaterials)
+        foreach (var item in gatheringData.ListOfGatherableItems)
         {
             if(random <= item.InitialGatherPercentage)
             {

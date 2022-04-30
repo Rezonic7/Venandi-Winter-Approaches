@@ -98,6 +98,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Toggle Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""762656a3-0c83-4bed-9e94-fcf85aa47f16"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +241,17 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d4906cb7-6441-4079-a4d6-37cec60b55b3"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -248,6 +268,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player3DMovement_Interact = m_Player3DMovement.FindAction("Interact", throwIfNotFound: true);
         m_Player3DMovement_HideWeapon = m_Player3DMovement.FindAction("Hide Weapon", throwIfNotFound: true);
         m_Player3DMovement_Aim = m_Player3DMovement.FindAction("Aim", throwIfNotFound: true);
+        m_Player3DMovement_ToggleInventory = m_Player3DMovement.FindAction("Toggle Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -315,6 +336,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player3DMovement_Interact;
     private readonly InputAction m_Player3DMovement_HideWeapon;
     private readonly InputAction m_Player3DMovement_Aim;
+    private readonly InputAction m_Player3DMovement_ToggleInventory;
     public struct Player3DMovementActions
     {
         private @PlayerInputs m_Wrapper;
@@ -327,6 +349,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player3DMovement_Interact;
         public InputAction @HideWeapon => m_Wrapper.m_Player3DMovement_HideWeapon;
         public InputAction @Aim => m_Wrapper.m_Player3DMovement_Aim;
+        public InputAction @ToggleInventory => m_Wrapper.m_Player3DMovement_ToggleInventory;
         public InputActionMap Get() { return m_Wrapper.m_Player3DMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -360,6 +383,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Aim.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnAim;
+                @ToggleInventory.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnToggleInventory;
+                @ToggleInventory.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnToggleInventory;
+                @ToggleInventory.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnToggleInventory;
             }
             m_Wrapper.m_Player3DMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -388,6 +414,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @ToggleInventory.started += instance.OnToggleInventory;
+                @ToggleInventory.performed += instance.OnToggleInventory;
+                @ToggleInventory.canceled += instance.OnToggleInventory;
             }
         }
     }
@@ -402,5 +431,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnHideWeapon(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnToggleInventory(InputAction.CallbackContext context);
     }
 }
