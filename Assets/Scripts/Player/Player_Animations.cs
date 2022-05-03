@@ -51,6 +51,14 @@ public class Player_Animations : Singleton<Player_Animations>
     {
         anim.SetTrigger("HC_Start");
     }
+    public void SpecialTrigger()
+    {
+        anim.SetTrigger("Special");
+    }
+    public void HC_SP(string special)
+    {
+        anim.SetTrigger(special);
+    }
 
     public void WeaponDrawn(bool isTrue)
     {
@@ -82,9 +90,10 @@ public class Player_Animations : Singleton<Player_Animations>
         anim.SetBool("isWalking", isTrue);
     }
 
-    public void JumpAttack()
+
+    public void RunAttack()
     {
-        anim.SetTrigger("JumpAttack");
+        anim.SetTrigger("RunAttack");
     }
 
     public void Run(bool isTrue)

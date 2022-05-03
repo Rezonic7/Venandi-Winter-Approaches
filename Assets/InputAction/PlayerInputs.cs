@@ -37,6 +37,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Toggle Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""370448a1-a35a-4e17-9814-c309b469f1ce"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Roll"",
                     ""type"": ""Button"",
                     ""id"": ""106016ac-dc2f-4e84-aea4-2945bc93ce18"",
@@ -91,21 +100,12 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Aim"",
+                    ""name"": ""Special"",
                     ""type"": ""Button"",
                     ""id"": ""8a0340a9-c3e6-4e3e-b941-dcb93b446ae7"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Toggle Inventory"",
-                    ""type"": ""Button"",
-                    ""id"": ""762656a3-0c83-4bed-9e94-fcf85aa47f16"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],
@@ -238,18 +238,86 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Aim"",
+                    ""action"": ""Special"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""d4906cb7-6441-4079-a4d6-37cec60b55b3"",
+                    ""id"": ""8ca500b9-e95e-49d2-8508-f34b1020447d"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Toggle Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Inventory"",
+            ""id"": ""c81f70ad-c81c-430f-b7b8-36938ab9f3a4"",
+            ""actions"": [
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""f17cdc52-f375-4c6a-b21c-6c873f9ebd5e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""1249b58c-49ce-4ecf-b506-4172774e9e19"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Toggle Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""50b55982-7071-40fb-b286-044d601b29fb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d3b8b589-2be3-4324-9e2a-efa7e53a415e"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3ba42e1-04c0-4f9a-b0ae-12232fc0e393"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c675a102-86bc-4e3a-8853-a45672df247e"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -261,14 +329,19 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         // Player3DMovement
         m_Player3DMovement = asset.FindActionMap("Player3DMovement", throwIfNotFound: true);
         m_Player3DMovement_Walk = m_Player3DMovement.FindAction("Walk", throwIfNotFound: true);
+        m_Player3DMovement_ToggleInventory = m_Player3DMovement.FindAction("Toggle Inventory", throwIfNotFound: true);
         m_Player3DMovement_Roll = m_Player3DMovement.FindAction("Roll", throwIfNotFound: true);
         m_Player3DMovement_Run = m_Player3DMovement.FindAction("Run", throwIfNotFound: true);
         m_Player3DMovement_MeleeAttack = m_Player3DMovement.FindAction("MeleeAttack", throwIfNotFound: true);
         m_Player3DMovement_LookAround = m_Player3DMovement.FindAction("LookAround", throwIfNotFound: true);
         m_Player3DMovement_Interact = m_Player3DMovement.FindAction("Interact", throwIfNotFound: true);
         m_Player3DMovement_HideWeapon = m_Player3DMovement.FindAction("Hide Weapon", throwIfNotFound: true);
-        m_Player3DMovement_Aim = m_Player3DMovement.FindAction("Aim", throwIfNotFound: true);
-        m_Player3DMovement_ToggleInventory = m_Player3DMovement.FindAction("Toggle Inventory", throwIfNotFound: true);
+        m_Player3DMovement_Special = m_Player3DMovement.FindAction("Special", throwIfNotFound: true);
+        // Inventory
+        m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
+        m_Inventory_Select = m_Inventory.FindAction("Select", throwIfNotFound: true);
+        m_Inventory_MousePosition = m_Inventory.FindAction("MousePosition", throwIfNotFound: true);
+        m_Inventory_ToggleInventory = m_Inventory.FindAction("Toggle Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -329,27 +402,27 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player3DMovement;
     private IPlayer3DMovementActions m_Player3DMovementActionsCallbackInterface;
     private readonly InputAction m_Player3DMovement_Walk;
+    private readonly InputAction m_Player3DMovement_ToggleInventory;
     private readonly InputAction m_Player3DMovement_Roll;
     private readonly InputAction m_Player3DMovement_Run;
     private readonly InputAction m_Player3DMovement_MeleeAttack;
     private readonly InputAction m_Player3DMovement_LookAround;
     private readonly InputAction m_Player3DMovement_Interact;
     private readonly InputAction m_Player3DMovement_HideWeapon;
-    private readonly InputAction m_Player3DMovement_Aim;
-    private readonly InputAction m_Player3DMovement_ToggleInventory;
+    private readonly InputAction m_Player3DMovement_Special;
     public struct Player3DMovementActions
     {
         private @PlayerInputs m_Wrapper;
         public Player3DMovementActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Walk => m_Wrapper.m_Player3DMovement_Walk;
+        public InputAction @ToggleInventory => m_Wrapper.m_Player3DMovement_ToggleInventory;
         public InputAction @Roll => m_Wrapper.m_Player3DMovement_Roll;
         public InputAction @Run => m_Wrapper.m_Player3DMovement_Run;
         public InputAction @MeleeAttack => m_Wrapper.m_Player3DMovement_MeleeAttack;
         public InputAction @LookAround => m_Wrapper.m_Player3DMovement_LookAround;
         public InputAction @Interact => m_Wrapper.m_Player3DMovement_Interact;
         public InputAction @HideWeapon => m_Wrapper.m_Player3DMovement_HideWeapon;
-        public InputAction @Aim => m_Wrapper.m_Player3DMovement_Aim;
-        public InputAction @ToggleInventory => m_Wrapper.m_Player3DMovement_ToggleInventory;
+        public InputAction @Special => m_Wrapper.m_Player3DMovement_Special;
         public InputActionMap Get() { return m_Wrapper.m_Player3DMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -362,6 +435,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Walk.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnWalk;
                 @Walk.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnWalk;
                 @Walk.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnWalk;
+                @ToggleInventory.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnToggleInventory;
+                @ToggleInventory.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnToggleInventory;
+                @ToggleInventory.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnToggleInventory;
                 @Roll.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnRoll;
                 @Roll.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnRoll;
                 @Roll.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnRoll;
@@ -380,12 +456,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @HideWeapon.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnHideWeapon;
                 @HideWeapon.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnHideWeapon;
                 @HideWeapon.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnHideWeapon;
-                @Aim.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnAim;
-                @Aim.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnAim;
-                @Aim.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnAim;
-                @ToggleInventory.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnToggleInventory;
-                @ToggleInventory.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnToggleInventory;
-                @ToggleInventory.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnToggleInventory;
+                @Special.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnSpecial;
+                @Special.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnSpecial;
+                @Special.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnSpecial;
             }
             m_Wrapper.m_Player3DMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -393,6 +466,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Walk.started += instance.OnWalk;
                 @Walk.performed += instance.OnWalk;
                 @Walk.canceled += instance.OnWalk;
+                @ToggleInventory.started += instance.OnToggleInventory;
+                @ToggleInventory.performed += instance.OnToggleInventory;
+                @ToggleInventory.canceled += instance.OnToggleInventory;
                 @Roll.started += instance.OnRoll;
                 @Roll.performed += instance.OnRoll;
                 @Roll.canceled += instance.OnRoll;
@@ -411,26 +487,78 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @HideWeapon.started += instance.OnHideWeapon;
                 @HideWeapon.performed += instance.OnHideWeapon;
                 @HideWeapon.canceled += instance.OnHideWeapon;
-                @Aim.started += instance.OnAim;
-                @Aim.performed += instance.OnAim;
-                @Aim.canceled += instance.OnAim;
+                @Special.started += instance.OnSpecial;
+                @Special.performed += instance.OnSpecial;
+                @Special.canceled += instance.OnSpecial;
+            }
+        }
+    }
+    public Player3DMovementActions @Player3DMovement => new Player3DMovementActions(this);
+
+    // Inventory
+    private readonly InputActionMap m_Inventory;
+    private IInventoryActions m_InventoryActionsCallbackInterface;
+    private readonly InputAction m_Inventory_Select;
+    private readonly InputAction m_Inventory_MousePosition;
+    private readonly InputAction m_Inventory_ToggleInventory;
+    public struct InventoryActions
+    {
+        private @PlayerInputs m_Wrapper;
+        public InventoryActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Select => m_Wrapper.m_Inventory_Select;
+        public InputAction @MousePosition => m_Wrapper.m_Inventory_MousePosition;
+        public InputAction @ToggleInventory => m_Wrapper.m_Inventory_ToggleInventory;
+        public InputActionMap Get() { return m_Wrapper.m_Inventory; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InventoryActions set) { return set.Get(); }
+        public void SetCallbacks(IInventoryActions instance)
+        {
+            if (m_Wrapper.m_InventoryActionsCallbackInterface != null)
+            {
+                @Select.started -= m_Wrapper.m_InventoryActionsCallbackInterface.OnSelect;
+                @Select.performed -= m_Wrapper.m_InventoryActionsCallbackInterface.OnSelect;
+                @Select.canceled -= m_Wrapper.m_InventoryActionsCallbackInterface.OnSelect;
+                @MousePosition.started -= m_Wrapper.m_InventoryActionsCallbackInterface.OnMousePosition;
+                @MousePosition.performed -= m_Wrapper.m_InventoryActionsCallbackInterface.OnMousePosition;
+                @MousePosition.canceled -= m_Wrapper.m_InventoryActionsCallbackInterface.OnMousePosition;
+                @ToggleInventory.started -= m_Wrapper.m_InventoryActionsCallbackInterface.OnToggleInventory;
+                @ToggleInventory.performed -= m_Wrapper.m_InventoryActionsCallbackInterface.OnToggleInventory;
+                @ToggleInventory.canceled -= m_Wrapper.m_InventoryActionsCallbackInterface.OnToggleInventory;
+            }
+            m_Wrapper.m_InventoryActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Select.started += instance.OnSelect;
+                @Select.performed += instance.OnSelect;
+                @Select.canceled += instance.OnSelect;
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
                 @ToggleInventory.started += instance.OnToggleInventory;
                 @ToggleInventory.performed += instance.OnToggleInventory;
                 @ToggleInventory.canceled += instance.OnToggleInventory;
             }
         }
     }
-    public Player3DMovementActions @Player3DMovement => new Player3DMovementActions(this);
+    public InventoryActions @Inventory => new InventoryActions(this);
     public interface IPlayer3DMovementActions
     {
         void OnWalk(InputAction.CallbackContext context);
+        void OnToggleInventory(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnMeleeAttack(InputAction.CallbackContext context);
         void OnLookAround(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnHideWeapon(InputAction.CallbackContext context);
-        void OnAim(InputAction.CallbackContext context);
+        void OnSpecial(InputAction.CallbackContext context);
+    }
+    public interface IInventoryActions
+    {
+        void OnSelect(InputAction.CallbackContext context);
+        void OnMousePosition(InputAction.CallbackContext context);
         void OnToggleInventory(InputAction.CallbackContext context);
     }
 }

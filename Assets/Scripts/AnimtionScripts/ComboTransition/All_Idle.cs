@@ -8,6 +8,7 @@ public class All_Idle : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Player_Controller.instance.readyforFirstAttack = true;
+        Player_Controller.instance.isDoingSpecialAttack = false;
         Player_Controller.instance.canRecieveInput = true;
     }
 

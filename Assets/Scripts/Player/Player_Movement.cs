@@ -74,7 +74,7 @@ public class Player_Movement : Singleton<Player_Movement>
 
             aimAt.transform.position = aimPos.transform.position;
         }
-        if (!Player_Controller.instance.canRecieveInput)
+        if (!Player_Controller.instance.canRecieveInput || Player_Controller.instance.isDoingSpecialAttack)
         {
             return;
         }
