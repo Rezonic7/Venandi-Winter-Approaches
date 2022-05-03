@@ -821,8 +821,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 212817168}
-  m_LocalRotation: {x: -0.000000029802322, y: -4.1594944e-10, z: -6.436518e-14, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.000000029802322, y: -0.00000000918315, z: 0.0000000031419711, w: 1}
+  m_LocalPosition: {x: -6.694359e-17, y: -0.00000022444031, z: 0.00000008043611}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 307156137}
@@ -1338,7 +1338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: -0.3945711, z: -1.503526}
+  m_FollowOffset: {x: 0, y: 2, z: -5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -3872,7 +3872,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 100
+    m_FontSize: 75
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 1
@@ -3891,6 +3891,11 @@ MonoBehaviour:
 
     Left Click -
     Attack
+
+    Right Click - Special Attack/Cancel Animation
+
+    Tab - Open/Close
+    Inventory
 
     T - Sheath Weapon
 
@@ -4087,7 +4092,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 840056393}
-  m_LocalRotation: {x: 0.17121495, y: 4.0979542e-10, z: 7.128462e-11, w: 0.9852337}
+  m_LocalRotation: {x: 0.17121495, y: -0.000000009185545, z: 0.0000000015928285, w: 0.9852337}
   m_LocalPosition: {x: 0, y: 3.1399999, z: -12.110001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4416,8 +4421,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 0, z: -10}
+  m_BindingMode: 4
+  m_FollowOffset: {x: 0, y: 2.002941, z: -5.001356}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -4928,7 +4933,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: -0.3945711, z: -1.503526}
+  m_FollowOffset: {x: 0, y: 2, z: -5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -5333,8 +5338,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 0, z: -10}
+  m_BindingMode: 4
+  m_FollowOffset: {x: 0, y: 2.002941, z: -5.001356}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -7360,7 +7365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: -0.3945711, z: -1.503526}
+  m_FollowOffset: {x: 0, y: 2, z: -5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -9080,8 +9085,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797639196}
-  m_LocalRotation: {x: -0.018141493, y: -0.000000024999391, z: 0.000000008302664, w: 0.9998355}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.018141493, y: -4.1588016e-10, z: -7.61005e-12, w: 0.9998355}
+  m_LocalPosition: {x: -6.694359e-17, y: -0.00000022444031, z: 0.00000008043611}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1480995997}
@@ -10259,8 +10264,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2048617181}
-  m_LocalRotation: {x: 0.01818943, y: 0.000000015673441, z: -0.000000006091142, w: 0.9998346}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.1751833, y: -4.0950746e-10, z: -7.293034e-11, w: 0.9845359}
+  m_LocalPosition: {x: -0.0000000024231275, y: -1.1032467, z: 2.9125962}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1012737047}
@@ -10547,8 +10552,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9384ab8608cdc3d479fe89cd51eed48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 0, z: -10}
+  m_BindingMode: 4
+  m_FollowOffset: {x: 0, y: 2.002941, z: -5.001356}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
