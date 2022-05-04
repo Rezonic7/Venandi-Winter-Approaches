@@ -73,6 +73,14 @@ public class Player_Animations : Singleton<Player_Animations>
             anim.SetTrigger("Sheath");
         }
     }
+    public void UseConsumableWeight(int weight)
+    {
+        anim.SetLayerWeight(3, weight);
+        if (weight == 1)
+        {
+            anim.SetTrigger("UseConsumable");
+        }
+    }
 
     public void LCDrawn(bool isTrue)
     {

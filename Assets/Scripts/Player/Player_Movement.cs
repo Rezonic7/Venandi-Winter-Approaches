@@ -78,6 +78,10 @@ public class Player_Movement : Singleton<Player_Movement>
         {
             return;
         }
+        if(!Player_Controller.instance.canWalk)
+        {
+            return;
+        }
         Move(movement);
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Animation_Gathering : StateMachineBehaviour
+public class Animation_UseConsumable : StateMachineBehaviour
 {
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -19,16 +19,9 @@ public class Animation_Gathering : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GatheringSpots GS = Player_Controller.instance.gatheringItem?.GetComponent<GatheringSpots>();
-        GatherableItems item = GS?.GatherItem();
-        int amount = Random.Range(item.MinAmount, item.MaxAmount + 1);
-        
-        if (amount <= 0)
-        {
-            CanvasManager.instance.ShowInfo("You Got Nothing");
-            return;
-        }
-        Player_Inventory.instance.AddItem(item.Item, amount);
+        Player_Animations.instance.UseConsumableWeight(0);
+        Player_Inventory.instance.UseItem();
+        Player_Controller.instance.isUsingItem = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

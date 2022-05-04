@@ -9,25 +9,34 @@ public class Player_Inventory : Singleton<Player_Inventory>
     [SerializeField] private GameObject slotHolder;
     [SerializeField] private GameObject hotBarHolder;
     [SerializeField] private GameObject Cursor;
-
     [SerializeField] private SlotClass[] startingItems;
+    [SerializeField] private GameObject hotBarSelecter;
+    
     private SlotClass[] items;
-
     private GameObject[] slots;
-
     private GameObject[] hotBar;
 
     private SlotClass movingSlot;
     private SlotClass originalSlot;
     private SlotClass tempSlot;
+    private SlotClass backupSlot;
 
-    private bool isMovingItem = false;
+    private int hotBarInt = 0;
+
+    private bool _isMovingItem = false;
+    private bool _canUseItem = false;
 
     private Vector2 mousePosition;
 
+    public bool IsMovingItem { get { return _isMovingItem; } }
+    public bool CanUseItem {  get { return _canUseItem; } }
+
     void Start()
     {
-        isMovingItem = false;
+        hotBarInt = 0;
+
+
+        _isMovingItem = false;
 
         slots = new GameObject[slotHolder.transform.childCount];
         items = new SlotClass[slots.Length];
@@ -50,6 +59,9 @@ public class Player_Inventory : Singleton<Player_Inventory>
             hotBar[i] = hotBarHolder.transform.GetChild(i).gameObject;
         }
         RefreshUI();
+
+        hotBarSelecter.transform.position = GetHotbarPosition();
+
     }
     public void AddItem(ItemClass newItem, int amount)
     {
@@ -58,11 +70,12 @@ public class Player_Inventory : Singleton<Player_Inventory>
         {
             if (slot.Quantity + amount <= newItem.MaxStack)
             {
+                CanvasManager.instance.ShowInfo("You have recieved " + newItem.ItemName + " x" + amount + "!");
                 slot.Quantity += amount;
             }
             else
             {
-                Debug.Log("Can't Carry Anymore");
+                CanvasManager.instance.ShowInfo(newItem.ItemName + " is already at Max Capacity");
                 slot.Quantity = newItem.MaxStack;
             }
         }
@@ -72,6 +85,7 @@ public class Player_Inventory : Singleton<Player_Inventory>
             {
                 if (items[i].Item == null)
                 {
+                    CanvasManager.instance.ShowInfo("You have recieved " + newItem.ItemName + " x" + amount + "!");
                     items[i] = new SlotClass(newItem, amount);
                     break;
                 }
@@ -150,7 +164,6 @@ public class Player_Inventory : Singleton<Player_Inventory>
             }
         }
     }
-
     public void OnMouseMovement(InputAction.CallbackContext value)
     {
         mousePosition = Mouse.current.position.ReadValue();
@@ -158,7 +171,7 @@ public class Player_Inventory : Singleton<Player_Inventory>
 
     private void Update()
     {
-        if (isMovingItem)
+        if (_isMovingItem)
         {
             Cursor.SetActive(true);
             Cursor.GetComponent<Image>().sprite = movingSlot.Item.ImageSprite;
@@ -167,8 +180,78 @@ public class Player_Inventory : Singleton<Player_Inventory>
         else
         {
             Cursor.SetActive(false);
-
         }
+    }
+
+    public void UseItem()
+    {
+        SlotClass useItem = items[hotBarInt + 30];
+        if(useItem == null)
+        {
+            return;
+        }
+        if(useItem.Item.GetConsumable() == null)
+        {
+            return;
+        }
+        RemoveItem(useItem.Item, 1);
+        return;
+    }
+
+    private Vector3 GetHotbarPosition()
+    {
+        for(int i = 0; i < hotBar.Length; i++)
+        {
+            if(hotBarInt == i)
+            {
+                return hotBar[i].transform.position;
+            }
+        }
+        return Vector3.zero;
+    }
+
+    private void CheckItemIfUsable()
+    {
+        SlotClass itemChecking = items[hotBarInt + 30];
+        if (itemChecking == null)
+        {
+            _canUseItem = false;
+            return;
+        }
+        if (itemChecking.Item is ConsumableClass)
+        {
+            _canUseItem = true;
+        }
+        else
+        {
+            _canUseItem = false;
+        }
+    }
+
+    public void ScrollRight()
+    {
+        if (hotBarInt < 9)
+        {
+            hotBarInt += 1;
+        }
+        else
+        {
+            hotBarInt = 0;
+        }
+        hotBarSelecter.transform.position = GetHotbarPosition();
+        CheckItemIfUsable();
+    }
+    public void ScrollLeft()
+    {
+        if (hotBarInt > 0)
+        {
+            hotBarInt -= 1;
+        }
+        else
+        {
+            hotBarInt = 9;
+        }
+        hotBarSelecter.transform.position = GetHotbarPosition();
     }
 
     public void OnInventoryClick(InputAction.CallbackContext value)
@@ -177,7 +260,7 @@ public class Player_Inventory : Singleton<Player_Inventory>
         {
             return;
         }
-        if (isMovingItem)
+        if (_isMovingItem)
         {
             EndMoveItem();
             return;
@@ -188,13 +271,14 @@ public class Player_Inventory : Singleton<Player_Inventory>
     private void StartMoveItem()
     {
         originalSlot = GetClosestSlot();
+        backupSlot = originalSlot;
         if (originalSlot == null || originalSlot.Item == null)
         {
             return;
         }
         movingSlot = new SlotClass(originalSlot.Item, originalSlot.Quantity);
         originalSlot.Clear();
-        isMovingItem = true;
+        _isMovingItem = true;
         RefreshUI();
     }
 
@@ -203,6 +287,7 @@ public class Player_Inventory : Singleton<Player_Inventory>
         originalSlot = GetClosestSlot();
         if (originalSlot == null)
         {
+            ReturnToOriginalSlot();
             return;
         }
         else
@@ -215,19 +300,28 @@ public class Player_Inventory : Singleton<Player_Inventory>
                 originalSlot.Quantity = tempSlot.Quantity;
                 tempSlot.Clear();
                 RefreshUI();
+                CheckItemIfUsable();
             }
             else
             {
                 originalSlot.Item = movingSlot.Item;
                 originalSlot.Quantity = movingSlot.Quantity;
                 movingSlot.Clear();
-                isMovingItem = false;
+                _isMovingItem = false;
                 RefreshUI();
+                CheckItemIfUsable();
             }
 
         }
     }
-
+    public void ReturnToOriginalSlot()
+    {
+        backupSlot.Item = movingSlot.Item;
+        backupSlot.Quantity = movingSlot.Quantity;
+        movingSlot.Clear();
+        _isMovingItem = false;
+        RefreshUI();
+    }
     private SlotClass GetClosestSlot()
     {
         for(int i = 0; i < slots.Length; i++)

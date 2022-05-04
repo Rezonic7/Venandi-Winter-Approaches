@@ -107,6 +107,24 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HotbarScroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""7f8cd696-dd7d-42a3-a9f1-49b0e69eaaff"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Use Item"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5b20db4-a6a4-4d5e-9ee0-b68dcd0d5e9f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -252,6 +270,28 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""action"": ""Toggle Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""abaf5978-039c-4e4e-ba82-a7e1a7c9f4c8"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HotbarScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36874568-facf-4286-92e3-ac29b94f0176"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Use Item"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -337,6 +377,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player3DMovement_Interact = m_Player3DMovement.FindAction("Interact", throwIfNotFound: true);
         m_Player3DMovement_HideWeapon = m_Player3DMovement.FindAction("Hide Weapon", throwIfNotFound: true);
         m_Player3DMovement_Special = m_Player3DMovement.FindAction("Special", throwIfNotFound: true);
+        m_Player3DMovement_HotbarScroll = m_Player3DMovement.FindAction("HotbarScroll", throwIfNotFound: true);
+        m_Player3DMovement_UseItem = m_Player3DMovement.FindAction("Use Item", throwIfNotFound: true);
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_Select = m_Inventory.FindAction("Select", throwIfNotFound: true);
@@ -410,6 +452,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player3DMovement_Interact;
     private readonly InputAction m_Player3DMovement_HideWeapon;
     private readonly InputAction m_Player3DMovement_Special;
+    private readonly InputAction m_Player3DMovement_HotbarScroll;
+    private readonly InputAction m_Player3DMovement_UseItem;
     public struct Player3DMovementActions
     {
         private @PlayerInputs m_Wrapper;
@@ -423,6 +467,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player3DMovement_Interact;
         public InputAction @HideWeapon => m_Wrapper.m_Player3DMovement_HideWeapon;
         public InputAction @Special => m_Wrapper.m_Player3DMovement_Special;
+        public InputAction @HotbarScroll => m_Wrapper.m_Player3DMovement_HotbarScroll;
+        public InputAction @UseItem => m_Wrapper.m_Player3DMovement_UseItem;
         public InputActionMap Get() { return m_Wrapper.m_Player3DMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -459,6 +505,12 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Special.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnSpecial;
                 @Special.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnSpecial;
                 @Special.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnSpecial;
+                @HotbarScroll.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnHotbarScroll;
+                @HotbarScroll.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnHotbarScroll;
+                @HotbarScroll.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnHotbarScroll;
+                @UseItem.started -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnUseItem;
+                @UseItem.performed -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnUseItem;
+                @UseItem.canceled -= m_Wrapper.m_Player3DMovementActionsCallbackInterface.OnUseItem;
             }
             m_Wrapper.m_Player3DMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -490,6 +542,12 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Special.started += instance.OnSpecial;
                 @Special.performed += instance.OnSpecial;
                 @Special.canceled += instance.OnSpecial;
+                @HotbarScroll.started += instance.OnHotbarScroll;
+                @HotbarScroll.performed += instance.OnHotbarScroll;
+                @HotbarScroll.canceled += instance.OnHotbarScroll;
+                @UseItem.started += instance.OnUseItem;
+                @UseItem.performed += instance.OnUseItem;
+                @UseItem.canceled += instance.OnUseItem;
             }
         }
     }
@@ -554,6 +612,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnHideWeapon(InputAction.CallbackContext context);
         void OnSpecial(InputAction.CallbackContext context);
+        void OnHotbarScroll(InputAction.CallbackContext context);
+        void OnUseItem(InputAction.CallbackContext context);
     }
     public interface IInventoryActions
     {

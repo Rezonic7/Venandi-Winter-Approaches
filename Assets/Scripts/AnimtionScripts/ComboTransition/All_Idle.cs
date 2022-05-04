@@ -7,6 +7,7 @@ public class All_Idle : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        Player_Controller.instance.canWalk = true;
         Player_Controller.instance.readyforFirstAttack = true;
         Player_Controller.instance.isDoingSpecialAttack = false;
         Player_Controller.instance.canRecieveInput = true;

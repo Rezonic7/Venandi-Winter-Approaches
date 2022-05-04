@@ -14,5 +14,4 @@ public abstract class ItemClass : ScriptableObject
     public abstract ItemClass GetItem();
     public abstract MiscClass GetMisc();
     public abstract ConsumableClass GetConsumable();
-
 }

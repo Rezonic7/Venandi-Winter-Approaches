@@ -6,6 +6,7 @@ public class CanvasManager : Singleton<CanvasManager>
 {
     [SerializeField] private InformationText damageTextPrefab;
     [SerializeField] private InformationText gatheredItemTextPrefab;
+    [SerializeField] private GameObject infoTextParent;
 
     private float screensizeX;
     private float screensizeY;
@@ -24,17 +25,15 @@ public class CanvasManager : Singleton<CanvasManager>
     {
         InformationText g;
         g = Instantiate(damageTextPrefab, spawnPos, Quaternion.identity, this.transform);
-        g.textValue = damage.ToString();
+        g.ChangeText(damage.ToString());
         Destroy(g.gameObject, 1f);
     }
-    public void ShowInfo(string info, float timeToDestroy)
+    public void ShowInfo(string info)
     {
         InformationText g;
-        Vector3 middleOfScreenOffset = middleOfScreen;
-        middleOfScreenOffset.y = middleOfScreenOffset.y + (screensizeY * 0.1f);
 
-        g = Instantiate(gatheredItemTextPrefab, middleOfScreenOffset, Quaternion.identity, this.transform);
-        g.textValue = info;
-        Destroy(g.gameObject, timeToDestroy);
+        g = Instantiate(gatheredItemTextPrefab, transform.position, Quaternion.identity, infoTextParent.transform);
+        g.ChangeText(info);
+        Destroy(g.gameObject, 3.2f);
     }
 }

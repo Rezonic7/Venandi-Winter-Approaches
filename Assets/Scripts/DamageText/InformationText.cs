@@ -6,14 +6,14 @@ using UnityEngine.UI;
 public class InformationText : MonoBehaviour
 {
     private Text text;
-    public string textValue = "test";
-    private void Start()
+    public string textValue;
+    private void Awake()
     {
         text = GetComponentInChildren<Text>();
     }
-    private void Update()
+    public void ChangeText(string newText)
     {
-        text.text = textValue;
+        text.text = newText;
     }
 }
    

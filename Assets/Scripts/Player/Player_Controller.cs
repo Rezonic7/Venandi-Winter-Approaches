@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -24,6 +22,7 @@ public class Player_Controller : Singleton<Player_Controller>
     [SerializeField] private GameObject aimCinemachine;
     [SerializeField] private GameObject reticle;
     [SerializeField] private GameObject inventory;
+    [SerializeField] private Image chargingImage;
 
     public bool canRecieveInput = true;
     public bool inputRecieved;
@@ -33,7 +32,8 @@ public class Player_Controller : Singleton<Player_Controller>
     public bool canAim = false;
     public bool aiming = false;
     public bool isDoingSpecialAttack = false;
-    public Image chargingImage;
+    public bool isUsingItem = false;
+    public bool canWalk = true;
 
     public GameObject gatheringItem;
     public WeaponTypeData weaponData;
@@ -41,6 +41,8 @@ public class Player_Controller : Singleton<Player_Controller>
 
     private void Start()
     {
+        canWalk = true;
+        isUsingItem = false;
         HC_SpecialCharge = false;
         canAim = false;
         canRecieveInput = true;
@@ -49,7 +51,7 @@ public class Player_Controller : Singleton<Player_Controller>
         canChangeWeapon = false;
         isDoingSpecialAttack = false;
 
-    inventory.SetActive(false);
+        inventory.SetActive(false);
         playerInput = GetComponent<PlayerInput>();
 
         pMovement = GetComponent<Player_Movement>();
@@ -77,21 +79,25 @@ public class Player_Controller : Singleton<Player_Controller>
         }
         if(inventory.activeSelf)
         {
-            ShowInventory();
+            HideInventory();
         }
         else
         {
-            HideInventory();
+            ShowInventory();
         }
     }
-    void ShowInventory()
+    void HideInventory()
     {
+        if (Player_Inventory.instance.IsMovingItem)
+        {
+            Player_Inventory.instance.ReturnToOriginalSlot();
+        }
         playerInput.SwitchCurrentActionMap("Player3DMovement");
         defCinemachine.SetActive(true);
         inventoryCinemachine.SetActive(false);
         inventory.SetActive(false);
     }
-    void HideInventory()
+    void ShowInventory()
     {
         playerInput.SwitchCurrentActionMap("Inventory");
         defCinemachine.SetActive(false);
@@ -137,6 +143,14 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
+        if(isUsingItem)
+        {
+            return;
+        }
+        if(!canWalk)
+        {
+            return;
+        }
         if (pMovement.movement.magnitude <= 0.1f)
         {
             return;
@@ -169,6 +183,10 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
+        if(!canWalk)
+        {
+            return;
+        }
         if(pMovement.isRolling)
         {
             return;
@@ -195,6 +213,10 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
+        if(isUsingItem)
+        {
+            return;
+        }
         if(canAim)
         {
             if (aiming)
@@ -205,9 +227,11 @@ public class Player_Controller : Singleton<Player_Controller>
             }
             return;
         }
+        canWalk = false;
 
-        if(pMovement.isRunning)
+        if (pMovement.isRunning)
         {
+            DoAction();
             switch (pEquipment.WeaponData.WeaponType)
             {
                 case WeaponTypeData.WeaponTypes.LightClub:
@@ -269,6 +293,10 @@ public class Player_Controller : Singleton<Player_Controller>
     }
     public void OnSpecialAttack(InputAction.CallbackContext value)
     {
+        if(isUsingItem)
+        {
+            return;
+        }
         if(canAim)
         {
             if (value.canceled)
@@ -285,6 +313,7 @@ public class Player_Controller : Singleton<Player_Controller>
             {
                 return;
             }
+            canWalk = false;
             pAnimations.StartAimBow(1);
             Debug.Log("Aiming");
             aiming = true;
@@ -301,6 +330,7 @@ public class Player_Controller : Singleton<Player_Controller>
             {
                 if(HC_SpecialCharge)
                 {
+                    DoAction();
                     HC_SpecialCharge = false;
                     if (HC_SpecialChargeTime >= 3.2f)
                     {
@@ -338,6 +368,7 @@ public class Player_Controller : Singleton<Player_Controller>
                     chargingImage.gameObject.SetActive(true);
                     break;
             }
+            canWalk = false;
             DrawWeapon();
             pAnimations.SpecialTrigger();
             isDoingSpecialAttack = true;
@@ -345,6 +376,25 @@ public class Player_Controller : Singleton<Player_Controller>
 
     }
     
+    public void OnUseItem(InputAction.CallbackContext value)
+    {
+        if(!value.started)
+        {
+            return;
+        }
+        if(!pInventory.CanUseItem)
+        {
+            return;
+        }
+        if(isUsingItem)
+        {
+            return;
+        }
+        isUsingItem = true;
+        SheathWeapon();
+        pAnimations.UseConsumableWeight(1);
+    }
+
     public void OnHideWeapon(InputAction.CallbackContext value)
     {
         if(!value.started)
@@ -377,14 +427,14 @@ public class Player_Controller : Singleton<Player_Controller>
         }
         if(canChangeWeapon)
         {
-            CanvasManager.instance.ShowInfo("You changed your weapon!", 1f);
+            CanvasManager.instance.ShowInfo("You changed your weapon!");
             pEquipment.UpdateSpawnWeapon(weaponData);
             SheathWeapon();
             return;
         }
         if(canChangeArmor)
         {
-            CanvasManager.instance.ShowInfo("You changed your Armor!", 1f);
+            CanvasManager.instance.ShowInfo("You changed your Armor!");
             pEquipment.UpdateSpawnArmor(armorData);
             return;
         }
@@ -400,6 +450,22 @@ public class Player_Controller : Singleton<Player_Controller>
         pAnimations.Gather();
        
     }
+    public void OnReadScroll(InputAction.CallbackContext value)
+    {
+        if (!value.performed)
+        {
+            return;
+        }
+        if (value.ReadValue<Vector2>().y > 0)
+        {
+            pInventory.ScrollLeft();
+        }
+        else
+        {
+            pInventory.ScrollRight();
+        }
+    }
+
     #endregion ButtonInputs
     void IsRunning()
     {
@@ -492,21 +558,21 @@ public class Player_Controller : Singleton<Player_Controller>
     {
         if(hit.transform.gameObject.GetComponent<GatheringSpots>() != null)
         {
-            CanvasManager.instance.ShowInfo("Press F to interact", 0.5f);
+            CanvasManager.instance.ShowInfo("Press F to interact");
             canGather = true;
             gatheringItem = hit.gameObject;
             
         }
         else if(hit.transform.gameObject.GetComponent<ChangeWeapon>() != null)
         {
-            CanvasManager.instance.ShowInfo("Press F to interact", 0.5f);
+            CanvasManager.instance.ShowInfo("Press F to interact");
             canChangeWeapon = true;
             weaponData = hit.GetComponent<ChangeWeapon>().WeaponData;
 
         }
         else if (hit.transform.gameObject.GetComponent<ChangeArmor>() != null)
         {
-            CanvasManager.instance.ShowInfo("Press F to interact", 0.5f);
+            CanvasManager.instance.ShowInfo("Press F to interact");
             canChangeArmor = true;
             armorData = hit.GetComponent<ChangeArmor>().ArmorData;
 
