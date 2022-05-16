@@ -9,6 +9,12 @@ public class SmallAnimal : AnimalClass
    
     public override void Update()
     {
+        IsAgitated = true;
+        if(IsAttacking)
+        {
+            Agent.SetDestination(transform.position);
+            return;
+        }
         if (IsAgitated)
         {
             if(!hasChosen_AgitateAction)
@@ -17,11 +23,13 @@ public class SmallAnimal : AnimalClass
                 if (DoRandomAction == 0)
                 {
                     DoRandomAttack();
+                    IsAttacking = true;
                 }
                 else if (DoRandomAction == 1)
                 {
                     MoveToNextArea();
                 }
+                IsAgitated = true;
                 hasChosen_AgitateAction = true;
             }
         }
@@ -55,16 +63,19 @@ public class SmallAnimal : AnimalClass
             {
                 LoiterTimer -= Time.deltaTime;
                 Agent.SetDestination(Agent.transform.position);
+                Anim.SetBool("isWalking", false);
                 Debug.Log("I will be Idle here");
             }
             else
             {
                 LoiterTimer = RandomizeTimer(BaseLoiterTime);
+                Anim.SetBool("isWalking", true);
                 RandomWanderAroundCurrentArea();
                 Debug.Log("Im gonna move around here a bit");
             }
         }
     }
+   
     public override void MoveToNextArea()
     {
         base.MoveToNextArea();

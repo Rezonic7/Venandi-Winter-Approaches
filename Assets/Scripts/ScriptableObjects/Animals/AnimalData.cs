@@ -6,6 +6,7 @@ using UnityEngine;
 public class AnimalData : ScriptableObject
 {
     [SerializeField] private string _animalName;
+    [SerializeField] private GameObject _animalMesh;
     [SerializeField] private float _baseMoveSpeed;
     [SerializeField] private float _attackRange;
     [SerializeField] private float _baseLoiterTime;
@@ -19,6 +20,7 @@ public class AnimalData : ScriptableObject
 
     [SerializeField] private List<ItemDropsClass> _itemDrops;
 
+    public GameObject AnimalMesh { get { return _animalMesh; } set { _animalMesh = value; } }
     public string AnimalName { get { return _animalName; } set { _animalName = value; } }
     public float BaseMovementSpeed { get { return _baseMoveSpeed; } set { _baseMoveSpeed = value; } }
     public float AttackRange { get { return _attackRange; } set { _attackRange = value; } }

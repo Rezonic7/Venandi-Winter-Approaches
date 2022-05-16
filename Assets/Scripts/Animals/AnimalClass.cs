@@ -12,7 +12,9 @@ public abstract class AnimalClass : MonoBehaviour
     private AreaClass[] areas;
     private AreaClass _currentArea;
     private NavMeshAgent _agent;
+    private Animator _anim;
 
+    private string _animalName;
     private float _baseWanderTime;
     private float _baseLoiterTime;
     private float _wanderTimer;
@@ -26,6 +28,8 @@ public abstract class AnimalClass : MonoBehaviour
     private bool _isPlayerInRange;
     private bool _isAttacking;
     
+    public Animator Anim { get { return _anim; } }
+    public string AnimalName { get { return _animalName; }}
     public AreaClass CurrentArea { get { return _currentArea; } set { _currentArea = value; } }
     public float LoiterTimer { get { return _loiterTimer; } set { _loiterTimer = value; } }
     public float WanderTimer { get { return _wanderTimer; } set { _wanderTimer = value; } }
@@ -39,8 +43,24 @@ public abstract class AnimalClass : MonoBehaviour
     public bool IsPassive { get { return _isPassive; } set { _isPassive = value; } }
 
     public Player_Controller player;
+
+    private void Awake()
+    {
+        _agent = GetComponent<NavMeshAgent>();
+
+        if (animalData != null)
+        {
+            _animalName = animalData.AnimalName;
+            _isPassive = animalData.IsPassive;
+            _agent.speed = animalData.BaseMovementSpeed;
+            _baseWanderTime = animalData.BaseWanderTime;
+            _baseLoiterTime = animalData.BaseLoiterTime;
+            Instantiate(animalData.AnimalMesh,  this.gameObject.transform.GetChild(0).transform);
+        }
+    }
     void Start()
     {
+        _anim = GetComponent<Animator>();
         if(Player_Controller.instance != null)
         {
             player = Player_Controller.instance;
@@ -52,20 +72,13 @@ public abstract class AnimalClass : MonoBehaviour
         _wanderTimer = RandomizeTimer(_baseWanderTime);
 
         isGoingToNextArea = false;
-        _agent = GetComponent<NavMeshAgent>();
 
         areas = new AreaClass[areaHolder.transform.childCount];
         for(int i = 0; i < areaHolder.transform.childCount; i++)
         {
             areas[i] = areaHolder.transform.GetChild(i).GetComponent<AreaClass>();
         }
-        if (animalData != null)
-        {
-            _isPassive = animalData.IsPassive;
-            _agent.speed = animalData.BaseMovementSpeed;
-            _baseWanderTime = animalData.BaseWanderTime;
-            _baseLoiterTime = animalData.BaseLoiterTime;
-        }
+       
         GetAreaData();
     }
     public float RandomizeTimer(float baseTime)
@@ -75,7 +88,12 @@ public abstract class AnimalClass : MonoBehaviour
     }
     public virtual void Update()
     {
-        if(_isAgitated)
+        if(_isAttacking)
+        {
+            _agent.SetDestination(transform.position);
+            return;
+        }
+        if (_isAgitated)
         {
             if (_isAttacking)
             {
@@ -104,7 +122,16 @@ public abstract class AnimalClass : MonoBehaviour
     }
     public void DoRandomAttack()
     {
-        int RandomAttack = Random.Range(0,1);
+        int RandomAttack = Random.Range(0, 2);
+        if (RandomAttack == 0)
+        {
+            Anim.SetTrigger("Attack1");
+        }
+        else if (RandomAttack == 1)
+        {
+            Anim.SetTrigger("Attack2");
+        }
+        _isAttacking = true;
     }
     #region UnaltertedState
     public void GetAreaData()
