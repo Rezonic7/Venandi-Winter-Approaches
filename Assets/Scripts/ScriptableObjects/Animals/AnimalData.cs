@@ -17,8 +17,6 @@ public class AnimalData : ScriptableObject
     [SerializeField] private List<Elements> _weakness;
     [SerializeField] private List<Elements> _resistance;
 
-    [SerializeField] private List<int> _areasToSpawnInt;
-
     [SerializeField] private List<ItemDropsClass> _itemDrops;
 
     public string AnimalName { get { return _animalName; } set { _animalName = value; } }
@@ -32,7 +30,6 @@ public class AnimalData : ScriptableObject
 
     public List<Elements> Weakness { get { return _weakness; } set { _weakness = value; } }
     public List<Elements> Resistance { get { return _resistance; } set { _resistance = value; } }
-    public List<int> AreasToSpawnInt { get { return _areasToSpawnInt; } set { _areasToSpawnInt = value; } }
     public List<ItemDropsClass> ItemDrops { get { return _itemDrops; } set { ItemDrops = value; } }
 
 }
