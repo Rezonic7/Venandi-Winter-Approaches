@@ -4,76 +4,142 @@ using UnityEngine.UI;
 
 public class Player_Controller : Singleton<Player_Controller>
 {
+    private GameObject inventoryCinemachine;
+    private GameObject defCinemachine;
+    private GameObject aimCinemachine;
+    private GameObject reticle;
+    private GameObject inventory;
+
+    //debug purposes remove when final
+    private Image chargingImage;
+
     private Player_Movement pMovement;
     private Player_Animations pAnimations;
     private Player_Variables pVariables;
     private Player_Equipment pEquipment;
     private Player_Inventory pInventory;
+    private PlayerInput playerInput;
+    
+    private float HC_SpecialChargeTime;
     private bool canChangeWeapon = false;
     private bool canChangeArmor = false;
     private bool canRunAttack = false;
     private bool HC_SpecialCharge = false;
-    private float HC_SpecialChargeTime;
+    private bool _canRecieveInput = true;
+    private bool _inputRecieved;
+    private bool _readyforFirstAttack = true;
+    private bool _canGather = false;
+    private bool _weaponDrawn = false;
+    private bool _canAim = false;
+    private bool _aiming = false;
+    private bool _isDoingSpecialAttack = false;
+    private bool _isUsingItem = false;
+    private bool _canWalk = true;
 
-    private PlayerInput playerInput;
+    public bool CanRecieveInput { get { return _canRecieveInput; } set { _canRecieveInput = value; } }
+    public bool InputRecieved { get { return _inputRecieved; } set { _inputRecieved = value; } }
+    public bool ReadyforFirstAttack { get { return _readyforFirstAttack; } set { _readyforFirstAttack = value; } }
+    public bool CanGather { get { return _canGather; } set { _canGather = value; } }
+    public bool WeaponDrawn { get { return _weaponDrawn; } set { _weaponDrawn = value; } }
+    public bool CanAim { get { return _canAim; } set { _canAim = value; } }
+    public bool Aiming { get { return _aiming; } set { _aiming = value; } }
+    public bool IsDoingSpecialAttack { get { return _isDoingSpecialAttack; } set { _isDoingSpecialAttack = value; } }
+    public bool IsUsingItem { get { return _isUsingItem; } set { _isUsingItem = value; } }
+    public bool CanWalk { get { return _canWalk; } set { _canWalk = value; } }
 
-    [SerializeField] private GameObject inventoryCinemachine;
-    [SerializeField] private GameObject defCinemachine;
-    [SerializeField] private GameObject aimCinemachine;
-    [SerializeField] private GameObject reticle;
-    [SerializeField] private GameObject inventory;
-    [SerializeField] private Image chargingImage;
 
-    public bool canRecieveInput = true;
-    public bool inputRecieved;
-    public bool readyforFirstAttack = true;
-    public bool canGather = false;
-    public bool weaponDrawn = false;
-    public bool canAim = false;
-    public bool aiming = false;
-    public bool isDoingSpecialAttack = false;
-    public bool isUsingItem = false;
-    public bool canWalk = true;
+    //debugs remove when final
+    private GameObject _gatheringItem;
+    private WeaponTypeData _weaponData;
+    private  ArmorData _armorData;
+    public GameObject GatheringItem { get { return _gatheringItem; } set { _gatheringItem = value; } }
+    public WeaponTypeData WeaponData { get { return _weaponData; } }
+    public ArmorData ArmorData { get { return _armorData; } }
+    //debugs remove when final
 
-    public GameObject gatheringItem;
-    public WeaponTypeData weaponData;
-    public ArmorData armorData;
 
     private void Start()
     {
-        canWalk = true;
-        isUsingItem = false;
+        defCinemachine = GameObject.FindWithTag("DefaultCinemachin")?.gameObject;
+        inventoryCinemachine = GameObject.FindWithTag("InventoryCinemachine")?.gameObject;
+        aimCinemachine = GameObject.FindWithTag("AimCinemachine")?.gameObject;
+        reticle = GameObject.FindWithTag("Reticle")?.gameObject;
+        inventory = GameObject.FindWithTag("Inventory")?.gameObject;
+        chargingImage = GameObject.FindWithTag("ChargingImage")?.GetComponent<Image>();
+
+        if(reticle || chargingImage)
+        {
+            reticle.SetActive(false);
+            chargingImage.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("Heads up! Some UI elements may not work properly, some UI are missing.");
+        }
+
+        if(defCinemachine || inventoryCinemachine || aimCinemachine)
+        {
+            defCinemachine.SetActive(true);
+            inventoryCinemachine.SetActive(false);
+            aimCinemachine.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("Heads up! Cinemachines may not work propely, some Cinemachine's are missing.");
+        }
+
+        _canWalk = true;
+        _isUsingItem = false;
         HC_SpecialCharge = false;
-        canAim = false;
-        canRecieveInput = true;
-        readyforFirstAttack = true;
-        canGather = false;
+        _canAim = false;
+        _canRecieveInput = true;
+        _readyforFirstAttack = true;
+        _canGather = false;
         canChangeWeapon = false;
-        isDoingSpecialAttack = false;
+        _isDoingSpecialAttack = false;
 
-        inventory.SetActive(false);
         playerInput = GetComponent<PlayerInput>();
-
         pMovement = GetComponent<Player_Movement>();
         pAnimations = GetComponent<Player_Animations>();
         pVariables = GetComponent<Player_Variables>();
         pEquipment = GetComponent<Player_Equipment>();
         pInventory = GetComponent<Player_Inventory>();
+        
+        if(inventory)
+        {
+            inventory.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("Heads Up! Inventory not found in scene.");
+        }
+        
     }
 
     private void Update()
     {
         IsRunning();
-        ChargeHC_Special();
+        if(chargingImage)
+        {
+            ChargeHC_Special();
+        }
     }
     #region ButtonInputs
     public void OnToggleInventory(InputAction.CallbackContext value)
     {
-        if(!value.started)
+        if(!inventory)
         {
             return;
         }
-        if(aiming)
+        if (!defCinemachine || !inventoryCinemachine || !aimCinemachine)
+        {
+            return;
+        }
+        if (!value.started)
+        {
+            return;
+        }
+        if(_aiming)
         {
             return;
         }
@@ -106,13 +172,13 @@ public class Player_Controller : Singleton<Player_Controller>
     }
     public void InputManager()
     {
-        if(!canRecieveInput)
+        if(!_canRecieveInput)
         {
-            inputRecieved = true;
+            _inputRecieved = true;
         }
         else
         {
-            inputRecieved = false;
+            _inputRecieved = false;
         }
     }
     public void OnMovement(InputAction.CallbackContext value)
@@ -128,7 +194,7 @@ public class Player_Controller : Singleton<Player_Controller>
             {
                 return;
             }
-            if(weaponDrawn)
+            if(_weaponDrawn)
             {
                 return;
             }
@@ -139,15 +205,15 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if(!canRecieveInput)
+        if(!_canRecieveInput)
         {
             return;
         }
-        if(isUsingItem)
+        if(_isUsingItem)
         {
             return;
         }
-        if(!canWalk)
+        if(!_canWalk)
         {
             return;
         }
@@ -159,9 +225,9 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if (weaponDrawn)
+        if (_weaponDrawn)
         {
-            if (aiming)
+            if (_aiming)
             {
                 return;
             }
@@ -175,7 +241,7 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if(!canRecieveInput)
+        if(!_canRecieveInput)
         {
             return;
         }
@@ -183,7 +249,7 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if(!canWalk)
+        if(!_canWalk)
         {
             return;
         }
@@ -191,7 +257,7 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if(aiming)
+        if(_aiming)
         {
             return;
         }
@@ -209,17 +275,17 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if(!canRecieveInput)
+        if(!_canRecieveInput)
         {
             return;
         }
-        if(isUsingItem)
+        if(_isUsingItem)
         {
             return;
         }
-        if(canAim)
+        if(_canAim)
         {
-            if (aiming)
+            if (_aiming)
             {
                 DoAction();
                 pAnimations.BowFire();
@@ -227,7 +293,7 @@ public class Player_Controller : Singleton<Player_Controller>
             }
             return;
         }
-        canWalk = false;
+        _canWalk = false;
 
         if (pMovement.isRunning)
         {
@@ -260,64 +326,72 @@ public class Player_Controller : Singleton<Player_Controller>
 
         DoAction();
 
-        if (!readyforFirstAttack)
+        if (!_readyforFirstAttack)
         {
             return;
         }
 
-        readyforFirstAttack = false;
+        _readyforFirstAttack = false;
         DrawWeapon();
 
         switch (pEquipment.WeaponData.WeaponType)
         {
             case WeaponTypeData.WeaponTypes.LightClub:
                 pAnimations.LightClubStart();
-                pAnimations.LCDrawn(weaponDrawn);
+                pAnimations.LCDrawn(_weaponDrawn);
                 break;
             case WeaponTypeData.WeaponTypes.HeavyClub:
                 pAnimations.HeavyClubStart();
-                pAnimations.HCDrawn(weaponDrawn);
+                pAnimations.HCDrawn(_weaponDrawn);
                 break;
             case WeaponTypeData.WeaponTypes.Bow:
                 pAnimations.BowStart();
-                pAnimations.BowDrawn(weaponDrawn);
-                pEquipment.BowDrawn(weaponDrawn);
-                canAim = true;
+                pAnimations.BowDrawn(_weaponDrawn);
+                pEquipment.BowDrawn(_weaponDrawn);
+                _canAim = true;
                 break;
         }
 
-        if (canAim)
+        if (_canAim)
         {
             return;
         }
     }
     public void OnSpecialAttack(InputAction.CallbackContext value)
     {
-        if(isUsingItem)
+        if(_isUsingItem)
         {
             return;
         }
-        if(canAim)
+        if(_canAim)
         {
+            if (!defCinemachine || !inventoryCinemachine || !aimCinemachine)
+            {
+                return;
+            }
+            if (!reticle)
+            {
+                return;
+            }
             if (value.canceled)
             {
                 Debug.Log("Not Aiming");
-                aiming = false;
-                pAnimations.IsAiming(aiming);
+                _aiming = false;
+                pAnimations.IsAiming(_aiming);
                 defCinemachine.SetActive(true);
                 aimCinemachine.SetActive(false);
-                reticle.SetActive(false);
                 pAnimations.StartAimBow(0);
+                reticle.SetActive(false);
             }
             if (!value.performed)
             {
                 return;
             }
-            canWalk = false;
+            _canWalk = false;
             pAnimations.StartAimBow(1);
             Debug.Log("Aiming");
-            aiming = true;
-            pAnimations.IsAiming(aiming);
+            _aiming = true;
+            pAnimations.IsAiming(_aiming);
             aimCinemachine.SetActive(true);
             defCinemachine.SetActive(false);
             reticle.SetActive(true);
@@ -344,6 +418,10 @@ public class Player_Controller : Singleton<Player_Controller>
                     {
                         pAnimations.HC_SP("HC_SP1");
                     }
+                    if(!chargingImage)
+                    {
+                        return;
+                    }
                     chargingImage.gameObject.SetActive(false);
                     return;
                 }
@@ -352,7 +430,7 @@ public class Player_Controller : Singleton<Player_Controller>
             {
                 return;
             }
-            if (isDoingSpecialAttack)
+            if (_isDoingSpecialAttack)
             {
                 return;
             }
@@ -365,13 +443,17 @@ public class Player_Controller : Singleton<Player_Controller>
                     pAnimations.HCDrawn(true);
                     HC_SpecialCharge = true;
                     HC_SpecialChargeTime = 0;
+                    if(!chargingImage)
+                    {
+                        return;
+                    }
                     chargingImage.gameObject.SetActive(true);
                     break;
             }
-            canWalk = false;
+            _canWalk = false;
             DrawWeapon();
             pAnimations.SpecialTrigger();
-            isDoingSpecialAttack = true;
+            _isDoingSpecialAttack = true;
         }
 
     }
@@ -386,11 +468,11 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if(isUsingItem)
+        if(_isUsingItem)
         {
             return;
         }
-        isUsingItem = true;
+        _isUsingItem = true;
         SheathWeapon();
         pAnimations.UseConsumableWeight(1);
     }
@@ -401,15 +483,15 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if(!canRecieveInput)
+        if(!_canRecieveInput)
         {
             return;
         }
-        if(!weaponDrawn)
+        if(!_weaponDrawn)
         {
             return;
         }
-        if(aiming)
+        if(_aiming)
         {
             return;
         }
@@ -421,28 +503,28 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if(!canRecieveInput)
+        if(!_canRecieveInput)
         {
             return;
         }
         if(canChangeWeapon)
         {
             CanvasManager.instance.ShowInfo("You changed your weapon!");
-            pEquipment.UpdateSpawnWeapon(weaponData);
+            pEquipment.UpdateSpawnWeapon(_weaponData);
             SheathWeapon();
             return;
         }
         if(canChangeArmor)
         {
             CanvasManager.instance.ShowInfo("You changed your Armor!");
-            pEquipment.UpdateSpawnArmor(armorData);
+            pEquipment.UpdateSpawnArmor(_armorData);
             return;
         }
-        if (!canGather)
+        if (!_canGather)
         {
             return;
         }
-        if(weaponDrawn)
+        if(_weaponDrawn)
         {
             SheathWeapon();
         }
@@ -499,6 +581,7 @@ public class Player_Controller : Singleton<Player_Controller>
     }
     void ChargeHC_Special()
     {
+
         if (HC_SpecialCharge)
         {
             HC_SpecialChargeTime += Time.deltaTime;
@@ -530,28 +613,28 @@ public class Player_Controller : Singleton<Player_Controller>
     }
     void DoAction()
     {
-        inputRecieved = true;
-        canRecieveInput = false;
+        _inputRecieved = true;
+        _canRecieveInput = false;
     }
     void DrawWeapon()
     {
-        weaponDrawn = true;
-        pAnimations.WeaponDrawn(weaponDrawn);
-        pEquipment.WeaponDrawn(weaponDrawn);
+        _weaponDrawn = true;
+        pAnimations.WeaponDrawn(_weaponDrawn);
+        pEquipment.WeaponDrawn(_weaponDrawn);
     }
     void SheathWeapon()
     {
-        weaponDrawn = false;
-        pAnimations.LCDrawn(weaponDrawn);
-        pAnimations.HCDrawn(weaponDrawn);
+        _weaponDrawn = false;
+        pAnimations.LCDrawn(_weaponDrawn);
+        pAnimations.HCDrawn(_weaponDrawn);
 
-        pAnimations.BowDrawn(weaponDrawn);
-        pEquipment.BowDrawn(weaponDrawn);
-        canAim = false;
+        pAnimations.BowDrawn(_weaponDrawn);
+        pEquipment.BowDrawn(_weaponDrawn);
+        _canAim = false;
 
         pAnimations.SheathWeight(1);
-        pAnimations.WeaponDrawn(weaponDrawn);
-        pEquipment.WeaponDrawn(weaponDrawn);
+        pAnimations.WeaponDrawn(_weaponDrawn);
+        pEquipment.WeaponDrawn(_weaponDrawn);
     }
 
     private void OnTriggerEnter(Collider hit)
@@ -559,22 +642,22 @@ public class Player_Controller : Singleton<Player_Controller>
         if(hit.transform.gameObject.GetComponent<GatheringSpots>() != null)
         {
             CanvasManager.instance.ShowInfo("Press F to interact");
-            canGather = true;
-            gatheringItem = hit.gameObject;
+            _canGather = true;
+            _gatheringItem = hit.gameObject;
             
         }
         else if(hit.transform.gameObject.GetComponent<ChangeWeapon>() != null)
         {
             CanvasManager.instance.ShowInfo("Press F to interact");
             canChangeWeapon = true;
-            weaponData = hit.GetComponent<ChangeWeapon>().WeaponData;
+            _weaponData = hit.GetComponent<ChangeWeapon>().WeaponData;
 
         }
         else if (hit.transform.gameObject.GetComponent<ChangeArmor>() != null)
         {
             CanvasManager.instance.ShowInfo("Press F to interact");
             canChangeArmor = true;
-            armorData = hit.GetComponent<ChangeArmor>().ArmorData;
+            _armorData = hit.GetComponent<ChangeArmor>().ArmorData;
 
         }
     }
@@ -582,8 +665,8 @@ public class Player_Controller : Singleton<Player_Controller>
     {
         if (hit.transform.gameObject.GetComponent<GatheringSpots>() != null)
         {
-            canGather = false;
-            gatheringItem = null;
+            _canGather = false;
+            _gatheringItem = null;
         }
         else if (hit.transform.gameObject.GetComponent<ChangeWeapon>() != null)
         {

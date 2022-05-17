@@ -21,7 +21,7 @@ public class Animation_UseConsumable : StateMachineBehaviour
     {
         Player_Animations.instance.UseConsumableWeight(0);
         Player_Inventory.instance.UseItem();
-        Player_Controller.instance.isUsingItem = false;
+        Player_Controller.instance.IsUsingItem = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -64,7 +64,7 @@ public class Player_Movement : Singleton<Player_Movement>
             RollAction(captureDirection);
             return;
         }
-        if (Player_Controller.instance.aiming)
+        if (Player_Controller.instance.Aiming)
         {
             float targetAngle = mainCamera.transform.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, aimTurnSpeed);
@@ -74,11 +74,11 @@ public class Player_Movement : Singleton<Player_Movement>
 
             aimAt.transform.position = aimPos.transform.position;
         }
-        if (!Player_Controller.instance.canRecieveInput || Player_Controller.instance.isDoingSpecialAttack)
+        if (!Player_Controller.instance.CanRecieveInput || Player_Controller.instance.IsDoingSpecialAttack)
         {
             return;
         }
-        if(!Player_Controller.instance.canWalk)
+        if(!Player_Controller.instance.CanWalk)
         {
             return;
         }
@@ -142,7 +142,7 @@ public class Player_Movement : Singleton<Player_Movement>
                 defaultMinTurningSpeed = 0.05f;
             }
             
-            if (!Player_Controller.instance.aiming)
+            if (!Player_Controller.instance.Aiming)
             {
                 float targetAngle = Mathf.Atan2(MovePosition.x, MovePosition.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, defaultMinTurningSpeed);

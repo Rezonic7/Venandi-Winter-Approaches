@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class Player_Variables : Singleton<Player_Variables>
 {
-    [SerializeField] private Slider healthBar;
-    [SerializeField] private Slider staminaBar;
+    private Slider healthBar;
+    private Slider staminaBar;
 
     private float maxHealth = 100;
     private float currentHealth;
@@ -18,8 +18,18 @@ public class Player_Variables : Singleton<Player_Variables>
 
     private Coroutine regenStamina;
 
+
     private void Start()
     {
+        healthBar = GameObject.FindGameObjectWithTag("PlayerHealth")?.GetComponent<Slider>();
+        staminaBar = GameObject.FindGameObjectWithTag("PlayerStamina")?.GetComponent<Slider>();
+
+        if (!staminaBar || !healthBar)
+        {
+            Debug.Log("Heads up! PlayerVariables will not work, some compenents are missing in the Scene");
+            return;
+        }
+       
         currentStamina = maxStamina;
         currentHealth = maxHealth;
 
@@ -32,6 +42,10 @@ public class Player_Variables : Singleton<Player_Variables>
 
     public void TakeDamage(float value)
     {
+        if(!healthBar)
+        {
+            return;
+        }
         int armorValue = Player_Equipment.instance.TotalArmor;
         if (value - armorValue <= 0)
         {
@@ -47,7 +61,7 @@ public class Player_Variables : Singleton<Player_Variables>
             currentHealth -= value;
             healthBar.value = currentHealth;
 
-            Player_Controller.instance.canRecieveInput = false;
+            Player_Controller.instance.CanRecieveInput = false;
             Player_Animations.instance.LightDamage();  
         }
         else
@@ -60,6 +74,10 @@ public class Player_Variables : Singleton<Player_Variables>
 
     public bool UseStamina(float value)
     {
+        if(!staminaBar)
+        {
+            return false;
+        }
         if(currentStamina - value >= 0)
         {
             currentStamina -= value;

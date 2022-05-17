@@ -20,7 +20,7 @@ public class Script_RollAnimation : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Player_Movement.instance.isRolling = false;
-        Player_Controller.instance.canRecieveInput = true;
+        Player_Controller.instance.CanRecieveInput = true;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

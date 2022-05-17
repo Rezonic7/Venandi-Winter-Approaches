@@ -8,7 +8,7 @@ public abstract class AnimalClass : MonoBehaviour
     [SerializeField] private AnimalData animalData;
     [SerializeField] private float _attackRange;
     [SerializeField] LayerMask layerToFollow;
-    private GameObject areaHolder;
+    private GameObject _areaHolder;
     private AreaClass[] areas;
     private AreaClass _currentArea;
     private NavMeshAgent _agent;
@@ -21,13 +21,20 @@ public abstract class AnimalClass : MonoBehaviour
     private float _loiterTimer;
     private float scaleX;
     private float scaleZ;
+    private float AttackDistance;
 
-    private bool isGoingToNextArea;
+    private SphereCollider _aggroCollider;
+    private SphereCollider _OutOfRangeCollider;
+
+    private bool _isGoingToNextArea;
     [SerializeField] private bool _isPassive;
     private bool _isAgitated;
     private bool _isPlayerInRange;
     private bool _isAttacking;
-    
+
+    public SphereCollider AggroCollider { get { return _aggroCollider; } set { _aggroCollider = value; } }
+    public SphereCollider OutOfRangeCollider { get { return _OutOfRangeCollider; } set { _OutOfRangeCollider = value; } }
+    public GameObject AreaHolder { get { return _areaHolder; } }
     public Animator Anim { get { return _anim; } }
     public string AnimalName { get { return _animalName; }}
     public AreaClass CurrentArea { get { return _currentArea; } set { _currentArea = value; } }
@@ -37,6 +44,7 @@ public abstract class AnimalClass : MonoBehaviour
     public float BaseWanderTime { get { return _baseWanderTime; } }
     public float AttackRange { get { return _attackRange; } }
     public NavMeshAgent Agent { get { return _agent; } }
+    public bool IsGoingToNextArea { get { return _isGoingToNextArea; } set { _isGoingToNextArea = value; } }
     public bool IsAgitated { get { return _isAgitated; } set { _isAgitated = value; } }
     public bool IsAttacking { get { return _isAttacking; } set { _isAttacking = value; } }
     public bool IsPlayerInRange { get { return _isPlayerInRange; } set { _isPlayerInRange = value; } }
@@ -48,6 +56,9 @@ public abstract class AnimalClass : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
 
+        _aggroCollider = transform.GetChild(1).GetComponent<SphereCollider>();
+        _OutOfRangeCollider = transform.GetChild(2).GetComponent<SphereCollider>();
+
         if (animalData != null)
         {
             _animalName = animalData.AnimalName;
@@ -55,28 +66,38 @@ public abstract class AnimalClass : MonoBehaviour
             _agent.speed = animalData.BaseMovementSpeed;
             _baseWanderTime = animalData.BaseWanderTime;
             _baseLoiterTime = animalData.BaseLoiterTime;
+            _aggroCollider.radius = animalData.AggroRange;
+            _OutOfRangeCollider.radius = animalData.OutofRange;
             Instantiate(animalData.AnimalMesh,  this.gameObject.transform.GetChild(0).transform);
         }
     }
     void Start()
     {
+        _areaHolder = GameObject.FindGameObjectWithTag("AreaHolder")?.gameObject;
+
+        if(!_areaHolder)
+        {
+            Debug.Log("Heads up! Area Holder does not exist. I cannot move");
+            return;
+        }
+
         _anim = GetComponent<Animator>();
         if(Player_Controller.instance != null)
         {
             player = Player_Controller.instance;
         }
 
-        areaHolder = GameObject.FindGameObjectWithTag("AreaHolder");
+        _loiterTimer = RandomizeTimer(_baseLoiterTime);
 
         _isAgitated = false;
         _wanderTimer = RandomizeTimer(_baseWanderTime);
 
-        isGoingToNextArea = false;
+        _isGoingToNextArea = false;
 
-        areas = new AreaClass[areaHolder.transform.childCount];
-        for(int i = 0; i < areaHolder.transform.childCount; i++)
+        areas = new AreaClass[_areaHolder.transform.childCount];
+        for(int i = 0; i < _areaHolder.transform.childCount; i++)
         {
-            areas[i] = areaHolder.transform.GetChild(i).GetComponent<AreaClass>();
+            areas[i] = _areaHolder.transform.GetChild(i).GetComponent<AreaClass>();
         }
        
         GetAreaData();
@@ -88,18 +109,23 @@ public abstract class AnimalClass : MonoBehaviour
     }
     public virtual void Update()
     {
-        if(_isAttacking)
+        if (!_areaHolder)
+        {
+            return;
+        }
+        if (_isAttacking)
         {
             _agent.SetDestination(transform.position);
             return;
         }
+
         if (_isAgitated)
         {
             if (_isAttacking)
             {
                 return;
             }
-            if (IsPlayerInRange)
+            if (_isPlayerInRange)
             {
                 _agent.SetDestination(player.transform.position);
                 if (_agent.remainingDistance <= _attackRange)
@@ -118,8 +144,8 @@ public abstract class AnimalClass : MonoBehaviour
         {
             PassiveState();
         }
-        
     }
+
     public void DoRandomAttack()
     {
         int RandomAttack = Random.Range(0, 2);
@@ -162,7 +188,7 @@ public abstract class AnimalClass : MonoBehaviour
         }
         else
         {
-            if (!isGoingToNextArea)
+            if (!_isGoingToNextArea)
             {
                 Debug.Log("Im going to the next Area");
                 MoveToNextArea();
@@ -171,7 +197,7 @@ public abstract class AnimalClass : MonoBehaviour
             if (_agent.remainingDistance <= 0)
             {
                 WanderTimer = RandomizeTimer(_baseWanderTime);
-                isGoingToNextArea = false;
+                _isGoingToNextArea = false;
                 _agent.speed = 3;
                 Debug.Log("Arrived at new Area");
             }
@@ -201,7 +227,7 @@ public abstract class AnimalClass : MonoBehaviour
                     Vector3 referenceDestination = _currentArea.transform.position;
                     Vector3 newDestination = RaycastDownArea(referenceDestination);
                     _agent.SetDestination(newDestination);
-                    isGoingToNextArea = true;
+                    _isGoingToNextArea = true;
                 }
             }
         }

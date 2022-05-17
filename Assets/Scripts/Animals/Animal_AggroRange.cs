@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Animal_AggroRange : MonoBehaviour
 {
-    public AnimalClass parentScript;
+    private AnimalClass parentScript;
     private void Start()
     {
         parentScript = GetComponentInParent<AnimalClass>();

@@ -31,8 +31,8 @@ public class GatheringSpots : MonoBehaviour
                 total = 0;
                 if(_gatheringTimes <= 0)
                 {
-                    Player_Controller.instance.canGather = false;
-                    Player_Controller.instance.gatheringItem = null;
+                    Player_Controller.instance.CanGather = false;
+                    Player_Controller.instance.GatheringItem = null;
                     GatheringSpotManager.instance.Respawn(gameObject.GetComponent<GatheringSpots>(), RandomTimes());
                     gameObject.SetActive(false);
                 }

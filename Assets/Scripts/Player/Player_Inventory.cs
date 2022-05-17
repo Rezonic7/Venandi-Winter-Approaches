@@ -6,12 +6,14 @@ using UnityEngine.InputSystem;
 
 public class Player_Inventory : Singleton<Player_Inventory>
 {
-    [SerializeField] private GameObject slotHolder;
-    [SerializeField] private GameObject hotBarHolder;
-    [SerializeField] private GameObject Cursor;
+    private GameObject slotHolder;
+    private GameObject hotBarHolder;
+    private GameObject floatingItemIcon;
+    private GameObject hotBarSelecter;
+
+    //debug purposes remvoe serielzefield on final
     [SerializeField] private SlotClass[] startingItems;
-    [SerializeField] private GameObject hotBarSelecter;
-    
+
     private SlotClass[] items;
     private GameObject[] slots;
     private GameObject[] hotBar;
@@ -29,13 +31,22 @@ public class Player_Inventory : Singleton<Player_Inventory>
     private Vector2 mousePosition;
 
     public bool IsMovingItem { get { return _isMovingItem; } }
-    public bool CanUseItem {  get { return _canUseItem; } }
+    public bool CanUseItem { get { return _canUseItem; } }
 
     void Start()
     {
+        slotHolder = GameObject.FindWithTag("SlotHolder")?.gameObject;
+        hotBarHolder = GameObject.FindWithTag("HotBarHolder")?.gameObject;
+        floatingItemIcon = GameObject.FindWithTag("FloatingItemIcon")?.gameObject;
+        hotBarSelecter = GameObject.FindWithTag("HotBarSelecter")?.gameObject;
+
+        if (!slotHolder || !hotBarHolder || !floatingItemIcon || !hotBarSelecter)
+        {
+            Debug.Log("Heads up! PlayerInventory will not work, some components are missing in the scene.");
+            return;
+        }
+
         hotBarInt = 0;
-
-
         _isMovingItem = false;
 
         slots = new GameObject[slotHolder.transform.childCount];
@@ -60,9 +71,15 @@ public class Player_Inventory : Singleton<Player_Inventory>
         }
         RefreshUI();
 
+        if (!hotBarSelecter)
+        {
+            return;
+        }
+
         hotBarSelecter.transform.position = GetHotbarPosition();
 
     }
+   
     public void AddItem(ItemClass newItem, int amount)
     {
         SlotClass slot = Contains(newItem);
@@ -171,15 +188,18 @@ public class Player_Inventory : Singleton<Player_Inventory>
 
     private void Update()
     {
-        if (_isMovingItem)
+        if (slotHolder && hotBarHolder && floatingItemIcon && hotBarSelecter)
         {
-            Cursor.SetActive(true);
-            Cursor.GetComponent<Image>().sprite = movingSlot.Item.ImageSprite;
-            Cursor.transform.position = mousePosition;
-        }
-        else
-        {
-            Cursor.SetActive(false);
+            if (_isMovingItem)
+            {
+                floatingItemIcon.SetActive(true);
+                floatingItemIcon.GetComponent<Image>().sprite = movingSlot.Item.ImageSprite;
+                floatingItemIcon.transform.position = mousePosition;
+            }
+            else
+            {
+                floatingItemIcon.SetActive(false);
+            }
         }
     }
 
@@ -230,6 +250,10 @@ public class Player_Inventory : Singleton<Player_Inventory>
 
     public void ScrollRight()
     {
+        if(!hotBarSelecter)
+        {
+            return;
+        }
         if (hotBarInt < 9)
         {
             hotBarInt += 1;
@@ -243,6 +267,10 @@ public class Player_Inventory : Singleton<Player_Inventory>
     }
     public void ScrollLeft()
     {
+        if (!hotBarSelecter)
+        {
+            return;
+        }
         if (hotBarInt > 0)
         {
             hotBarInt -= 1;

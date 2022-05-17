@@ -19,7 +19,7 @@ public class Animation_Gathering : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GatheringSpots GS = Player_Controller.instance.gatheringItem?.GetComponent<GatheringSpots>();
+        GatheringSpots GS = Player_Controller.instance.GatheringItem?.GetComponent<GatheringSpots>();
         GatherableItems item = GS?.GatherItem();
         int amount = Random.Range(item.MinAmount, item.MaxAmount + 1);
         

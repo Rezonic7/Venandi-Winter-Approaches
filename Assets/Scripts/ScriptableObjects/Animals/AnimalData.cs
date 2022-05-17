@@ -9,6 +9,8 @@ public class AnimalData : ScriptableObject
     [SerializeField] private GameObject _animalMesh;
     [SerializeField] private float _baseMoveSpeed;
     [SerializeField] private float _attackRange;
+    [SerializeField] private float _aggroRange;
+    [SerializeField] private float _outofRange;
     [SerializeField] private float _baseLoiterTime;
     [SerializeField] private float _baseWanderTime;
     [SerializeField] private int _health;
@@ -24,6 +26,8 @@ public class AnimalData : ScriptableObject
     public string AnimalName { get { return _animalName; } set { _animalName = value; } }
     public float BaseMovementSpeed { get { return _baseMoveSpeed; } set { _baseMoveSpeed = value; } }
     public float AttackRange { get { return _attackRange; } set { _attackRange = value; } }
+    public float AggroRange { get { return _aggroRange; } set { _aggroRange = value; } }
+    public float OutofRange { get { return _outofRange; } set { _outofRange = value; } }
     public float BaseLoiterTime { get { return _baseLoiterTime; } set { _baseLoiterTime = value; } }
     public float BaseWanderTime { get { return _baseWanderTime; } set { _baseWanderTime = value; } }
     public int Health { get { return _health; } set { _health = value; } }

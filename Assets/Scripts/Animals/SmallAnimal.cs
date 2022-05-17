@@ -9,12 +9,26 @@ public class SmallAnimal : AnimalClass
    
     public override void Update()
     {
-        IsAgitated = true;
+        if(!AreaHolder)
+        {
+            return;
+        }
         if(IsAttacking)
         {
+            transform.LookAt(player.gameObject.transform);
             Agent.SetDestination(transform.position);
             return;
         }
+
+        if(IsGoingToNextArea)
+        {
+            if(Agent.remainingDistance <= 5)
+            {
+                IsGoingToNextArea = false;
+            }
+        }
+
+
         if (IsAgitated)
         {
             if(!hasChosen_AgitateAction)
@@ -23,14 +37,29 @@ public class SmallAnimal : AnimalClass
                 if (DoRandomAction == 0)
                 {
                     DoRandomAttack();
-                    IsAttacking = true;
+                    IsAgitated = true;
                 }
                 else if (DoRandomAction == 1)
                 {
                     MoveToNextArea();
                 }
-                IsAgitated = true;
                 hasChosen_AgitateAction = true;
+            }
+            else
+            {
+                if (IsPlayerInRange)
+                {
+                    Agent.SetDestination(player.transform.position);
+                    if (Agent.remainingDistance >= AttackRange)
+                    {
+                        Agent.SetDestination(transform.position);
+                        DoRandomAttack();
+                    }
+                }
+                else
+                {
+                    PassiveState();
+                }
             }
         }
         else
@@ -46,7 +75,6 @@ public class SmallAnimal : AnimalClass
                 {
                     Agent.SetDestination(transform.position);
                     DoRandomAttack();
-                    IsAttacking = true;
                 }
             }
             else
@@ -57,7 +85,7 @@ public class SmallAnimal : AnimalClass
     }
     public override void PassiveState()
     {
-        if (Agent.remainingDistance <= 0)
+        if (Agent.remainingDistance <= 3)
         {
             if (LoiterTimer > 0)
             {
@@ -79,7 +107,5 @@ public class SmallAnimal : AnimalClass
     public override void MoveToNextArea()
     {
         base.MoveToNextArea();
-        IsAgitated = false;
-        hasChosen_AgitateAction = false;
     }
 }

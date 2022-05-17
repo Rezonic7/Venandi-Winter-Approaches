@@ -7,6 +7,18 @@ TagManager:
   - Ground
   - Weapon
   - AreaHolder
+  - PlayerHealth
+  - PlayerStamina
+  - SlotHolder
+  - Inventory
+  - HotBarHolder
+  - FloatingItemIcon
+  - HotBarSelecter
+  - ChargingImage
+  - DefaultCinemachin
+  - InventoryCinemachine
+  - AimCinemachine
+  - Reticle
   layers:
   - Default
   - TransparentFX

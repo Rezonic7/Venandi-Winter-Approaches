@@ -6,6 +6,8 @@ public class MissionManager : Singleton<MissionManager>
 {
     [SerializeField] private MissionData missionData;
     private GameObject areaHolder;
+
+    // make private after testing is done
     public List<int> areasNotSpawnable;
     private AreaClass[] areas;
     private float missionTime;
@@ -28,7 +30,14 @@ public class MissionManager : Singleton<MissionManager>
             {
                 if(currentArea != null)
                 {
-                    Vector3 spawnPos = currentArea.gameObject.transform.position;
+                    Vector3 areaPos = currentArea.gameObject.transform.position;
+
+                    float scaleX = currentArea.transform.localScale.x / 2;
+                    float scaleZ = currentArea.transform.localScale.z / 2;
+
+                    float randomX = Random.Range(-scaleX, scaleX);
+                    float randomZ = Random.Range(-scaleZ, scaleZ);
+                    Vector3 spawnPos = new Vector3(randomX, 0, randomZ) + currentArea.transform.position;
                     spawnPos.y = 10f;
                     AnimalClass animal = Instantiate(missionData.AnimalsToSpawn[i].Animal, spawnPos, Quaternion.identity, this.transform);
                     animal.CurrentArea = currentArea;
