@@ -13,38 +13,14 @@ public class Animal_AggroRange : MonoBehaviour
     {
         if(other.transform.tag == "Player")
         {
-            if(parentScript.IsPassive)
-            {
-                if(parentScript.IsAgitated)
-                {
-                    parentScript.IsPlayerInRange = true;
-                }
-                return;
-            }
-            else
-            {
-                parentScript.IsAgitated = true;
-                parentScript.IsPlayerInRange = true;
-            }
+            parentScript.IsPlayerInRange = true;
         }
     }
     private void OnTriggerStay(Collider other)
     {
         if (other.transform.tag == "Player")
         {
-            if (parentScript.IsPassive)
-            {
-                if (parentScript.IsAgitated)
-                {
-                    parentScript.IsPlayerInRange = true;
-                }
-                return;
-            }
-            else
-            {
-                parentScript.IsAgitated = true;
-                parentScript.IsPlayerInRange = true;
-            }
+            parentScript.IsPlayerInRange = true;
         }
     }
 }

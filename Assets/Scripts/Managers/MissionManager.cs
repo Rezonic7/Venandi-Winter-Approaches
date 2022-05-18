@@ -15,6 +15,7 @@ public class MissionManager : Singleton<MissionManager>
     private void Start()
     {
         missionTime = missionData.MissionTime;
+
         areasNotSpawnable = new List<int>();
         areaHolder = GameObject.FindGameObjectWithTag("AreaHolder");
         areas = new AreaClass[areaHolder.transform.childCount];
@@ -39,7 +40,10 @@ public class MissionManager : Singleton<MissionManager>
                     float randomZ = Random.Range(-scaleZ, scaleZ);
                     Vector3 spawnPos = new Vector3(randomX, 0, randomZ) + currentArea.transform.position;
                     spawnPos.y = 10f;
-                    AnimalClass animal = Instantiate(missionData.AnimalsToSpawn[i].Animal, spawnPos, Quaternion.identity, this.transform);
+
+                    AnimalClass animal = Instantiate(missionData.AnimalsToSpawn[i].AnimalClass, spawnPos, Quaternion.identity, this.transform);
+                
+                    animal.AnimalData = missionData.AnimalsToSpawn[i].Animal;
                     animal.CurrentArea = currentArea;
                 }
             }

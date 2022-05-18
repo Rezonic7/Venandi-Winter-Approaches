@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4795295757606270117}
+  - component: {fileID: 7005415665835581408}
   m_Layer: 0
   m_Name: MeshHolder
-  m_TagString: Untagged
+  m_TagString: AnimalMesh
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,6 +31,19 @@ Transform:
   m_Father: {fileID: 6148907681418349078}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7005415665835581408
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1186453307946507585}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 5, z: 3}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &6148907680980979796
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,7 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99feaa9740dc2a54e898abf1e91d6282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentScript: {fileID: 0}
 --- !u!1 &6148907681418349081
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,7 +158,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.25
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 7
   m_ObstacleAvoidanceType: 4
 --- !u!114 &6148907681418349080
 MonoBehaviour:
@@ -159,13 +172,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266ce72e8242fe44d9daa0c7865f7038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animalData: {fileID: 11400000, guid: ec6e96147efd62741abe94fdd5e08b7c, type: 2}
-  _attackRange: 0
   layerToFollow:
     serializedVersion: 2
     m_Bits: 128
-  _isPassive: 1
-  player: {fileID: 0}
 --- !u!54 &4753137288573638733
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ public class Animation_SmallAnimalAttack : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         SmallAnimal animal = animator.gameObject.GetComponent<SmallAnimal>();
-        animal.IsAttacking = false;
+        animal.StartCoroutine(animal.StartAttackCoolDown(1.5f));
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

@@ -15,9 +15,9 @@ MonoBehaviour:
   _animalName: Deer
   _animalMesh: {fileID: 617606146074419681, guid: 5aafca3e1c7547e47b7cac73135e3bb7, type: 3}
   _baseMoveSpeed: 1
-  _attackRange: 10
+  _attackRange: 1.5
   _aggroRange: 5
-  _outofRange: 7
+  _outofRange: 12.5
   _baseLoiterTime: 10
   _baseWanderTime: 0
   _health: 100

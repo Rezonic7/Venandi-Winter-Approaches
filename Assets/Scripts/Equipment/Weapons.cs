@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Weapons : Singleton<Weapons>
 {
+    public GameObject bloodParticle;
+
     private int _damageValue;
     private bool _hasDamaged;
     public int DamageValue { get { return _damageValue; } set { _damageValue = value; } }
@@ -16,7 +18,7 @@ public class Weapons : Singleton<Weapons>
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<TrainingDummy>() == null)
+        if(other.gameObject.transform.tag == "AnimalMesh")
         {
             return;
         }
@@ -25,8 +27,13 @@ public class Weapons : Singleton<Weapons>
             return;
         }
         HasDamaged = true;
-        TrainingDummy TD = other.gameObject.GetComponent<TrainingDummy>();
-        TD.TakeDamage(_damageValue);
+
+        GameObject BPGO = Instantiate(bloodParticle, other.gameObject.transform.position, Quaternion.identity, other.gameObject.transform);
+        Destroy(BPGO, 1f);
+
+        AnimalClass animal = other.gameObject.transform.GetComponentInParent<AnimalClass>();
+        animal.TakeDamage(_damageValue);
+
         Vector3 spawnPos = Camera.main.WorldToScreenPoint(transform.position);
         CanvasManager.instance.SpawnDamage(_damageValue, spawnPos);
     }

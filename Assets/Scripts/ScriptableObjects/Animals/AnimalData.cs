@@ -5,16 +5,24 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Animal Data", menuName = "Create Data/Animal/Animal Data")]
 public class AnimalData : ScriptableObject
 {
+    [Tooltip("Animal Name")]
     [SerializeField] private string _animalName;
+    [Tooltip("Animal Prefab Model")]
     [SerializeField] private GameObject _animalMesh;
-    [SerializeField] private float _baseMoveSpeed;
+    
+    [Tooltip("Animal Variables")]
     [SerializeField] private float _attackRange;
     [SerializeField] private float _aggroRange;
     [SerializeField] private float _outofRange;
+
     [SerializeField] private float _baseLoiterTime;
     [SerializeField] private float _baseWanderTime;
+
+    [Tooltip("Animal Stats")]
     [SerializeField] private int _health;
     [SerializeField] private int _baseDamage;
+    [SerializeField] private float _baseMoveSpeed;
+
     [SerializeField] private bool _isPassive;
 
     [SerializeField] private List<Elements> _weakness;

@@ -19,6 +19,7 @@ TagManager:
   - InventoryCinemachine
   - AimCinemachine
   - Reticle
+  - AnimalMesh
   layers:
   - Default
   - TransparentFX
