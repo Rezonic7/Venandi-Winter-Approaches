@@ -19,7 +19,8 @@ public class Script_RollAnimation : StateMachineBehaviour
     //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Player_Movement.instance.isRolling = false;
+        Player_Controller.instance.IsRolling = false;
+        Player_Controller.instance.CanRoll = true;
         Player_Controller.instance.CanRecieveInput = true;
     }
 

@@ -16,6 +16,7 @@ public abstract class AnimalClass : MonoBehaviour
 
     private SphereCollider _aggroCollider;
     private SphereCollider _OutOfRangeCollider;
+    private Collider hitBox;
 
     private string _animalName;
 
@@ -30,13 +31,17 @@ public abstract class AnimalClass : MonoBehaviour
 
     private int _maxHealth;
     private int _currentHealth;
+    private int _baseDamage;
+    private int _totalDamage;
 
     private bool _isGoingToNextArea;
-    private bool _canAttack;
+    private bool _canMove;
     private bool _isPassive;
     private bool _isAgitated;
     private bool _isPlayerInRange;
     private bool _isAttacking;
+    private bool _isDead;
+    private bool _hasDamaged;
 
     public AnimalData AnimalData { get { return _animalData; } set { _animalData = value; } }
     public SphereCollider AggroCollider { get { return _aggroCollider; } set { _aggroCollider = value; } }
@@ -48,12 +53,16 @@ public abstract class AnimalClass : MonoBehaviour
     public Player_Controller Player { get { return _player; } set { _player = value; } }
     public string AnimalName { get { return _animalName; }}
     public int Health { get { return _maxHealth; } set { _maxHealth = value; } }
+    public int BaseDamage { get { return _baseDamage; } set { _baseDamage = value; } }
+    public int TotalDamage { get { return _totalDamage; } set { _totalDamage = value; } }
     public float LoiterTimer { get { return _loiterTimer; } set { _loiterTimer = value; } }
     public float WanderTimer { get { return _wanderTimer; } set { _wanderTimer = value; } }
     public float BaseLoiterTime { get { return _baseLoiterTime; } }
     public float BaseWanderTime { get { return _baseWanderTime; } }
     public float AttackRange { get { return _attackRange; } }
-    public bool canMove { get { return _canAttack; } set { _canAttack = value; } }
+    public bool HasDamaged { get { return _hasDamaged; } set { _hasDamaged = value; } }
+    public bool IsDead { get { return _isDead; } set { _isDead = value; } }
+    public bool CanMove { get { return _canMove; } set { _canMove = value; } }
     public bool IsGoingToNextArea { get { return _isGoingToNextArea; } set { _isGoingToNextArea = value; } }
     public bool IsAgitated { get { return _isAgitated; } set { _isAgitated = value; } }
     public bool IsAttacking { get { return _isAttacking; } set { _isAttacking = value; } }
@@ -64,10 +73,11 @@ public abstract class AnimalClass : MonoBehaviour
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        hitBox = transform.GetChild(0).GetComponent<Collider>();
         _aggroCollider = transform.GetChild(1).GetComponent<SphereCollider>();
         _OutOfRangeCollider = transform.GetChild(2).GetComponent<SphereCollider>();
     }
-    void Start()
+    public virtual void Start()
     {
         if (_animalData)
         {
@@ -81,6 +91,8 @@ public abstract class AnimalClass : MonoBehaviour
             _attackRange = _animalData.AttackRange;
             _maxHealth = _animalData.Health;
             _currentHealth = _maxHealth;
+            _baseDamage = _animalData.BaseDamage;
+            _totalDamage = _baseDamage;
             Instantiate(_animalData.AnimalMesh, this.gameObject.transform.GetChild(0).transform);
         }
 
@@ -101,9 +113,10 @@ public abstract class AnimalClass : MonoBehaviour
         _loiterTimer = RandomizeTimer(_baseLoiterTime);
         _wanderTimer = RandomizeTimer(_baseWanderTime);
 
+        _hasDamaged = false;
         _isAgitated = false;
         _isGoingToNextArea = false;
-        canMove = true;
+        CanMove = true;
 
 
         areas = new AreaClass[_areaHolder.transform.childCount];
@@ -123,6 +136,20 @@ public abstract class AnimalClass : MonoBehaviour
     {
         if (!_areaHolder)
         {
+            return;
+        }
+
+        if(IsDead)
+        {
+            if(Agent.enabled)
+            {
+               Agent.SetDestination(transform.position);
+            }
+
+            Agent.enabled = false;
+            _aggroCollider.enabled = false;
+            _OutOfRangeCollider.enabled = false;
+            hitBox.enabled = false;
             return;
         }
 
@@ -180,7 +207,7 @@ public abstract class AnimalClass : MonoBehaviour
     public IEnumerator StartAttackCoolDown(float attackCoolDown)
     {
         yield return new WaitForSeconds(attackCoolDown);
-        canMove = true;
+        CanMove = true;
         _isAttacking = false;
     }
     public void TakeDamage(int value)
@@ -188,13 +215,17 @@ public abstract class AnimalClass : MonoBehaviour
         if (_currentHealth - value >= 0)
         {
             _currentHealth -= value;
-            _anim.SetTrigger("TakeDamage");
         }
         else
         {
             _currentHealth = 0;
             _anim.SetBool("isDead", true);
+            _isDead = true;
         }
+    }
+    public void Add_MotionValue(float percentage)
+    {
+        _totalDamage = MotionValue(BaseDamage, percentage);
     }
     #endregion Public Methods To Call
 
@@ -203,7 +234,7 @@ public abstract class AnimalClass : MonoBehaviour
     {
         RotateTowardsPlayer();
 
-        if (canMove)
+        if (CanMove)
         {
             Agent.SetDestination(Player.gameObject.transform.position);
             if (Agent.remainingDistance <= AttackRange)
@@ -268,6 +299,8 @@ public abstract class AnimalClass : MonoBehaviour
     }
     public void DoRandomAttack()
     {
+        _hasDamaged = false;
+
         int RandomAttack = Random.Range(0, 2);
         if (RandomAttack == 0)
         {
@@ -278,7 +311,7 @@ public abstract class AnimalClass : MonoBehaviour
             Anim.SetTrigger("Attack2");
         }
         _isAttacking = true;
-        canMove = false;
+        CanMove = false;
     }
     public virtual void MoveToNextArea()
     {
@@ -326,6 +359,11 @@ public abstract class AnimalClass : MonoBehaviour
             return hit.point;
         }
         return Vector3.zero;
+    }
+    private int MotionValue(int baseDamage, float PercentageModifier)
+    {
+        int totalValue = (int)((float)baseDamage + (float)((float)baseDamage * PercentageModifier));
+        return totalValue;
     }
     #endregion UnaltertedState
 }

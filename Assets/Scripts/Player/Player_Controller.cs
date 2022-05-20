@@ -35,7 +35,11 @@ public class Player_Controller : Singleton<Player_Controller>
     private bool _isDoingSpecialAttack = false;
     private bool _isUsingItem = false;
     private bool _canWalk = true;
+    private bool _canRoll = true;
+    private bool _isRolling = false;
 
+    public bool IsRolling { get { return _isRolling; } set { _isRolling = value; } }
+    public bool CanRoll { get { return _canRoll; } set { _canRoll = value; } }
     public bool CanRecieveInput { get { return _canRecieveInput; } set { _canRecieveInput = value; } }
     public bool InputRecieved { get { return _inputRecieved; } set { _inputRecieved = value; } }
     public bool ReadyforFirstAttack { get { return _readyforFirstAttack; } set { _readyforFirstAttack = value; } }
@@ -88,6 +92,7 @@ public class Player_Controller : Singleton<Player_Controller>
             Debug.Log("Heads up! Cinemachines may not work propely, some Cinemachine's are missing.");
         }
 
+        _canRoll = true;
         _canWalk = true;
         _isUsingItem = false;
         HC_SpecialCharge = false;
@@ -237,23 +242,16 @@ public class Player_Controller : Singleton<Player_Controller>
     }
     public void OnRoll(InputAction.CallbackContext value)
     {
-        if(!value.started)
+        if (!_canRoll)
         {
             return;
         }
-        if(!_canRecieveInput)
+        if (!value.started)
         {
             return;
         }
+        
         if (pMovement.movement.magnitude <= 0.1f)
-        {
-            return;
-        }
-        if(!_canWalk)
-        {
-            return;
-        }
-        if(pMovement.isRolling)
         {
             return;
         }
@@ -265,9 +263,11 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
+        Debug.Log("I should roll");
         pMovement.captureDirection = pMovement.movement;
         pAnimations.Roll();
-        pMovement.Roll();
+        _isRolling = true;
+        SetRoll(0);
     }
     public void OnAttack(InputAction.CallbackContext value)
     {
@@ -615,6 +615,19 @@ public class Player_Controller : Singleton<Player_Controller>
     {
         _inputRecieved = true;
         _canRecieveInput = false;
+
+        _canRoll = false;
+    }
+    void SetRoll(int checkTrue)
+    {
+        if(checkTrue <= 0)
+        {
+            _canRoll = false;
+        }
+        else
+        {
+            _canRoll = true;
+        }
     }
     void DrawWeapon()
     {

@@ -5,6 +5,14 @@ using UnityEngine.AI;
 
 public class SmallAnimal : AnimalClass
 {
+    private Collider hurtBox;
+    public override void Start()
+    {
+        base.Start();
+        hurtBox = transform.GetChild(0).GetChild(0).Find("HurtBox").GetComponent<Collider>();
+
+        hurtBox.enabled = false;
+    }
     public override void CalmState()
     {
         if (Agent.remainingDistance <= 3)
@@ -23,4 +31,16 @@ public class SmallAnimal : AnimalClass
             }
         }
     }
+    public void SetHurtBox(int isTrue)
+    {
+        if(isTrue <= 0)
+        {
+            hurtBox.enabled = false;
+        }else
+        {
+            hurtBox.enabled = true;
+        }
+    }
+    
+
 }

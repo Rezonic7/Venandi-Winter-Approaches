@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 673c54f2f8cca034c9f80a31972c5ca8, type: 3}
+  m_Name: Rhino
+  m_EditorClassIdentifier: 
+  _animalName: Rhino
+  _animalMesh: {fileID: 8970325634888059096, guid: 1c9735ab89bf71647af8d980006cfd66, type: 3}
+  _attackRange: 1.5
+  _aggroRange: 10
+  _outofRange: 20
+  _baseLoiterTime: 10
+  _baseWanderTime: 0
+  _health: 250
+  _baseDamage: 25
+  _baseMoveSpeed: 0.5
+  _isPassive: 0
+  _weakness: 02000000
+  _resistance: 00000000
+  _itemDrops:
+  - _item: {fileID: 0}
+    _quantity: 0
+  - _item: {fileID: 11400000, guid: 42ec369186e5ce0429393a2826c362a6, type: 2}
+    _quantity: 3
+  - _item: {fileID: 0}
+    _quantity: 0

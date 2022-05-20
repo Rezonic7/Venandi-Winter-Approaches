@@ -179,6 +179,6 @@ public class Player_Equipment : Singleton<Player_Equipment>
     public void Add_MotionValue(float percentage)
     {
         _totalDamage = MotionValue(weaponTotal, percentage);
-        Weapons.instance.DamageValue = TotalDamage;
+        Weapons.instance.DamageValue = _totalDamage;
     }
 }

@@ -13,13 +13,11 @@ public class Player_Movement : Singleton<Player_Movement>
     private float currentSpeed;
     private float minSpeed;
     private float timeForMaxAccel;
-    private float timeForRoll;
 
     [SerializeField] private float aimTurnSpeed = 0.2f;
     [SerializeField] private float defaultTurningSpeed = 0.2f;
     [SerializeField] private float gravity = 9.81f;
     [SerializeField] private float rollMultiplier = 6f;
-    [SerializeField] private float RollDuration = 5f;
 
     [SerializeField] private GameObject aimPivot;
     [SerializeField] private GameObject aimAt;
@@ -38,7 +36,6 @@ public class Player_Movement : Singleton<Player_Movement>
     public Vector2 movement;
 
     public bool isRunning = false;
-    public bool isRolling = false;
     public bool isMoving = false;
 
     void Start()
@@ -58,12 +55,9 @@ public class Player_Movement : Singleton<Player_Movement>
     void Update()
     {
         isGroundedCheck();
-        
-        if(isRolling)
-        {
-            RollAction(captureDirection);
-            return;
-        }
+
+        RollAction(captureDirection);
+
         if (Player_Controller.instance.Aiming)
         {
             float targetAngle = mainCamera.transform.eulerAngles.y;
@@ -119,11 +113,6 @@ public class Player_Movement : Singleton<Player_Movement>
         }
     }
 
-    public void Roll()
-    {
-        isRolling = true;
-    }
-
     public void Move(Vector2 inputMovement)
     {
         Vector3 MovePosition = new Vector3(inputMovement.x, 0f, inputMovement.y).normalized;
@@ -170,18 +159,17 @@ public class Player_Movement : Singleton<Player_Movement>
     }
     public void RollAction(Vector2 movement)
     {
+        if(!Player_Controller.instance.IsRolling)
+        {
+            return;
+        }
         Vector3 Movement = new Vector3(movement.x, 0, movement.y);
         float targetAngle = Mathf.Atan2(Movement.x, Movement.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
         transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
         
-        if(timeForRoll <= RollDuration && movement.magnitude != 0)
+        if(movement.magnitude != 0)
         {
             playerController.Move((transform.forward * rollMultiplier) * Time.deltaTime);
-            timeForRoll -= Time.deltaTime;
-        }
-        else
-        {
-            timeForRoll = 0;
         }
         timeForMaxAccel = timeToReachMaxAccel;
     }

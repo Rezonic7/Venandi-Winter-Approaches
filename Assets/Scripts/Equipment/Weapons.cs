@@ -18,7 +18,7 @@ public class Weapons : Singleton<Weapons>
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.transform.tag == "AnimalMesh")
+        if(other.gameObject.transform.tag != "AnimalMesh")
         {
             return;
         }
@@ -36,5 +36,13 @@ public class Weapons : Singleton<Weapons>
 
         Vector3 spawnPos = Camera.main.WorldToScreenPoint(transform.position);
         CanvasManager.instance.SpawnDamage(_damageValue, spawnPos);
+
+        if(animal.IsPassive)
+        {
+            if(!animal.IsAgitated)
+            {
+                animal.HasBeenAgitated();
+            }
+        }
     }
 }

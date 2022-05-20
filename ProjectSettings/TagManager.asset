@@ -24,14 +24,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - DamageText
   - MapGround
-  - 
-  - 
-  - 
+  - Animal
+  - Raycast
+  - Water
   - 
   - 
   - 

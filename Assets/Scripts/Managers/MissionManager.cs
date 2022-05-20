@@ -42,8 +42,6 @@ public class MissionManager : Singleton<MissionManager>
                     spawnPos.y = 10f;
 
                     AnimalClass animal = Instantiate(missionData.AnimalsToSpawn[i].AnimalClass, spawnPos, Quaternion.identity, this.transform);
-                
-                    animal.AnimalData = missionData.AnimalsToSpawn[i].Animal;
                     animal.CurrentArea = currentArea;
                 }
             }

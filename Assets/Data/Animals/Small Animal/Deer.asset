@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animalName: Deer
   _animalMesh: {fileID: 617606146074419681, guid: 5aafca3e1c7547e47b7cac73135e3bb7, type: 3}
-  _baseMoveSpeed: 1
   _attackRange: 1.5
   _aggroRange: 5
   _outofRange: 12.5
@@ -22,7 +21,8 @@ MonoBehaviour:
   _baseWanderTime: 0
   _health: 100
   _baseDamage: 5
-  _isPassive: 0
+  _baseMoveSpeed: 1
+  _isPassive: 1
   _weakness: 000000000100000002000000
   _resistance: 
   _itemDrops:

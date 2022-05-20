@@ -39,7 +39,7 @@ public class AnimalData : ScriptableObject
     public float BaseLoiterTime { get { return _baseLoiterTime; } set { _baseLoiterTime = value; } }
     public float BaseWanderTime { get { return _baseWanderTime; } set { _baseWanderTime = value; } }
     public int Health { get { return _health; } set { _health = value; } }
-    public int Damage { get { return _baseDamage; } set { _baseDamage = value; } }
+    public int BaseDamage { get { return _baseDamage; } set { _baseDamage = value; } }
     public bool IsPassive { get { return _isPassive; } set { _isPassive = value; } }
 
     public List<Elements> Weakness { get { return _weakness; } set { _weakness = value; } }
