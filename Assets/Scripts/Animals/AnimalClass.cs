@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public abstract class AnimalClass : MonoBehaviour
 {
-    private AnimalData _animalData;
+    [SerializeField] private AnimalData _animalData;
     [SerializeField] LayerMask layerToFollow;
     private GameObject _areaHolder;
     private AreaClass[] areas;
@@ -24,6 +24,7 @@ public abstract class AnimalClass : MonoBehaviour
     private float turnSmoothVelocity;
     private float _baseWanderTime;
     private float _baseLoiterTime;
+    private float _baseSpeed;
     private float _wanderTimer;
     private float _loiterTimer;
     private float scaleX;
@@ -55,6 +56,7 @@ public abstract class AnimalClass : MonoBehaviour
     public int Health { get { return _maxHealth; } set { _maxHealth = value; } }
     public int BaseDamage { get { return _baseDamage; } set { _baseDamage = value; } }
     public int TotalDamage { get { return _totalDamage; } set { _totalDamage = value; } }
+    public float BaseSpeed { get { return _baseSpeed; } set { _baseSpeed = value; } }
     public float LoiterTimer { get { return _loiterTimer; } set { _loiterTimer = value; } }
     public float WanderTimer { get { return _wanderTimer; } set { _wanderTimer = value; } }
     public float BaseLoiterTime { get { return _baseLoiterTime; } }
@@ -83,7 +85,8 @@ public abstract class AnimalClass : MonoBehaviour
         {
             _animalName = _animalData.AnimalName;
             _isPassive = _animalData.IsPassive;
-            _agent.speed = _animalData.BaseMovementSpeed;
+            _baseSpeed = _animalData.BaseMovementSpeed;
+            Agent.speed = _baseSpeed;
             _baseWanderTime = _animalData.BaseWanderTime;
             _baseLoiterTime = _animalData.BaseLoiterTime;
             _aggroCollider.radius = _animalData.AggroRange;
@@ -93,7 +96,6 @@ public abstract class AnimalClass : MonoBehaviour
             _currentHealth = _maxHealth;
             _baseDamage = _animalData.BaseDamage;
             _totalDamage = _baseDamage;
-            Instantiate(_animalData.AnimalMesh, this.gameObject.transform.GetChild(0).transform);
         }
 
         _areaHolder = GameObject.FindGameObjectWithTag("AreaHolder")?.gameObject;
@@ -155,9 +157,9 @@ public abstract class AnimalClass : MonoBehaviour
 
         if (_isPlayerInRange)
         {
-            if (IsPassive)
+            if (_isPassive)
             {
-                if (IsAgitated)
+                if (_isAgitated)
                 {
                     AggressiveState();
                 }
@@ -178,11 +180,25 @@ public abstract class AnimalClass : MonoBehaviour
 
         if (IsGoingToNextArea)
         {
+            Agent.speed = _baseSpeed + (_baseSpeed * 0.5f);
             if (Agent.remainingDistance <= 5)
             {
                 IsAgitated = true;
                 IsGoingToNextArea = false;
             }
+        }
+        else
+        {
+            Agent.speed = _baseSpeed;
+        }
+
+        if (_agent.remainingDistance > 0)
+        {
+            _anim.SetBool("isWalking", true);
+        }
+        else
+        {
+            _anim.SetBool("isWalking", false);
         }
 
     }
@@ -240,7 +256,7 @@ public abstract class AnimalClass : MonoBehaviour
             if (Agent.remainingDistance <= AttackRange)
             {
                 Agent.SetDestination(transform.position);
-                DoRandomAttack();
+                IsFacingPlayer();
             }
         }
         else
@@ -294,8 +310,21 @@ public abstract class AnimalClass : MonoBehaviour
         }
         Vector3 direction = Player.transform.position - transform.position;
         float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, 0.2f);
-        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+        transform.rotation = Quaternion.Euler(0f, GetTurnSpeed(targetAngle), 0f);
+    }
+    private float GetTurnSpeed(float targetAngle)
+    {
+        float angle;
+        if(Agent.remainingDistance <= AttackRange)
+        {
+            angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, 0.2f);
+            return angle;
+        }
+        else
+        {
+            angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, 1f);
+            return angle;
+        }
     }
     public void DoRandomAttack()
     {
@@ -340,6 +369,20 @@ public abstract class AnimalClass : MonoBehaviour
         scaleX = _currentArea.transform.localScale.x / 2;
         scaleZ = _currentArea.transform.localScale.z / 2;
     }
+    public void IsFacingPlayer()
+    {
+        Vector3 offsetTrasform = transform.position;
+        offsetTrasform.y = transform.position.y + (Agent.height / 2);
+
+        RaycastHit hit;
+        if (Physics.Raycast(offsetTrasform, transform.forward, out hit, AttackRange + 0.5f))
+        {
+            if (hit.transform.tag == "Player")
+            {
+                DoRandomAttack();
+            }
+        }
+    }
     public void RandomWanderAroundCurrentArea()
     {
         float randomX = Random.Range(-scaleX, scaleX);
@@ -365,6 +408,6 @@ public abstract class AnimalClass : MonoBehaviour
         int totalValue = (int)((float)baseDamage + (float)((float)baseDamage * PercentageModifier));
         return totalValue;
     }
-    #endregion UnaltertedState
+    #endregion GetInfo
 }
 

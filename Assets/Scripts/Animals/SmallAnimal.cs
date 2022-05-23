@@ -21,12 +21,10 @@ public class SmallAnimal : AnimalClass
             {
                 LoiterTimer -= Time.deltaTime;
                 Agent.SetDestination(Agent.transform.position);
-                Anim.SetBool("isWalking", false);
             }
             else
             {
                 LoiterTimer = RandomizeTimer(BaseLoiterTime);
-                Anim.SetBool("isWalking", true);
                 RandomWanderAroundCurrentArea();
             }
         }

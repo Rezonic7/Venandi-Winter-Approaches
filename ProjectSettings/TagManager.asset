@@ -20,6 +20,7 @@ TagManager:
   - AimCinemachine
   - Reticle
   - AnimalMesh
+  - Puddle
   layers:
   - Default
   - TransparentFX

@@ -13,7 +13,7 @@ NavMeshProjectSettings:
     cost: 2
   - name: Water
     cost: 5
-  - name: 
+  - name: DeepWater
     cost: 1
   - name: 
     cost: 1

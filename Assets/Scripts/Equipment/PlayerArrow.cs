@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PlayerArrow : MonoBehaviour
 {
+    public GameObject bloodParticle;
+
     [SerializeField] private float arrowSpeed;
     private Rigidbody rb;
-    private int _damage;
+    private int _damageValue;
     
-    public int Damage { set { _damage = value; } }
+    public int Damage { set { _damageValue = value; } }
 
     private void Start()
     {
@@ -20,18 +22,28 @@ public class PlayerArrow : MonoBehaviour
         transform.forward = Vector3.Slerp(transform.forward, rb.velocity.normalized, Time.deltaTime);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.transform.gameObject.GetComponent<TrainingDummy>() != null)
+        if (other.gameObject.transform.tag != "AnimalMesh")
         {
-            TrainingDummy TD = collision.transform.gameObject.GetComponent<TrainingDummy>();
-            TD.TakeDamage(_damage);
-            Vector3 spawnPos = Camera.main.WorldToScreenPoint(transform.position);
-            CanvasManager.instance.SpawnDamage(_damage, spawnPos);
-
-            Destroy(gameObject);
+            return;
         }
 
-    }
+        GameObject BPGO = Instantiate(bloodParticle, other.gameObject.transform.position, Quaternion.identity, other.gameObject.transform);
+        Destroy(BPGO, 1f);
 
+        AnimalClass animal = other.gameObject.transform.GetComponentInParent<AnimalClass>();
+        animal.TakeDamage(_damageValue);
+
+        Vector3 spawnPos = Camera.main.WorldToScreenPoint(transform.position);
+        CanvasManager.instance.SpawnDamage(_damageValue, spawnPos);
+
+        if (animal.IsPassive)
+        {
+            if (!animal.IsAgitated)
+            {
+                animal.HasBeenAgitated();
+            }
+        }
+    }
 }

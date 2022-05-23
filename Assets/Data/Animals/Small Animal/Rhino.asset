@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Rhino
   m_EditorClassIdentifier: 
   _animalName: Rhino
-  _animalMesh: {fileID: 8970325634888059096, guid: 1c9735ab89bf71647af8d980006cfd66, type: 3}
-  _attackRange: 1.5
+  _attackRange: 2.5
   _aggroRange: 10
   _outofRange: 20
   _baseLoiterTime: 10

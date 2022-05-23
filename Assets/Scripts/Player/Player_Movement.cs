@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Player_Movement : Singleton<Player_Movement>
 {
@@ -22,6 +19,9 @@ public class Player_Movement : Singleton<Player_Movement>
     [SerializeField] private GameObject aimPivot;
     [SerializeField] private GameObject aimAt;
     [SerializeField] private GameObject aimPos;
+
+    [SerializeField] LayerMask layerToFollow;
+
 
     public float moveSpeed;
     public float maxSpeed;
@@ -76,6 +76,7 @@ public class Player_Movement : Singleton<Player_Movement>
         {
             return;
         }
+        
         Move(movement);
     }
 
@@ -122,6 +123,8 @@ public class Player_Movement : Singleton<Player_Movement>
         {
             currentSpeed = Mathf.SmoothStep(minSpeed, maxSpeed, timeForMaxAccel / timeToReachMaxAccel);
 
+            Vector3 MoveDirection = Vector3.zero;
+            float targetAngle = 0;
             if (!isRunning)
             {
                 defaultMinTurningSpeed = Mathf.Clamp(((maxSpeed - currentSpeed) / maxSpeed) - 0.2f, defaultTurningSpeed, 1f);
@@ -133,24 +136,36 @@ public class Player_Movement : Singleton<Player_Movement>
             
             if (!Player_Controller.instance.Aiming)
             {
-                float targetAngle = Mathf.Atan2(MovePosition.x, MovePosition.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+                targetAngle = Mathf.Atan2(MovePosition.x, MovePosition.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, defaultMinTurningSpeed);
 
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                MoveDirection = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
 
-                Vector3 MoveDirection = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
-
-                playerController.Move(MoveDirection * Time.deltaTime * currentSpeed);
-                timeForMaxAccel += Time.deltaTime;
+                
             }
             else
             {
-                float targetAngle = Mathf.Atan2(MovePosition.x, MovePosition.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
-                Vector3 MoveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-
-                playerController.Move(MoveDirection * Time.deltaTime * currentSpeed);
-                timeForMaxAccel += Time.deltaTime;
+                targetAngle = Mathf.Atan2(MovePosition.x, MovePosition.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
+                MoveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             }
+
+            RaycastHit hit;
+
+            Vector3 checkWall = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            if (Physics.Raycast(transform.position, checkWall, out hit, 1, layerToFollow))
+            {
+                Debug.DrawLine(transform.position, hit.point, Color.green);
+                float angle = Vector3.Angle(hit.normal, Vector3.up);
+                Debug.Log(angle);
+                if (angle > 50)
+                {
+                    return;
+                }
+            }
+
+            playerController.Move(MoveDirection * Time.deltaTime * currentSpeed);
+            timeForMaxAccel += Time.deltaTime;
         }
         else
         {

@@ -7,8 +7,6 @@ public class AnimalData : ScriptableObject
 {
     [Tooltip("Animal Name")]
     [SerializeField] private string _animalName;
-    [Tooltip("Animal Prefab Model")]
-    [SerializeField] private GameObject _animalMesh;
     
     [Tooltip("Animal Variables")]
     [SerializeField] private float _attackRange;
@@ -24,13 +22,14 @@ public class AnimalData : ScriptableObject
     [SerializeField] private float _baseMoveSpeed;
 
     [SerializeField] private bool _isPassive;
-
+    
+    [Tooltip("Animal Weakness and Reistances")]
     [SerializeField] private List<Elements> _weakness;
     [SerializeField] private List<Elements> _resistance;
-
+   
+    [Tooltip("Animal Drops")]
     [SerializeField] private List<ItemDropsClass> _itemDrops;
 
-    public GameObject AnimalMesh { get { return _animalMesh; } set { _animalMesh = value; } }
     public string AnimalName { get { return _animalName; } set { _animalName = value; } }
     public float BaseMovementSpeed { get { return _baseMoveSpeed; } set { _baseMoveSpeed = value; } }
     public float AttackRange { get { return _attackRange; } set { _attackRange = value; } }
