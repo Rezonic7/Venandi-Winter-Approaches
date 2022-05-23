@@ -2,53 +2,78 @@ using UnityEngine;
 
 public class Player_Movement : Singleton<Player_Movement>
 {
+    [SerializeField] private float aimTurnSpeed = 0.2f;
+    [SerializeField] private float defaultTurningSpeed = 0.2f;
+    [SerializeField] private float rollMultiplier = 1.1f;
+
+    [SerializeField] LayerMask layerToFollow;
+
     private Camera mainCamera;
     private CharacterController playerController;
 
     private float defaultMinTurningSpeed;
     private float turnSmoothVelocity;
     private float currentSpeed;
-    private float minSpeed;
     private float timeForMaxAccel;
+    private float gravity = 9.81f;
+    private float timeToReachMaxAccel = 1;
+    private float limitAngle = 37;
+    private float negativeArray;
 
-    [SerializeField] private float aimTurnSpeed = 0.2f;
-    [SerializeField] private float defaultTurningSpeed = 0.2f;
-    [SerializeField] private float gravity = 9.81f;
-    [SerializeField] private float rollMultiplier = 6f;
+    private GameObject aimPivot;
+    private GameObject aimAt;
+    private GameObject aimPos;
 
-    [SerializeField] private GameObject aimPivot;
-    [SerializeField] private GameObject aimAt;
-    [SerializeField] private GameObject aimPos;
+    private Quaternion[] arrayofAngles;
 
-    [SerializeField] LayerMask layerToFollow;
+    private int fieldOfView = 65;
+    private int numberOfRays = 3;
 
+    private float _minSpeed;
+    private float _maxSpeed;
+    private float _runModifier;
+    private float _speedModifier;
 
-    public float moveSpeed;
-    public float maxSpeed;
-
-    public float runSpeed;
-    public float walkSpeed;
-
-    public float timeToReachMaxAccel;
     private Vector3 gravityForce;
 
-    public Vector2 captureDirection;
-    public Vector2 movement;
+    private Vector2 _captureDirection;
+    private Vector2 _movement;
 
-    public bool isRunning = false;
-    public bool isMoving = false;
+    private bool _isRunning = false;
+
+
+    public float MinSpeed { get { return _minSpeed; } set { _minSpeed = value; } }
+    public float MaxSpeed { get { return _maxSpeed; } set { _maxSpeed = value; } }
+    public float RunModifier { get { return _runModifier; } set { _runModifier = value; } }
+    public float SpeedModifer { get { return _speedModifier; } set { _speedModifier = value; } }
+
+    public Vector2 Movement { get { return _movement; } set { _movement = value; } }
+    public Vector2 CaptureDirection { get { return _captureDirection; } set { _captureDirection = value; } }
+    public bool IsRunning { get { return _isRunning; } set { _isRunning = value; } }
 
     void Start()
     {
         playerController = GetComponent<CharacterController>();
         mainCamera = Camera.main;
 
-        walkSpeed = maxSpeed;
-        runSpeed = maxSpeed * 1.5f;
+        aimPivot = GameObject.FindWithTag("AimPivot")?.gameObject;
+        aimAt = GameObject.FindWithTag("AimTarget")?.gameObject;
+        aimPos = GameObject.FindWithTag("AimPosition")?.gameObject;
+
+        if(!aimPivot || !aimAt || !aimPos)
+        {
+            Debug.Log("Heads up! Aiming will not work properly, some Aiming Components are missing.");
+        }
+
+        _minSpeed = 1f;
+        _maxSpeed = 5f;
+        _runModifier = 1;
+        _speedModifier = 1f;
+        timeToReachMaxAccel = 1;
+        limitAngle = 37;
 
         defaultMinTurningSpeed = defaultTurningSpeed;
 
-        minSpeed = currentSpeed;
         timeForMaxAccel = 0;
     }
 
@@ -56,17 +81,20 @@ public class Player_Movement : Singleton<Player_Movement>
     {
         isGroundedCheck();
 
-        RollAction(captureDirection);
+        RollAction(_captureDirection);
 
         if (Player_Controller.instance.Aiming)
         {
-            float targetAngle = mainCamera.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, aimTurnSpeed);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            if(aimPivot || aimAt || aimPos)
+            {
+                float targetAngle = mainCamera.transform.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, aimTurnSpeed);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            aimPivot.transform.rotation = mainCamera.transform.rotation;
+                aimPivot.transform.rotation = mainCamera.transform.rotation;
 
-            aimAt.transform.position = aimPos.transform.position;
+                aimAt.transform.position = aimPos.transform.position;
+            }
         }
         if (!Player_Controller.instance.CanRecieveInput || Player_Controller.instance.IsDoingSpecialAttack)
         {
@@ -76,8 +104,11 @@ public class Player_Movement : Singleton<Player_Movement>
         {
             return;
         }
-        
-        Move(movement);
+        if(Player_Controller.instance.IsRolling)
+        {
+            return;
+        }
+        Move(_movement);
     }
 
     private void FixedUpdate()
@@ -121,13 +152,13 @@ public class Player_Movement : Singleton<Player_Movement>
         
         if (MovePosition.magnitude >= 0.1f)
         {
-            currentSpeed = Mathf.SmoothStep(minSpeed, maxSpeed, timeForMaxAccel / timeToReachMaxAccel);
+            currentSpeed = (Mathf.SmoothStep(_minSpeed, _maxSpeed, timeForMaxAccel / timeToReachMaxAccel) * _runModifier) * _speedModifier;
 
             Vector3 MoveDirection = Vector3.zero;
             float targetAngle = 0;
-            if (!isRunning)
+            if (!_isRunning)
             {
-                defaultMinTurningSpeed = Mathf.Clamp(((maxSpeed - currentSpeed) / maxSpeed) - 0.2f, defaultTurningSpeed, 1f);
+                defaultMinTurningSpeed = Mathf.Clamp(((_maxSpeed - currentSpeed) / _maxSpeed) - 0.2f, defaultTurningSpeed, 1f);
             }
             else
             {
@@ -141,8 +172,6 @@ public class Player_Movement : Singleton<Player_Movement>
 
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
                 MoveDirection = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
-
-                
             }
             else
             {
@@ -150,18 +179,11 @@ public class Player_Movement : Singleton<Player_Movement>
                 MoveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             }
 
-            RaycastHit hit;
+            Vector3 LoSRef = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
-            Vector3 checkWall = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            if (Physics.Raycast(transform.position, checkWall, out hit, 1, layerToFollow))
+            if(!LineOfSight(LoSRef))
             {
-                Debug.DrawLine(transform.position, hit.point, Color.green);
-                float angle = Vector3.Angle(hit.normal, Vector3.up);
-                Debug.Log(angle);
-                if (angle > 50)
-                {
-                    return;
-                }
+                return;
             }
 
             playerController.Move(MoveDirection * Time.deltaTime * currentSpeed);
@@ -172,6 +194,34 @@ public class Player_Movement : Singleton<Player_Movement>
             timeForMaxAccel = 0;
         }
     }
+    bool LineOfSight(Vector3 MoveDirection)
+    {
+        arrayofAngles = new Quaternion[numberOfRays + 1];
+        negativeArray = -(fieldOfView / 2);
+
+        for (int i = 0; i < arrayofAngles.Length; i++)
+        {
+            float angle = negativeArray + (i * (fieldOfView / numberOfRays));
+            arrayofAngles[i] = Quaternion.AngleAxis(angle, Vector3.up);
+
+            Vector3 rayDirection = arrayofAngles[i] * MoveDirection;
+
+            RaycastHit hit;
+
+            Vector3 yOffset = new Vector3(0, -0.8f, 0);
+            Vector3 refPos = transform.position + yOffset;
+
+            if (Physics.Raycast(refPos, rayDirection, out hit, 1, layerToFollow))
+            {
+                float normalAngle = Vector3.Angle(hit.normal, Vector3.up);
+                if (normalAngle > limitAngle)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     public void RollAction(Vector2 movement)
     {
         if(!Player_Controller.instance.IsRolling)
@@ -181,10 +231,13 @@ public class Player_Movement : Singleton<Player_Movement>
         Vector3 Movement = new Vector3(movement.x, 0, movement.y);
         float targetAngle = Mathf.Atan2(Movement.x, Movement.z) * Mathf.Rad2Deg + mainCamera.transform.eulerAngles.y;
         transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-        
+        if(!LineOfSight(transform.forward))
+        {
+            return;
+        }
         if(movement.magnitude != 0)
         {
-            playerController.Move((transform.forward * rollMultiplier) * Time.deltaTime);
+            playerController.Move((transform.forward * (_maxSpeed * rollMultiplier)) * Time.deltaTime);
         }
         timeForMaxAccel = timeToReachMaxAccel;
     }

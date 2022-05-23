@@ -21,6 +21,9 @@ TagManager:
   - Reticle
   - AnimalMesh
   - Puddle
+  - AimPivot
+  - AimTarget
+  - AimPosition
   layers:
   - Default
   - TransparentFX
@@ -32,7 +35,7 @@ TagManager:
   - MapGround
   - Animal
   - Raycast
-  - Water
+  - 
   - 
   - 
   - 

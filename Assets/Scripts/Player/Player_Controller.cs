@@ -189,13 +189,13 @@ public class Player_Controller : Singleton<Player_Controller>
     public void OnMovement(InputAction.CallbackContext value)
     {
         Vector2 inputMovement = value.ReadValue<Vector2>();
-        pMovement.movement = inputMovement;
+        pMovement.Movement = inputMovement;
     }
     public void OnRun(InputAction.CallbackContext value)
     {
         if (value.canceled)
         {
-            if(!pMovement.isRunning)
+            if(!pMovement.IsRunning)
             {
                 return;
             }
@@ -203,7 +203,7 @@ public class Player_Controller : Singleton<Player_Controller>
             {
                 return;
             }
-            pMovement.isRunning = false;
+            pMovement.IsRunning = false;
         }
 
         if (!value.started)
@@ -222,7 +222,7 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        if (pMovement.movement.magnitude <= 0.1f)
+        if (pMovement.Movement.magnitude <= 0.1f)
         {
             return;
         }
@@ -238,7 +238,7 @@ public class Player_Controller : Singleton<Player_Controller>
             }
             SheathWeapon();
         }
-        pMovement.isRunning = true;
+        pMovement.IsRunning = true;
     }
     public void OnRoll(InputAction.CallbackContext value)
     {
@@ -251,7 +251,7 @@ public class Player_Controller : Singleton<Player_Controller>
             return;
         }
         
-        if (pMovement.movement.magnitude <= 0.1f)
+        if (pMovement.Movement.magnitude <= 0.1f)
         {
             return;
         }
@@ -264,7 +264,7 @@ public class Player_Controller : Singleton<Player_Controller>
             return;
         }
         Debug.Log("I should roll");
-        pMovement.captureDirection = pMovement.movement;
+        pMovement.CaptureDirection = pMovement.Movement;
         pAnimations.Roll();
         _isRolling = true;
         SetRoll(0);
@@ -295,7 +295,7 @@ public class Player_Controller : Singleton<Player_Controller>
         }
         _canWalk = false;
 
-        if (pMovement.isRunning)
+        if (pMovement.IsRunning)
         {
             DoAction();
             switch (pEquipment.WeaponData.WeaponType)
@@ -399,7 +399,7 @@ public class Player_Controller : Singleton<Player_Controller>
         }
         else
         {
-            pMovement.isRunning = false;
+            pMovement.IsRunning = false;
             if (value.canceled)
             {
                 if(HC_SpecialCharge)
@@ -457,7 +457,7 @@ public class Player_Controller : Singleton<Player_Controller>
         }
 
     }
-    
+
     public void OnUseItem(InputAction.CallbackContext value)
     {
         if(!value.started)
@@ -551,26 +551,26 @@ public class Player_Controller : Singleton<Player_Controller>
     #endregion ButtonInputs
     void IsRunning()
     {
-        if (pMovement.isRunning)
+        if (pMovement.IsRunning)
         {
             if (pVariables.UseStamina(0.1f))
             {
                 pAnimations.Run(true);
-                pMovement.maxSpeed = pMovement.maxSpeed = pMovement.runSpeed;
+                pMovement.RunModifier = 1.5f;
             }
             else
             {
-                pMovement.isRunning = false;
+                pMovement.IsRunning = false;
                 pAnimations.Run(false);
-                pMovement.maxSpeed = pMovement.maxSpeed = pMovement.walkSpeed;
+                pMovement.RunModifier = 1f;
             }
         }
         else
         {
             pAnimations.Run(false);
-            pMovement.maxSpeed = pMovement.maxSpeed = pMovement.walkSpeed;
+            pMovement.RunModifier = 1f;
         }
-        if (pMovement.movement.magnitude >= 0.1f)
+        if (pMovement.Movement.magnitude >= 0.1f)
         {
             pAnimations.Walk(true);
         }
@@ -652,6 +652,10 @@ public class Player_Controller : Singleton<Player_Controller>
 
     private void OnTriggerEnter(Collider hit)
     {
+        if(hit.transform.tag == "Puddle")
+        {
+            pMovement.SpeedModifer = 0.8f;
+        }
         if(hit.transform.gameObject.GetComponent<GatheringSpots>() != null)
         {
             CanvasManager.instance.ShowInfo("Press F to interact");
@@ -676,6 +680,10 @@ public class Player_Controller : Singleton<Player_Controller>
     }
     private void OnTriggerExit(Collider hit)
     {
+        if (hit.transform.tag == "Puddle")
+        {
+            pMovement.SpeedModifer = 1f;
+        }
         if (hit.transform.gameObject.GetComponent<GatheringSpots>() != null)
         {
             _canGather = false;

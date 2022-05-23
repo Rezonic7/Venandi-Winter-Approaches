@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animalName: Rhino
   _attackRange: 2.5
-  _aggroRange: 10
+  _aggroRange: 3
   _outofRange: 20
   _baseLoiterTime: 10
   _baseWanderTime: 0

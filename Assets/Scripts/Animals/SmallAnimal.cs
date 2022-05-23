@@ -21,6 +21,7 @@ public class SmallAnimal : AnimalClass
             {
                 LoiterTimer -= Time.deltaTime;
                 Agent.SetDestination(Agent.transform.position);
+                AgentHasPath = false;
             }
             else
             {
