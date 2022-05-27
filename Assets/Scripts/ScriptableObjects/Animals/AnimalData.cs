@@ -5,10 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Animal Data", menuName = "Create Data/Animal/Animal Data")]
 public class AnimalData : ScriptableObject
 {
-    [Tooltip("Animal Name")]
+    [Header("Animal Name")]
     [SerializeField] private string _animalName;
     
-    [Tooltip("Animal Variables")]
+    [Header("Animal Variables")]
     [SerializeField] private float _attackRange;
     [SerializeField] private float _aggroRange;
     [SerializeField] private float _outofRange;
@@ -16,18 +16,18 @@ public class AnimalData : ScriptableObject
     [SerializeField] private float _baseLoiterTime;
     [SerializeField] private float _baseWanderTime;
 
-    [Tooltip("Animal Stats")]
+    [Header("Animal Stats")]
     [SerializeField] private int _health;
     [SerializeField] private int _baseDamage;
     [SerializeField] private float _baseMoveSpeed;
 
     [SerializeField] private bool _isPassive;
     
-    [Tooltip("Animal Weakness and Reistances")]
+    [Header("Animal Weakness and Reistances")]
     [SerializeField] private List<Elements> _weakness;
     [SerializeField] private List<Elements> _resistance;
    
-    [Tooltip("Animal Drops")]
+    [Header("Animal Drops")]
     [SerializeField] private List<ItemDropsClass> _itemDrops;
 
     public string AnimalName { get { return _animalName; } set { _animalName = value; } }

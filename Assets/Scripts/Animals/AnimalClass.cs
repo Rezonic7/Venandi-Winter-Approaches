@@ -56,7 +56,8 @@ public abstract class AnimalClass : MonoBehaviour
     public NavMeshAgent Agent { get { return _agent; } }
     public Player_Controller Player { get { return _player; } set { _player = value; } }
     public string AnimalName { get { return _animalName; }}
-    public int Health { get { return _maxHealth; } set { _maxHealth = value; } }
+    public int MaxHealth { get { return _maxHealth; } set { _maxHealth = value; } }
+    public int CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
     public int BaseDamage { get { return _baseDamage; } set { _baseDamage = value; } }
     public int TotalDamage { get { return _totalDamage; } set { _totalDamage = value; } }
     public float BaseSpeed { get { return _baseSpeed; } set { _baseSpeed = value; } }
@@ -160,44 +161,41 @@ public abstract class AnimalClass : MonoBehaviour
             hitBox.enabled = false;
             return;
         }
-
-        if (_isPlayerInRange)
+        if(!IsGoingToNextArea)
         {
-            if (_isPassive)
+            if (_isPlayerInRange)
             {
-                if (_isAgitated)
+                if (_isPassive)
                 {
-                    AggressiveState();
+                    if (_isAgitated)
+                    {
+                        AggressiveState();
+                    }
+                    else
+                    {
+                        CalmState();
+                    }
                 }
                 else
                 {
-                    CalmState();
+                    AggressiveState();
                 }
             }
             else
             {
-                AggressiveState();
+                CalmState();
             }
+
         }
         else
         {
-            CalmState();
-        }
-
-        if (IsGoingToNextArea)
-        {
-            Agent.speed = _baseSpeed + (_baseSpeed * 0.5f);
+            Agent.speed = _baseSpeed + (_baseSpeed * 0.75f);
             if (Agent.remainingDistance <= 5)
             {
                 IsAgitated = true;
                 IsGoingToNextArea = false;
             }
         }
-        else
-        {
-            Agent.speed = _baseSpeed;
-        }
-
         if (_agent.remainingDistance > 0)
         {
             _anim.SetBool("isWalking", true);
@@ -206,30 +204,29 @@ public abstract class AnimalClass : MonoBehaviour
         {
             _anim.SetBool("isWalking", false);
         }
-
     }
 
     private void LateUpdate()
     {
-        if (_agentHasPath)
-        {
-            float currentDistance = Vector3.Distance(transform.position, Agent.destination);
-            if (currentDistance < lastDistance)
-            {
-                // Agent is getting closer, this is we want to see, go on, also reset give up time
-                lastDistance = currentDistance;
-                _stuckTimer = 3f;
-            }
-            else
-            {
-                // Cannot proceed closer, countdown time to giveup
-                _stuckTimer  -= Time.deltaTime;
-                if (_stuckTimer <= 0)
-                {
-                    RandomWanderAroundCurrentArea();
-                }
-            }
-        }
+        //if (_agentHasPath)
+        //{
+        //    float currentDistance = Vector3.Distance(transform.position, Agent.destination);
+        //    if (currentDistance < lastDistance)
+        //    {
+        //        // Agent is getting closer, this is we want to see, go on, also reset give up time
+        //        lastDistance = currentDistance;
+        //        _stuckTimer = 3f;
+        //    }
+        //    else
+        //    {
+        //        // Cannot proceed closer, countdown time to giveup
+        //        _stuckTimer  -= Time.deltaTime;
+        //        if (_stuckTimer <= 0)
+        //        {
+        //            RandomWanderAroundCurrentArea();
+        //        }
+        //    }
+        //}
     }
 
 
@@ -254,7 +251,7 @@ public abstract class AnimalClass : MonoBehaviour
         CanMove = true;
         _isAttacking = false;
     }
-    public void TakeDamage(int value)
+    public virtual void TakeDamage(int value)
     {
         if (_currentHealth - value >= 0)
         {
@@ -265,6 +262,7 @@ public abstract class AnimalClass : MonoBehaviour
             _currentHealth = 0;
             _anim.SetBool("isDead", true);
             _isDead = true;
+            return;
         }
     }
     public void Add_MotionValue(float percentage)
@@ -274,7 +272,7 @@ public abstract class AnimalClass : MonoBehaviour
     #endregion Public Methods To Call
 
     #region States
-    public void AggressiveState()
+    public virtual void AggressiveState()
     {
         float distance = Vector3.Distance(transform.position, Player.gameObject.transform.position);
 
@@ -304,6 +302,7 @@ public abstract class AnimalClass : MonoBehaviour
     }
     public virtual void CalmState()
     {
+        _agent.speed = _baseSpeed;
         if (_wanderTimer > 0)
         {
             _wanderTimer -= Time.deltaTime;
@@ -353,7 +352,7 @@ public abstract class AnimalClass : MonoBehaviour
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, speed);
         transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
-    public void DoRandomAttack()
+    public virtual void DoRandomAttack()
     {
         _hasDamaged = false;
 
@@ -372,19 +371,17 @@ public abstract class AnimalClass : MonoBehaviour
     public virtual void MoveToNextArea()
     {
         int randomArea = Random.Range(0, _currentArea.NeighboringAreas.Count);
+        for(int i = 0; i < _currentArea.NeighboringAreas.Count; i++)
         {
-            for(int i = 0; i < _currentArea.NeighboringAreas.Count; i++)
+            if(i == randomArea)
             {
-                if(i == randomArea)
-                {
-                    _currentArea = _currentArea.NeighboringAreas[i];
-                    GetAreaData();
+                _currentArea = _currentArea.NeighboringAreas[i];
+                GetAreaData();
 
-                    Vector3 referenceDestination = _currentArea.transform.position;
-                    Vector3 newDestination = RaycastDownArea(referenceDestination);
-                    _agent.SetDestination(newDestination);
-                    _isGoingToNextArea = true;
-                }
+                Vector3 referenceDestination = _currentArea.transform.position;
+                Vector3 newDestination = RaycastDownArea(referenceDestination);
+                _agent.SetDestination(newDestination);
+                _isGoingToNextArea = true;
             }
         }
     }
