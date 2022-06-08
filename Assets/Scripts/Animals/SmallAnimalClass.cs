@@ -5,16 +5,16 @@ using UnityEngine.AI;
 
 public class SmallAnimalClass : AnimalClass
 {
-    private Collider hurtBox;
     public override void Start()
     {
         base.Start();
-        hurtBox = transform.GetChild(0).GetChild(0).Find("HurtBox").GetComponent<Collider>();
-
-        hurtBox.enabled = false;
     }
     public override void CalmState()
     {
+        if(IsAttacking)
+        {
+            return;
+        }
         if (Agent.remainingDistance <= 3)
         {
             if (LoiterTimer > 0)
@@ -29,17 +29,13 @@ public class SmallAnimalClass : AnimalClass
                 RandomWanderAroundCurrentArea();
             }
         }
-    }
-    public void SetHurtBox(int isTrue)
-    {
-        if(isTrue <= 0)
+        if (IsAggressive)
         {
-            hurtBox.enabled = false;
-        }else
-        {
-            hurtBox.enabled = true;
+            RandomCalmAnimation();
+            IsAggressive = false;
         }
     }
+   
     
 
 }

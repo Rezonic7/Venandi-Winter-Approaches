@@ -11,8 +11,13 @@ public class Animal_OutofRange : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        if(other.transform.tag == "AggroCollider")
+        {
+            return;
+        }
         if (other.transform.tag == "Player")
         {
+            Debug.Log("The player has left my range");
             parentScript.IsPlayerInRange = false;
         }
     }

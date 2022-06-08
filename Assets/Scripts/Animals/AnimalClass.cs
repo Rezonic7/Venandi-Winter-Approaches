@@ -7,16 +7,14 @@ public abstract class AnimalClass : MonoBehaviour
 {
     [SerializeField] private AnimalData _animalData;
     [SerializeField] LayerMask layerToFollow;
+    [SerializeField] private Collider _hurtBox;
+    [SerializeField] private Collider _hitBox;
     private GameObject _areaHolder;
     private AreaClass[] areas;
     private AreaClass _currentArea;
     private NavMeshAgent _agent;
     private Animator _anim;
     private Player_Controller _player;
-
-    private SphereCollider _aggroCollider;
-    private SphereCollider _OutOfRangeCollider;
-    private Collider hitBox;
 
     private string _animalName;
 
@@ -31,6 +29,8 @@ public abstract class AnimalClass : MonoBehaviour
     private float scaleX;
     private float scaleZ;
     private float lastDistance;
+    private float _aggroRadius;
+    private float _outOfRangeRadius;
 
     private int _maxHealth;
     private int _currentHealth;
@@ -46,18 +46,23 @@ public abstract class AnimalClass : MonoBehaviour
     private bool _isAttacking;
     private bool _isDead;
     private bool _hasDamaged;
+    private bool _hasChosenAggitationAction;
+    private bool _isAggressive;
+
 
     public AnimalData AnimalData { get { return _animalData; } set { _animalData = value; } }
-    public SphereCollider AggroCollider { get { return _aggroCollider; } set { _aggroCollider = value; } }
-    public SphereCollider OutOfRangeCollider { get { return _OutOfRangeCollider; } set { _OutOfRangeCollider = value; } }
     public GameObject AreaHolder { get { return _areaHolder; } }
     public Animator Anim { get { return _anim; } }
     public AreaClass CurrentArea { get { return _currentArea; } set { _currentArea = value; } }
     public NavMeshAgent Agent { get { return _agent; } }
     public Player_Controller Player { get { return _player; } set { _player = value; } }
+    public Collider HurtBox { get { return _hurtBox; } set { _hurtBox = value; } }
+    public Collider HitBox { get { return _hitBox; } set { _hitBox = value; } }
     public string AnimalName { get { return _animalName; }}
     public int MaxHealth { get { return _maxHealth; } set { _maxHealth = value; } }
     public int CurrentHealth { get { return _currentHealth; } set { _currentHealth = value; } }
+    public float AggroRadius { get { return _aggroRadius; } set { _aggroRadius = value; } }
+    public float OutOfRangeRadius { get { return _outOfRangeRadius; } set { _outOfRangeRadius = value; } }
     public int BaseDamage { get { return _baseDamage; } set { _baseDamage = value; } }
     public int TotalDamage { get { return _totalDamage; } set { _totalDamage = value; } }
     public float BaseSpeed { get { return _baseSpeed; } set { _baseSpeed = value; } }
@@ -67,6 +72,8 @@ public abstract class AnimalClass : MonoBehaviour
     public float BaseLoiterTime { get { return _baseLoiterTime; } }
     public float BaseWanderTime { get { return _baseWanderTime; } }
     public float AttackRange { get { return _attackRange; } }
+    public bool HasChosenAggitationAction { get { return _hasChosenAggitationAction; } set { _hasChosenAggitationAction = value; } }
+    public bool IsAggressive { get { return _isAggressive; } set { _isAggressive = value; } }
     public bool AgentHasPath { get { return _agentHasPath; } set { _agentHasPath = value; } }
     public bool HasDamaged { get { return _hasDamaged; } set { _hasDamaged = value; } }
     public bool IsDead { get { return _isDead; } set { _isDead = value; } }
@@ -81,9 +88,6 @@ public abstract class AnimalClass : MonoBehaviour
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        hitBox = transform.GetChild(0).GetComponent<Collider>();
-        _aggroCollider = transform.GetChild(1).GetComponent<SphereCollider>();
-        _OutOfRangeCollider = transform.GetChild(2).GetComponent<SphereCollider>();
     }
     public virtual void Start()
     {
@@ -92,11 +96,11 @@ public abstract class AnimalClass : MonoBehaviour
             _animalName = _animalData.AnimalName;
             _isPassive = _animalData.IsPassive;
             _baseSpeed = _animalData.BaseMovementSpeed;
-            Agent.speed = _baseSpeed;
+            _agent.speed = _baseSpeed;
             _baseWanderTime = _animalData.BaseWanderTime;
             _baseLoiterTime = _animalData.BaseLoiterTime;
-            _aggroCollider.radius = _animalData.AggroRange;
-            _OutOfRangeCollider.radius = _animalData.OutofRange;
+            _aggroRadius = _animalData.AggroRange;
+            _outOfRangeRadius = _animalData.OutofRange;
             _attackRange = _animalData.AttackRange;
             _maxHealth = _animalData.Health;
             _currentHealth = _maxHealth;
@@ -121,9 +125,12 @@ public abstract class AnimalClass : MonoBehaviour
         _loiterTimer = RandomizeTimer(_baseLoiterTime);
         _wanderTimer = RandomizeTimer(_baseWanderTime);
 
+        _isAggressive = false;
         _hasDamaged = false;
         _isAgitated = false;
+        _hasChosenAggitationAction = false;
         _isGoingToNextArea = false;
+        _hurtBox.enabled = false;
         CanMove = true;
 
 
@@ -132,7 +139,7 @@ public abstract class AnimalClass : MonoBehaviour
         {
             areas[i] = _areaHolder.transform.GetChild(i).GetComponent<AreaClass>();
         }
-       
+        RandomCalmAnimation();
         GetAreaData();
     }
     public float RandomizeTimer(float baseTime)
@@ -144,6 +151,7 @@ public abstract class AnimalClass : MonoBehaviour
     {
         if (!_areaHolder)
         {
+            Debug.Log("Error Area of this animal could not be determined");
             return;
         }
 
@@ -156,54 +164,11 @@ public abstract class AnimalClass : MonoBehaviour
             }
 
             Agent.enabled = false;
-            _aggroCollider.enabled = false;
-            _OutOfRangeCollider.enabled = false;
-            hitBox.enabled = false;
+            _hitBox.enabled = false;
             return;
         }
-        if(!IsGoingToNextArea)
-        {
-            if (_isPlayerInRange)
-            {
-                if (_isPassive)
-                {
-                    if (_isAgitated)
-                    {
-                        AggressiveState();
-                    }
-                    else
-                    {
-                        CalmState();
-                    }
-                }
-                else
-                {
-                    AggressiveState();
-                }
-            }
-            else
-            {
-                CalmState();
-            }
-
-        }
-        else
-        {
-            Agent.speed = _baseSpeed + (_baseSpeed * 0.75f);
-            if (Agent.remainingDistance <= 5)
-            {
-                IsAgitated = true;
-                IsGoingToNextArea = false;
-            }
-        }
-        if (_agent.remainingDistance > 0)
-        {
-            _anim.SetBool("isWalking", true);
-        }
-        else
-        {
-            _anim.SetBool("isWalking", false);
-        }
+        DetermineState();
+        SetWalkAnimaion();
     }
 
     private void LateUpdate()
@@ -231,18 +196,86 @@ public abstract class AnimalClass : MonoBehaviour
 
 
     #region Public Methods To Call
+
+    public void RotateTowardsPlayer(float speed)
+    {
+        //if (_isAttacking)
+        //{
+        //    return;
+        //}
+        Vector3 direction = Player.transform.position - transform.position;
+        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, speed);
+        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+    }
+    public virtual void DoRandomAttack()
+    {
+        _hasDamaged = false;
+
+        int RandomAttack = Random.Range(0, 2);
+        if (RandomAttack == 0)
+        {
+            Anim.SetTrigger("Attack1");
+        }
+        else if (RandomAttack == 1)
+        {
+            Anim.SetTrigger("Attack2");
+        }
+        _isAttacking = true;
+        CanMove = false;
+    }
+    public virtual void MoveToNextArea()
+    {
+        int randomArea = Random.Range(0, _currentArea.NeighboringAreas.Count);
+        for (int i = 0; i < _currentArea.NeighboringAreas.Count; i++)
+        {
+            if (i == randomArea)
+            {
+                _currentArea = _currentArea.NeighboringAreas[i];
+                GetAreaData();
+
+                Vector3 referenceDestination = _currentArea.transform.position;
+                Vector3 newDestination = RaycastDownArea(referenceDestination);
+                _agent.SetDestination(newDestination);
+                _isGoingToNextArea = true;
+            }
+        }
+    }
+    public float MultiplySpeed(float multiplier)
+    {
+        float totalSpeed = _baseSpeed * multiplier;
+        if(totalSpeed >= 15)
+        {
+            totalSpeed = 15;
+        }
+        return totalSpeed;
+    }
+    public void ChargeForward()
+    {
+        Agent.ResetPath();
+        Agent.Move(transform.forward * (_baseSpeed * 10 ) * Time.deltaTime);
+    }
     public void HasBeenAgitated()
     {
-        int DoRandomAction = Random.Range(0, 2);
-        if (DoRandomAction == 0)
+        if(!_hasChosenAggitationAction)
         {
-            //Debug.Log("I have chosen to fight");
-            IsAgitated = true;
-        }
-        else if (DoRandomAction == 1)
-        {
-            //Debug.Log("I have chosen to run away, but ill fight next time");
-            MoveToNextArea();
+            int DoRandomAction = Random.Range(0, 2);
+            if (DoRandomAction == 0)
+            {
+                //Debug.Log("I have chosen to fight");
+                IsAgitated = true;
+            }
+            else if (DoRandomAction == 1)
+            {
+                //Debug.Log("I have chosen to run away, but ill fight next time");
+                MoveToNextArea();
+                if (!_isAggressive)
+                {
+                    Anim.SetTrigger("isAggressive");
+                    _isAggressive = true;
+                }
+            }
+            _hasChosenAggitationAction = true;
         }
     }
     public IEnumerator StartAttackCoolDown(float attackCoolDown)
@@ -265,6 +298,28 @@ public abstract class AnimalClass : MonoBehaviour
             return;
         }
     }
+    public void SetHurtBox(int isTrue)
+    {
+        if (isTrue <= 0)
+        {
+            _hurtBox.enabled = false;
+        }
+        else
+        {
+            _hurtBox.enabled = true;
+        }
+    }
+    public void SetWalkAnimaion()
+    {
+        if (_agent.remainingDistance > 0)
+        {
+            _anim.SetBool("isWalking", true);
+        }
+        else
+        {
+            _anim.SetBool("isWalking", false);
+        }
+    }
     public void Add_MotionValue(float percentage)
     {
         _totalDamage = MotionValue(BaseDamage, percentage);
@@ -272,19 +327,87 @@ public abstract class AnimalClass : MonoBehaviour
     #endregion Public Methods To Call
 
     #region States
+    public void DetermineState()
+    {
+        if (!IsGoingToNextArea)
+        {
+            if (_isPlayerInRange)
+            {
+                Debug.Log("Player is in range");
+                if (_isPassive)
+                {
+                    //Debug.Log("Animal is NOT Aggressive");
+                    if (_isAgitated)
+                    {
+                        //Debug.Log("Animal is Aggittated");
+                        AggressiveState();
+                    }
+                    else
+                    {
+                        //Debug.Log("Animal is NOT Aggittated");
+                        CalmState();
+                    }
+                }
+                else
+                {
+                    // Debug.Log("Animal is Aggressive");
+                    AggressiveState();
+                }
+            }
+            else
+            {
+                Debug.Log("Player is NOT in range");
+                CalmState();
+            }
+
+        }
+        else
+        {
+            Agent.speed = MultiplySpeed(4);
+            if (Agent.remainingDistance <= 5)
+            {
+                IsAgitated = true;
+                IsGoingToNextArea = false;
+                if (_isAggressive)
+                {
+                    RandomCalmAnimation();
+                    _isAggressive = false;
+                }
+            }
+        }
+
+        if(_isPlayerInRange)
+        {
+            if(GetDistanceToPlayer() >= _outOfRangeRadius)
+            {
+                _isPlayerInRange = false;
+            }
+        }
+        else
+        {
+            if (GetDistanceToPlayer() <= _aggroRadius)
+            {
+                _isPlayerInRange = true;
+            }
+        }
+    }
     public virtual void AggressiveState()
     {
-        float distance = Vector3.Distance(transform.position, Player.gameObject.transform.position);
+        if(_isAttacking)
+        {
+            return;
+        }
 
-        Agent.speed  = _baseSpeed +(_baseSpeed * 0.25f);
+        Agent.speed  = MultiplySpeed(3);
         if (CanMove)
         {
-            if (distance <= AttackRange)
+            if (GetDistanceToPlayer() <= AttackRange)
             {
+               
                 Agent.SetDestination(transform.position);
                 _agentHasPath = false;
 
-                RotateTowardsPlayer(1);
+                RotateTowardsPlayer(0.75f);
                 IsFacingPlayer();
             }
             else
@@ -299,9 +422,19 @@ public abstract class AnimalClass : MonoBehaviour
             _agentHasPath = false;
 
         }
+
+        if (!_isAggressive)
+        {
+            Anim.SetTrigger("isAggressive");
+            _isAggressive = true;
+        }
     }
     public virtual void CalmState()
     {
+        if(_isAttacking)
+        {
+            return;
+        }
         _agent.speed = _baseSpeed;
         if (_wanderTimer > 0)
         {
@@ -313,7 +446,6 @@ public abstract class AnimalClass : MonoBehaviour
                     _loiterTimer -= Time.deltaTime;
                     _agent.SetDestination(_agent.transform.position);
                     _agentHasPath = false;
-
                     //Debug.Log("I will be Idle here");
                 }
                 else
@@ -340,51 +472,26 @@ public abstract class AnimalClass : MonoBehaviour
                 //Debug.Log("Arrived at new Area");
             }
         }
-    }
-    public void RotateTowardsPlayer(float speed)
-    {
-        if (_isAttacking)
+        if (_isAggressive)
         {
-            return;
+            RandomCalmAnimation();
+            _isAggressive = false;
         }
-        Vector3 direction = Player.transform.position - transform.position;
-        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, speed);
-        transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
-    public virtual void DoRandomAttack()
+    public void RandomCalmAnimation()
     {
-        _hasDamaged = false;
+        int randomAnim = Random.Range(0, 2);
+        if (randomAnim == 0)
+        {
+            Anim.SetTrigger("isCalm1");
 
-        int RandomAttack = Random.Range(0, 2);
-        if (RandomAttack == 0)
-        {
-            Anim.SetTrigger("Attack1");
         }
-        else if (RandomAttack == 1)
+        else if (randomAnim == 1)
         {
-            Anim.SetTrigger("Attack2");
-        }
-        _isAttacking = true;
-        CanMove = false;
-    }
-    public virtual void MoveToNextArea()
-    {
-        int randomArea = Random.Range(0, _currentArea.NeighboringAreas.Count);
-        for(int i = 0; i < _currentArea.NeighboringAreas.Count; i++)
-        {
-            if(i == randomArea)
-            {
-                _currentArea = _currentArea.NeighboringAreas[i];
-                GetAreaData();
-
-                Vector3 referenceDestination = _currentArea.transform.position;
-                Vector3 newDestination = RaycastDownArea(referenceDestination);
-                _agent.SetDestination(newDestination);
-                _isGoingToNextArea = true;
-            }
+            Anim.SetTrigger("isCalm2");
         }
     }
+    
     #endregion States
 
     #region GetInfo
@@ -392,6 +499,11 @@ public abstract class AnimalClass : MonoBehaviour
     {
         scaleX = _currentArea.transform.localScale.x / 2;
         scaleZ = _currentArea.transform.localScale.z / 2;
+    }
+    public float GetDistanceToPlayer()
+    {
+        float distance = Vector3.Distance(transform.position, Player.gameObject.transform.position);
+        return distance;
     }
     public void IsFacingPlayer()
     {

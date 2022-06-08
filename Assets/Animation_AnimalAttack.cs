@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Animation_AnimalAttack : StateMachineBehaviour
 {
+    [SerializeField] private float attackCooldown = 1.5f;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{
@@ -20,7 +21,7 @@ public class Animation_AnimalAttack : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         AnimalClass animal = animator.gameObject.GetComponent<AnimalClass>();
-        animal.StartCoroutine(animal.StartAttackCoolDown(1.5f));
+        animal.StartCoroutine(animal.StartAttackCoolDown(attackCooldown));
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

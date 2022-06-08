@@ -196,6 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4316256582094594226}
   - component: {fileID: 7508110229167479085}
+  - component: {fileID: 157352279319099460}
   m_Layer: 0
   m_Name: Collider
   m_TagString: AnimalMesh
@@ -210,12 +211,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756974242714110747}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00017, y: 0.00126, z: 0.00451}
-  m_LocalScale: {x: 0.5535566, y: 1.0398529, z: 0.86225}
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0.00000004371139}
+  m_LocalPosition: {x: 0.00017005598, y: 0.003207426, z: -0.0017759916}
+  m_LocalScale: {x: 0.5535566, y: 1.0398529, z: 0.8622499}
   m_Children: []
-  m_Father: {fileID: 5081458539317018322}
-  m_RootOrder: 1
+  m_Father: {fileID: 4561006791630562210}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7508110229167479085
 BoxCollider:
@@ -230,6 +231,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.01, y: 0.01, z: 0.01}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &157352279319099460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756974242714110747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67bca5d82350a5b45976e4acb354a697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &835368761949538504
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,6 +396,7 @@ Transform:
   - {fileID: 4761219248936602631}
   - {fileID: 1002801696144492963}
   - {fileID: 6170551543508293274}
+  - {fileID: 4676439998703690652}
   m_Father: {fileID: 7517434804626168346}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -416,6 +430,7 @@ Transform:
   m_Children:
   - {fileID: 5035028125950547456}
   - {fileID: 8646138331974320276}
+  - {fileID: 4316256582094594226}
   m_Father: {fileID: 5081458539317018322}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -887,6 +902,63 @@ Transform:
   m_Father: {fileID: 8646138331974320276}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3456073829991318555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4676439998703690652}
+  - component: {fileID: 8414358594246874320}
+  - component: {fileID: 2173735938700352651}
+  m_Layer: 8
+  m_Name: HurtBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4676439998703690652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3456073829991318555}
+  m_LocalRotation: {x: -0.25397247, y: 0.16034618, z: 0.049926776, w: 0.9525201}
+  m_LocalPosition: {x: 0.00046548774, y: 0.0029673828, z: 0.0014303608}
+  m_LocalScale: {x: 0.0013940275, y: 0.001838584, z: 0.0025088242}
+  m_Children: []
+  m_Father: {fileID: 5049664316421312918}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8414358594246874320
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3456073829991318555}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2173735938700352651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3456073829991318555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b96c86f4cff41a448957ed5a58dd50b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3469101399481111335
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,7 +1156,7 @@ GameObject:
   - component: {fileID: 4269559317640111014}
   - component: {fileID: 3450674648560251388}
   - component: {fileID: 5172618531575663806}
-  - component: {fileID: 4269559317640111019}
+  - component: {fileID: 3261791823118486956}
   m_Layer: 8
   m_Name: Wolf
   m_TagString: Untagged
@@ -1100,7 +1172,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4269559317640111016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -300.5187, y: -17.349884, z: -531.832}
+  m_LocalPosition: {x: -300.5187, y: -17.383, z: -531.832}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3213770735683525908}
@@ -1166,7 +1238,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4269559317640111019
+--- !u!114 &3261791823118486956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1175,14 +1247,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4269559317640111016}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 695091213ddb77c49bac675e1ce03fa5, type: 3}
+  m_Script: {fileID: 11500000, guid: 266ce72e8242fe44d9daa0c7865f7038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animalData: {fileID: 11400000, guid: 596a51c790c7d86488acf23cac8724f1, type: 2}
+  _animalData: {fileID: 11400000, guid: 51fd435757655874ca11e6d85511d535, type: 2}
   layerToFollow:
     serializedVersion: 2
     m_Bits: 128
-  _combatTime: 300
+  _hurtBox: {fileID: 8414358594246874320}
+  _hitBox: {fileID: 7508110229167479085}
 --- !u!1 &4269559317741681125
 GameObject:
   m_ObjectHideFlags: 0
@@ -1264,7 +1337,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4285947670405339263}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.59, z: 0}
+  m_LocalPosition: {x: 0, y: -1.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5081458539317018322}
@@ -1701,7 +1774,6 @@ Transform:
   m_LocalScale: {x: 420.15567, y: 420.15567, z: 420.15567}
   m_Children:
   - {fileID: 4561006791630562210}
-  - {fileID: 4316256582094594226}
   m_Father: {fileID: 3472677864398914245}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -1429,7 +1429,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8970325634130665707}
   m_LocalRotation: {x: 0.20889385, y: -0, z: -0, w: 0.9779383}
-  m_LocalPosition: {x: -0.27, y: 0.13000187, z: 2.9600081}
+  m_LocalPosition: {x: -0.471, y: 0.13000187, z: 2.9600081}
   m_LocalScale: {x: 0.93999994, y: 0.7156333, z: 0.82536656}
   m_Children:
   - {fileID: 8970325633811976837}
@@ -6145,7 +6145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8970325634888059097}
   m_Layer: 8
-  m_Name: RhinoMesh
+  m_Name: RhinoPartByPart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

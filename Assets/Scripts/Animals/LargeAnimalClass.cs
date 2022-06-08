@@ -8,7 +8,6 @@ public class LargeAnimalClass : AnimalClass
     [SerializeField] private float _combatTime;
     private float combatTimer;
     private bool isInCombat;
-    private bool isAggressive;
 
     private bool firstEscapeTrigger;
     private bool secondEscapeTrigger;
@@ -20,7 +19,6 @@ public class LargeAnimalClass : AnimalClass
     {
         base.Start();
 
-        isAggressive = false;
         isInCombat = false;
         combatTimer = _combatTime;
         noOfAttacks = 2;
@@ -65,22 +63,11 @@ public class LargeAnimalClass : AnimalClass
     {
         base.AggressiveState();
         isInCombat = true;
-        if(!isAggressive)
-        {
-            Anim.SetTrigger("isAggressive");
-            isAggressive = true;
-        }
-        
     }
     public override void CalmState()
     {
         base.CalmState();
         isInCombat = false;
-        if (isAggressive)
-        {
-            RandomCalmAnimation();
-            isAggressive = false;
-        }
     }
     public override void DoRandomAttack()
     {
@@ -114,20 +101,7 @@ public class LargeAnimalClass : AnimalClass
         IsAttacking = true;
         CanMove = false;
     }
-    public void RandomCalmAnimation()
-    {
-        int randomAnim = Random.Range(0, 2);
-        if(randomAnim == 0)
-        {
-            Anim.SetTrigger("isCalm1");
-
-        }
-        else if(randomAnim == 1)
-        {
-            Anim.SetTrigger("isCalm2");
-
-        }
-    }    
+   
     public override void TakeDamage(int value)
     {
         base.TakeDamage(value);

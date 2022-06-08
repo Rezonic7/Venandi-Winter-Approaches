@@ -18,31 +18,31 @@ public class Weapons : Singleton<Weapons>
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.transform.tag != "AnimalMesh")
+        if(other.gameObject.transform.tag == "AnimalMesh" || other.gameObject.transform.tag == "TrainingDummy")
         {
-            return;
-        }
-        if(HasDamaged)
-        {
-            return;
-        }
-        HasDamaged = true;
-
-        GameObject BPGO = Instantiate(bloodParticle, other.gameObject.transform.position, Quaternion.identity, other.gameObject.transform);
-        Destroy(BPGO, 1f);
-
-        AnimalClass animal = other.gameObject.transform.GetComponentInParent<AnimalClass>();
-        animal.TakeDamage(_damageValue);
-
-        Vector3 spawnPos = Camera.main.WorldToScreenPoint(transform.position);
-        CanvasManager.instance.SpawnDamage(_damageValue, spawnPos);
-
-        if(animal.IsPassive)
-        {
-            if(!animal.IsAgitated)
+            if (HasDamaged)
             {
-                animal.HasBeenAgitated();
+                return;
+            }
+            HasDamaged = true;
+
+            GameObject BPGO = Instantiate(bloodParticle, other.gameObject.transform.position, Quaternion.identity, other.gameObject.transform);
+            Destroy(BPGO, 1f);
+
+            AnimalClass animal = other.gameObject.transform.GetComponentInParent<AnimalClass>();
+            animal.TakeDamage(_damageValue);
+
+            Vector3 spawnPos = Camera.main.WorldToScreenPoint(transform.position);
+            CanvasManager.instance.SpawnDamage(_damageValue, spawnPos);
+
+            if (animal.IsPassive)
+            {
+                if (!animal.IsAgitated)
+                {
+                    animal.HasBeenAgitated();
+                }
             }
         }
+       
     }
 }
