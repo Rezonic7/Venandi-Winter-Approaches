@@ -15,5 +15,11 @@ MonoBehaviour:
   _missionTime: 0
   _animalsToSpawn:
   - _animal: {fileID: 6148907681418349080, guid: 7faa52ff7e8809845b781c14f1bcb6c4, type: 3}
-    _quantity: 1
+    _quantity: 4
     _areasToSpawn: 01000000
+  - _animal: {fileID: 3261791823118486956, guid: b1986018d7303534899efd9c2cd3621e, type: 3}
+    _quantity: 1
+    _areasToSpawn: 02000000
+  - _animal: {fileID: 2767667993249827924, guid: c4d66fdd303536c43a99a45a623f5e27, type: 3}
+    _quantity: 1
+    _areasToSpawn: 03000000

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: 
   _ItemName: Wood
-  _imageSprite: {fileID: 21300000, guid: 47fe3dfbe737aa34ba4fc1981b1f451d, type: 3}
+  _imageSprite: {fileID: 21300000, guid: 80c8e6727e7591b4190cbd1f1c794b5a, type: 3}
   _maxStack: 99

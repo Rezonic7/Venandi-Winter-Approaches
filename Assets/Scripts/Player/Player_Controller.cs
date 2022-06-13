@@ -37,7 +37,9 @@ public class Player_Controller : Singleton<Player_Controller>
     private bool _canWalk = true;
     private bool _canRoll = true;
     private bool _isRolling = false;
+    private bool _isDead = false;
 
+    public bool IsDead { get { return _isDead; } set { _isDead = value; } }
     public bool IsRolling { get { return _isRolling; } set { _isRolling = value; } }
     public bool CanRoll { get { return _canRoll; } set { _canRoll = value; } }
     public bool CanRecieveInput { get { return _canRecieveInput; } set { _canRecieveInput = value; } }
@@ -53,10 +55,12 @@ public class Player_Controller : Singleton<Player_Controller>
 
 
     //debugs remove when final
-    private GameObject _gatheringItem;
+    private GatheringSpots _gatheringItem;
     private WeaponTypeData _weaponData;
-    private  ArmorData _armorData;
-    public GameObject GatheringItem { get { return _gatheringItem; } set { _gatheringItem = value; } }
+    private ArmorData _armorData;
+    private CarvingSpot _carvingSpot;
+    public CarvingSpot CavingSpot { get { return _carvingSpot; } set { _carvingSpot = value; } }
+    public GatheringSpots GatheringItem { get { return _gatheringItem; } set { _gatheringItem = value; } }
     public WeaponTypeData WeaponData { get { return _weaponData; } }
     public ArmorData ArmorData { get { return _armorData; } }
     //debugs remove when final
@@ -95,6 +99,7 @@ public class Player_Controller : Singleton<Player_Controller>
         _canRoll = true;
         _canWalk = true;
         _isUsingItem = false;
+        _isDead = false;
         HC_SpecialCharge = false;
         _canAim = false;
         _canRecieveInput = true;
@@ -102,6 +107,9 @@ public class Player_Controller : Singleton<Player_Controller>
         _canGather = false;
         canChangeWeapon = false;
         _isDoingSpecialAttack = false;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         playerInput = GetComponent<PlayerInput>();
         pMovement = GetComponent<Player_Movement>();
@@ -123,6 +131,12 @@ public class Player_Controller : Singleton<Player_Controller>
 
     private void Update()
     {
+        if(IsDead)
+        {
+            Cursor.visible = true;
+            playerInput.SwitchCurrentActionMap("DeathScreen");
+            return;
+        }    
         IsRunning();
         if(chargingImage)
         {
@@ -132,7 +146,7 @@ public class Player_Controller : Singleton<Player_Controller>
     #region ButtonInputs
     public void OnToggleInventory(InputAction.CallbackContext value)
     {
-        if(!inventory)
+        if (!inventory)
         {
             return;
         }
@@ -167,6 +181,8 @@ public class Player_Controller : Singleton<Player_Controller>
         defCinemachine.SetActive(true);
         inventoryCinemachine.SetActive(false);
         inventory.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     void ShowInventory()
     {
@@ -174,6 +190,8 @@ public class Player_Controller : Singleton<Player_Controller>
         defCinemachine.SetActive(false);
         inventoryCinemachine.SetActive(true);
         inventory.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
     public void InputManager()
     {
@@ -263,7 +281,6 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             return;
         }
-        Debug.Log("I should roll");
         pMovement.CaptureDirection = pMovement.Movement;
         pAnimations.Roll();
         _isRolling = true;
@@ -476,7 +493,6 @@ public class Player_Controller : Singleton<Player_Controller>
         SheathWeapon();
         pAnimations.UseConsumableWeight(1);
     }
-
     public void OnHideWeapon(InputAction.CallbackContext value)
     {
         if(!value.started)
@@ -520,16 +536,33 @@ public class Player_Controller : Singleton<Player_Controller>
             pEquipment.UpdateSpawnArmor(_armorData);
             return;
         }
-        if (!_canGather)
-        {
-            return;
-        }
         if(_weaponDrawn)
         {
             SheathWeapon();
         }
-        DoAction();
-        pAnimations.Gather();
+        if (!_canGather)
+        {
+            return;
+        }
+        if(_gatheringItem)
+        {
+            if (_gatheringItem.IsGatherable)
+            {
+                DoAction();
+                pAnimations.Gather();
+                return;
+            }
+        }
+        if (_carvingSpot)
+        {
+            if (_carvingSpot.IsGatherable)
+            {
+                DoAction();
+                pAnimations.Gather();
+                return;
+            }
+        }
+       
        
     }
     public void OnReadScroll(InputAction.CallbackContext value)
@@ -637,6 +670,10 @@ public class Player_Controller : Singleton<Player_Controller>
     }
     void SheathWeapon()
     {
+        if(!_canRecieveInput)
+        {
+            return;
+        }
         _weaponDrawn = false;
         pAnimations.LCDrawn(_weaponDrawn);
         pAnimations.HCDrawn(_weaponDrawn);
@@ -660,17 +697,23 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             CanvasManager.instance.ShowInfo("Press F to interact");
             _canGather = true;
-            _gatheringItem = hit.gameObject;
+            _gatheringItem = hit.GetComponent<GatheringSpots>();
             
         }
-        else if(hit.transform.gameObject.GetComponent<ChangeWeapon>() != null)
+        if (hit.transform.gameObject.GetComponent<CarvingSpot>() != null)
+        {
+            CanvasManager.instance.ShowInfo("Press F to interact");
+            _canGather = true;
+            _carvingSpot = hit.GetComponent<CarvingSpot>();
+        }
+        if (hit.transform.gameObject.GetComponent<ChangeWeapon>() != null)
         {
             CanvasManager.instance.ShowInfo("Press F to interact");
             canChangeWeapon = true;
             _weaponData = hit.GetComponent<ChangeWeapon>().WeaponData;
 
         }
-        else if (hit.transform.gameObject.GetComponent<ChangeArmor>() != null)
+        if (hit.transform.gameObject.GetComponent<ChangeArmor>() != null)
         {
             CanvasManager.instance.ShowInfo("Press F to interact");
             canChangeArmor = true;
@@ -689,13 +732,18 @@ public class Player_Controller : Singleton<Player_Controller>
             _canGather = false;
             _gatheringItem = null;
         }
-        else if (hit.transform.gameObject.GetComponent<ChangeWeapon>() != null)
+        if (hit.transform.gameObject.GetComponent<ChangeWeapon>() != null)
         {
             canChangeWeapon = false;
         }
-        else if (hit.transform.gameObject.GetComponent<ChangeArmor>() != null)
+        if (hit.transform.gameObject.GetComponent<ChangeArmor>() != null)
         {
             canChangeArmor = false;
+        }
+        if(hit.transform.gameObject.GetComponent<CarvingSpot>() != null)
+        {
+            _canGather = false;
+            _carvingSpot = null;
         }
     } 
 }

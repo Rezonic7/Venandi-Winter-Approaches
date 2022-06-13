@@ -362,6 +362,34 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""DeathScreen"",
+            ""id"": ""cab66b55-563c-4bca-b199-1101585deb0a"",
+            ""actions"": [
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""161aba84-ac4f-4834-84eb-de9480228627"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""62e7d537-443b-4b1f-ab4d-c7fbbd130f44"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -384,6 +412,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Inventory_Select = m_Inventory.FindAction("Select", throwIfNotFound: true);
         m_Inventory_MousePosition = m_Inventory.FindAction("MousePosition", throwIfNotFound: true);
         m_Inventory_ToggleInventory = m_Inventory.FindAction("Toggle Inventory", throwIfNotFound: true);
+        // DeathScreen
+        m_DeathScreen = asset.FindActionMap("DeathScreen", throwIfNotFound: true);
+        m_DeathScreen_MousePosition = m_DeathScreen.FindAction("MousePosition", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -601,6 +632,39 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         }
     }
     public InventoryActions @Inventory => new InventoryActions(this);
+
+    // DeathScreen
+    private readonly InputActionMap m_DeathScreen;
+    private IDeathScreenActions m_DeathScreenActionsCallbackInterface;
+    private readonly InputAction m_DeathScreen_MousePosition;
+    public struct DeathScreenActions
+    {
+        private @PlayerInputs m_Wrapper;
+        public DeathScreenActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MousePosition => m_Wrapper.m_DeathScreen_MousePosition;
+        public InputActionMap Get() { return m_Wrapper.m_DeathScreen; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DeathScreenActions set) { return set.Get(); }
+        public void SetCallbacks(IDeathScreenActions instance)
+        {
+            if (m_Wrapper.m_DeathScreenActionsCallbackInterface != null)
+            {
+                @MousePosition.started -= m_Wrapper.m_DeathScreenActionsCallbackInterface.OnMousePosition;
+                @MousePosition.performed -= m_Wrapper.m_DeathScreenActionsCallbackInterface.OnMousePosition;
+                @MousePosition.canceled -= m_Wrapper.m_DeathScreenActionsCallbackInterface.OnMousePosition;
+            }
+            m_Wrapper.m_DeathScreenActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
+            }
+        }
+    }
+    public DeathScreenActions @DeathScreen => new DeathScreenActions(this);
     public interface IPlayer3DMovementActions
     {
         void OnWalk(InputAction.CallbackContext context);
@@ -620,5 +684,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnSelect(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnToggleInventory(InputAction.CallbackContext context);
+    }
+    public interface IDeathScreenActions
+    {
+        void OnMousePosition(InputAction.CallbackContext context);
     }
 }

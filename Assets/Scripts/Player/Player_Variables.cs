@@ -68,7 +68,7 @@ public class Player_Variables : Singleton<Player_Variables>
         {
             currentHealth = 0;
             healthBar.value = currentHealth;
-            Debug.Log("Player Died");
+            Player_Animations.instance.Death();
         }
     }
 

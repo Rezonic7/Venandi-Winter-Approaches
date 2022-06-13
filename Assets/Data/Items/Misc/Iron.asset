@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Iron
   m_EditorClassIdentifier: 
   _ItemName: Iron
-  _imageSprite: {fileID: 21300000, guid: d37a58a9dc7956945afb4218cb93a0e9, type: 3}
+  _imageSprite: {fileID: 21300000, guid: 563e9d58e5e291341a9d8097569fecec, type: 3}
   _maxStack: 99

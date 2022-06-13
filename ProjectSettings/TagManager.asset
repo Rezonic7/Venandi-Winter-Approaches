@@ -24,8 +24,6 @@ TagManager:
   - AimPivot
   - AimTarget
   - AimPosition
-  - AggroCollider
-  - OutOfRangeCollider
   layers:
   - Default
   - TransparentFX

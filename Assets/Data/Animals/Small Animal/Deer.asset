@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Deer
   m_EditorClassIdentifier: 
   _animalName: Deer
-  _animalMesh: {fileID: 617606146074419681, guid: 5aafca3e1c7547e47b7cac73135e3bb7, type: 3}
   _attackRange: 1.5
   _aggroRange: 5
   _outofRange: 12.5
@@ -27,8 +26,14 @@ MonoBehaviour:
   _resistance: 
   _itemDrops:
   - _item: {fileID: 11400000, guid: 0cb4bd4e00a5f31459a035341b4adc1d, type: 2}
-    _quantity: 1
+    _minQuantityAmount: 1
+    _maxQuantityAmount: 2
+    _gatherPercentage: 0.66
   - _item: {fileID: 11400000, guid: 42ec369186e5ce0429393a2826c362a6, type: 2}
-    _quantity: 1
+    _minQuantityAmount: 1
+    _maxQuantityAmount: 1
+    _gatherPercentage: 1
   - _item: {fileID: 11400000, guid: f39a3947c5853c244b540b0e7fc3bcc3, type: 2}
-    _quantity: 1
+    _minQuantityAmount: 1
+    _maxQuantityAmount: 2
+    _gatherPercentage: 0.66

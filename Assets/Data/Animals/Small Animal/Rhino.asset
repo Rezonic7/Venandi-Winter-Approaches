@@ -25,9 +25,15 @@ MonoBehaviour:
   _weakness: 02000000
   _resistance: 00000000
   _itemDrops:
-  - _item: {fileID: 0}
-    _quantity: 0
+  - _item: {fileID: 11400000, guid: 73971b662a4baa145b55af2409fac3e0, type: 2}
+    _minQuantityAmount: 1
+    _maxQuantityAmount: 2
+    _gatherPercentage: 0.66
   - _item: {fileID: 11400000, guid: 42ec369186e5ce0429393a2826c362a6, type: 2}
-    _quantity: 3
-  - _item: {fileID: 0}
-    _quantity: 0
+    _minQuantityAmount: 3
+    _maxQuantityAmount: 3
+    _gatherPercentage: 1
+  - _item: {fileID: 11400000, guid: 0f42d4f6d3d8b0f44bb16273ad8d27e1, type: 2}
+    _minQuantityAmount: 1
+    _maxQuantityAmount: 2
+    _gatherPercentage: 0.66

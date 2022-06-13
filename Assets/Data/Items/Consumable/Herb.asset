@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Herb
   m_EditorClassIdentifier: 
   _ItemName: Herb
-  _imageSprite: {fileID: 21300000, guid: f7fe919869e91dc4ab6a7fcc0545f00f, type: 3}
+  _imageSprite: {fileID: 21300000, guid: 62b2179c5efd3574686b3e03885d4fcf, type: 3}
   _maxStack: 10

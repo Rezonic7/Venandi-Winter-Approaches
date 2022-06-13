@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: MEAT
   m_EditorClassIdentifier: 
   _ItemName: MEAT
-  _imageSprite: {fileID: 0}
+  _imageSprite: {fileID: 21300000, guid: 9f18df9d6ee005640b45ce15b73947db, type: 3}
   _maxStack: 99999

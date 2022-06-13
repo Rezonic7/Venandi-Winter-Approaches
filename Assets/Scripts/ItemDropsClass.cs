@@ -6,7 +6,12 @@ using UnityEngine;
 public class ItemDropsClass
 {
     [SerializeField] private ItemClass _item;
-    [SerializeField] private int _quantity;
-    public ItemClass Item { get { return _item; } set { _item = value; } }
-    public int Quantity { get { return _quantity; } set { _quantity = value; } }
+    [SerializeField] private int _minQuantityAmount;
+    [SerializeField] private int _maxQuantityAmount;
+    [SerializeField] private float _gatherPercentage;
+
+    public int MinQuantityAmount { get { return _minQuantityAmount; } }
+    public int MaxQuantityAmount { get { return _maxQuantityAmount; } }
+    public float GatherPercentage { get { return _gatherPercentage; } }
+    public ItemClass Item { get { return _item; } }
 }

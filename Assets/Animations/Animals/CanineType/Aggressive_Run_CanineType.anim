@@ -1523,7 +1523,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsTrigger
-    path: MeshHolder/Wolf2/metarig/spine.004/Collider
+    path: MeshHolder/Wolf2/metarig/Collider
     classID: 65
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -1689,7 +1689,7 @@ AnimationClip:
       customType: 4
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 1679178115
+      path: 3743288734
       attribute: 2693561734
       script: {fileID: 0}
       typeID: 65
@@ -6657,7 +6657,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsTrigger
-    path: MeshHolder/Wolf2/metarig/spine.004/Collider
+    path: MeshHolder/Wolf2/metarig/Collider
     classID: 65
     script: {fileID: 0}
   m_EulerEditorCurves:

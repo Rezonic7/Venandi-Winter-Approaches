@@ -98,7 +98,10 @@ public class Player_Animations : Singleton<Player_Animations>
         anim.SetBool("isWalking", isTrue);
     }
 
-
+    public void Death()
+    {
+        anim.SetTrigger("isDead");
+    }
     public void RunAttack()
     {
         anim.SetTrigger("RunAttack");

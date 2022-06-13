@@ -7,10 +7,14 @@ public class GatheringSpots : MonoBehaviour
     [SerializeField] private GatheringSpotType gatheringData;
 
     private int _gatheringTimes;
+
+    private bool _isGatherable = true;
+    public bool IsGatherable { get { return _isGatherable; } set { _isGatherable = value; } }
     public int GatheringTimes { set { _gatheringTimes = value; } }
 
     private void Start()
     {
+        _isGatherable = true;
         _gatheringTimes = RandomTimes();
     }
     
@@ -33,6 +37,7 @@ public class GatheringSpots : MonoBehaviour
                 {
                     Player_Controller.instance.CanGather = false;
                     Player_Controller.instance.GatheringItem = null;
+                    _isGatherable = false;
                     GatheringSpotManager.instance.Respawn(gameObject.GetComponent<GatheringSpots>(), RandomTimes());
                     gameObject.SetActive(false);
                 }

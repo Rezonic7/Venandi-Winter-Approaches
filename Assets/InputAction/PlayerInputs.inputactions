@@ -340,6 +340,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "DeathScreen",
+            "id": "cab66b55-563c-4bca-b199-1101585deb0a",
+            "actions": [
+                {
+                    "name": "MousePosition",
+                    "type": "Value",
+                    "id": "161aba84-ac4f-4834-84eb-de9480228627",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "62e7d537-443b-4b1f-ab4d-c7fbbd130f44",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MousePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

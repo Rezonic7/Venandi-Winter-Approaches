@@ -9,13 +9,14 @@ public abstract class AnimalClass : MonoBehaviour
     [SerializeField] LayerMask layerToFollow;
     [SerializeField] private Collider _hurtBox;
     [SerializeField] private Collider _hitBox;
+    [SerializeField] private Collider _carveHitBox;
     private GameObject _areaHolder;
     private AreaClass[] areas;
     private AreaClass _currentArea;
     private NavMeshAgent _agent;
     private Animator _anim;
     private Player_Controller _player;
-
+    
     private string _animalName;
 
     private float _attackRange;
@@ -48,6 +49,7 @@ public abstract class AnimalClass : MonoBehaviour
     private bool _hasDamaged;
     private bool _hasChosenAggitationAction;
     private bool _isAggressive;
+    private bool _isGatherable;
 
 
     public AnimalData AnimalData { get { return _animalData; } set { _animalData = value; } }
@@ -56,6 +58,7 @@ public abstract class AnimalClass : MonoBehaviour
     public AreaClass CurrentArea { get { return _currentArea; } set { _currentArea = value; } }
     public NavMeshAgent Agent { get { return _agent; } }
     public Player_Controller Player { get { return _player; } set { _player = value; } }
+    public Collider CarveHitBox { get { return _carveHitBox; } set { _carveHitBox = value; } }
     public Collider HurtBox { get { return _hurtBox; } set { _hurtBox = value; } }
     public Collider HitBox { get { return _hitBox; } set { _hitBox = value; } }
     public string AnimalName { get { return _animalName; }}
@@ -72,6 +75,7 @@ public abstract class AnimalClass : MonoBehaviour
     public float BaseLoiterTime { get { return _baseLoiterTime; } }
     public float BaseWanderTime { get { return _baseWanderTime; } }
     public float AttackRange { get { return _attackRange; } }
+    public bool IsGatherable { get { return _isGatherable; } set { _isGatherable = value; } }
     public bool HasChosenAggitationAction { get { return _hasChosenAggitationAction; } set { _hasChosenAggitationAction = value; } }
     public bool IsAggressive { get { return _isAggressive; } set { _isAggressive = value; } }
     public bool AgentHasPath { get { return _agentHasPath; } set { _agentHasPath = value; } }
@@ -131,6 +135,7 @@ public abstract class AnimalClass : MonoBehaviour
         _hasChosenAggitationAction = false;
         _isGoingToNextArea = false;
         _hurtBox.enabled = false;
+        _carveHitBox.enabled = false;
         CanMove = true;
 
 
@@ -159,12 +164,14 @@ public abstract class AnimalClass : MonoBehaviour
         {
             if(Agent.enabled)
             {
-               Agent.SetDestination(transform.position);
+               Agent.ResetPath();
                 _agentHasPath = false;
+                _carveHitBox.enabled = true;
             }
 
             Agent.enabled = false;
             _hitBox.enabled = false;
+            _hurtBox.enabled = false;
             return;
         }
         DetermineState();
@@ -293,7 +300,11 @@ public abstract class AnimalClass : MonoBehaviour
         else
         {
             _currentHealth = 0;
-            _anim.SetBool("isDead", true);
+            _anim.SetTrigger("isDead");
+            if(this.gameObject)
+            {
+                Destroy(this.gameObject, 180f);
+            }
             _isDead = true;
             return;
         }
@@ -333,7 +344,7 @@ public abstract class AnimalClass : MonoBehaviour
         {
             if (_isPlayerInRange)
             {
-                Debug.Log("Player is in range");
+                //Debug.Log("Player is in range");
                 if (_isPassive)
                 {
                     //Debug.Log("Animal is NOT Aggressive");
@@ -356,7 +367,7 @@ public abstract class AnimalClass : MonoBehaviour
             }
             else
             {
-                Debug.Log("Player is NOT in range");
+                //Debug.Log("Player is NOT in range");
                 CalmState();
             }
 
@@ -391,6 +402,7 @@ public abstract class AnimalClass : MonoBehaviour
             }
         }
     }
+   
     public virtual void AggressiveState()
     {
         if(_isAttacking)

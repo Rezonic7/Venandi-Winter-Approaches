@@ -79,6 +79,11 @@ public class Player_Movement : Singleton<Player_Movement>
 
     void Update()
     {
+        if(Player_Controller.instance.IsDead)
+        {
+            playerController.enabled = false;
+            return;
+        }
         isGroundedCheck();
 
         RollAction(_captureDirection);
