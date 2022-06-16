@@ -18,7 +18,6 @@ public class Player_Variables : Singleton<Player_Variables>
 
     private Coroutine regenStamina;
 
-
     private void Start()
     {
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth")?.GetComponent<Slider>();
@@ -39,9 +38,32 @@ public class Player_Variables : Singleton<Player_Variables>
         staminaBar.value = maxStamina;
         healthBar.value = maxHealth;
     }
-
+    public void Respawn()
+    {
+        currentHealth = maxHealth;
+        healthBar.value = currentHealth;
+    }
+    public void Heal(float value)
+    {
+        if (!healthBar)
+        {
+            return;
+        }
+        if (currentHealth + value >= maxHealth)
+        {
+            currentHealth = maxHealth;
+        }else
+        {
+            currentHealth += value;
+        }
+        healthBar.value = currentHealth;
+    }
     public void TakeDamage(float value)
     {
+        if(Player_Controller.instance.IsDead)
+        {
+            return;
+        }
         if(!healthBar)
         {
             return;
@@ -56,7 +78,7 @@ public class Player_Variables : Singleton<Player_Variables>
             value = value - armorValue;
         }
         Debug.Log(value);
-        if (currentHealth - value >= 0)
+        if (currentHealth - value > 0)
         {
             currentHealth -= value;
             healthBar.value = currentHealth;
@@ -68,7 +90,11 @@ public class Player_Variables : Singleton<Player_Variables>
         {
             currentHealth = 0;
             healthBar.value = currentHealth;
+            Player_Controller.instance.DoAction();
+            Player_Movement.instance.PlayerController.enabled = false;
+            Player_Controller.instance.IsDead = true;
             Player_Animations.instance.Death();
+            MissionManager.instance.PlayerDeath();
         }
     }
 

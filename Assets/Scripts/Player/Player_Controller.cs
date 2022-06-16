@@ -133,8 +133,7 @@ public class Player_Controller : Singleton<Player_Controller>
     {
         if(IsDead)
         {
-            Cursor.visible = true;
-            playerInput.SwitchCurrentActionMap("DeathScreen");
+            SwitchActionMap("DeathScreen");
             return;
         }    
         IsRunning();
@@ -142,6 +141,10 @@ public class Player_Controller : Singleton<Player_Controller>
         {
             ChargeHC_Special();
         }
+    }
+    public void SwitchActionMap(string actionMap)
+    {
+        playerInput.SwitchCurrentActionMap(actionMap);
     }
     #region ButtonInputs
     public void OnToggleInventory(InputAction.CallbackContext value)
@@ -490,7 +493,10 @@ public class Player_Controller : Singleton<Player_Controller>
             return;
         }
         _isUsingItem = true;
-        SheathWeapon();
+        if(_weaponDrawn)
+        {
+            SheathWeapon();
+        }
         pAnimations.UseConsumableWeight(1);
     }
     public void OnHideWeapon(InputAction.CallbackContext value)
@@ -644,7 +650,7 @@ public class Player_Controller : Singleton<Player_Controller>
             }
         }
     }
-    void DoAction()
+    public void DoAction()
     {
         _inputRecieved = true;
         _canRecieveInput = false;

@@ -306,6 +306,7 @@ public abstract class AnimalClass : MonoBehaviour
                 Destroy(this.gameObject, 180f);
             }
             _isDead = true;
+            MissionManager.instance.UpdateHuntGoal(this);
             return;
         }
     }

@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a8cde1bb9bb9ba42af00009b16d94b0, type: 3}
   m_Name: Testing
   m_EditorClassIdentifier: 
-  _missionTime: 0
+  _missionTime: 900
+  _playerLives: 3
   _animalsToSpawn:
-  - _animal: {fileID: 6148907681418349080, guid: 7faa52ff7e8809845b781c14f1bcb6c4, type: 3}
-    _quantity: 4
+  - _animal: {fileID: 4269559317640111019, guid: f6fc348812ec866498754c96e8f1f343, type: 3}
+    _quantity: 10
     _areasToSpawn: 01000000
   - _animal: {fileID: 3261791823118486956, guid: b1986018d7303534899efd9c2cd3621e, type: 3}
     _quantity: 1

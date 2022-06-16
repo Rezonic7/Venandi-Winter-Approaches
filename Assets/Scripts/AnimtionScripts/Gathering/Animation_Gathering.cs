@@ -48,6 +48,7 @@ public class Animation_Gathering : StateMachineBehaviour
         }
         if(item)
         {
+            MissionManager.instance.UpdateGatherGoal(item, amount);
             Player_Inventory.instance.AddItem(item, amount);
         }
     }

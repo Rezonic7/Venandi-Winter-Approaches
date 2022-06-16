@@ -24,6 +24,12 @@ TagManager:
   - AimPivot
   - AimTarget
   - AimPosition
+  - InGameClock
+  - RespawnPoint
+  - GameOverPanel
+  - FadeTransition
+  - TextGoal
+  - WinPanel
   layers:
   - Default
   - TransparentFX
@@ -35,8 +41,8 @@ TagManager:
   - MapGround
   - Animal
   - Raycast
-  - 
-  - 
+  - GatheringSpot
+  - Foilage & Rock
   - 
   - 
   - 

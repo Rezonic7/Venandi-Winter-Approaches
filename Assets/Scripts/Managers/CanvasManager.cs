@@ -36,4 +36,13 @@ public class CanvasManager : Singleton<CanvasManager>
         g.ChangeText(info);
         Destroy(g.gameObject, 3.2f);
     }
+
+    public void TryAgain_CallGameManager()
+    {
+        GameManager.instance.TryAgain();
+    }
+    public void ReturnToTitle_CallGameManager()
+    {
+        GameManager.instance.ReturnToTitle();
+    }
 }

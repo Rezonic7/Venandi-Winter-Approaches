@@ -1126,7 +1126,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1777893467328584765}
-  m_LocalRotation: {x: 0.01818946, y: -0.000000016139309, z: 0.0000000060995538, w: 0.9998346}
+  m_LocalRotation: {x: 0.01818946, y: 0.000000016039323, z: -0.0000000060977303, w: 0.9998346}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2339,6 +2339,34 @@ PrefabInstance:
     - target: {fileID: 6862208359966026994, guid: 9e72e675c5768954a9fd71ef78992dd0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6862208359966026998, guid: 9e72e675c5768954a9fd71ef78992dd0, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6862208359966026998, guid: 9e72e675c5768954a9fd71ef78992dd0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionId
+      value: 161aba84-ac4f-4834-84eb-de9480228627
+      objectReference: {fileID: 0}
+    - target: {fileID: 6862208359966026998, guid: 9e72e675c5768954a9fd71ef78992dd0, type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionName
+      value: DeathScreen/MousePosition[/Mouse/position]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6862208359966026999, guid: 9e72e675c5768954a9fd71ef78992dd0, type: 3}
+      propertyPath: startingItems.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6862208359966026999, guid: 9e72e675c5768954a9fd71ef78992dd0, type: 3}
+      propertyPath: startingItems.Array.data[0]._item
+      value: 
+      objectReference: {fileID: 11400000, guid: 8396a5578925ba9409f7fbad5311e305, type: 2}
+    - target: {fileID: 6862208359966026999, guid: 9e72e675c5768954a9fd71ef78992dd0, type: 3}
+      propertyPath: startingItems.Array.data[1]._item
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e59caaa4d92e1b43907e1d8af8b8ca7, type: 2}
+    - target: {fileID: 6862208359966026999, guid: 9e72e675c5768954a9fd71ef78992dd0, type: 3}
+      propertyPath: startingItems.Array.data[0]._quantity
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6862208359985088744, guid: 9e72e675c5768954a9fd71ef78992dd0, type: 3}
       propertyPath: m_Layer

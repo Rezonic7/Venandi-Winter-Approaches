@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 382769526869406308}
   - component: {fileID: 2498136128133383854}
   - component: {fileID: -522637441051764793}
+  - component: {fileID: 7902428940706677254}
   m_Layer: 0
   m_Name: "\u0420alm 8"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &3665935929411517889
 Transform:
@@ -96,3 +97,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8218125084029093775, guid: 71dd27dd31877754891b56bb49f085ae, type: 3}
+--- !u!208 &7902428940706677254
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4155650250290915195}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.1, y: 0.50100005, z: 0.1}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.52400005, z: 0}
+  m_TimeToStationary: 0.5

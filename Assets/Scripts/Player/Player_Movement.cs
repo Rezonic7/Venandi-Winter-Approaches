@@ -9,7 +9,7 @@ public class Player_Movement : Singleton<Player_Movement>
     [SerializeField] LayerMask layerToFollow;
 
     private Camera mainCamera;
-    private CharacterController playerController;
+    private CharacterController _playerController;
 
     private float defaultMinTurningSpeed;
     private float turnSmoothVelocity;
@@ -51,9 +51,12 @@ public class Player_Movement : Singleton<Player_Movement>
     public Vector2 CaptureDirection { get { return _captureDirection; } set { _captureDirection = value; } }
     public bool IsRunning { get { return _isRunning; } set { _isRunning = value; } }
 
+    public CharacterController PlayerController { get { return _playerController; } set { _playerController = value; } }
+   
+
     void Start()
     {
-        playerController = GetComponent<CharacterController>();
+        _playerController = GetComponent<CharacterController>();
         mainCamera = Camera.main;
 
         aimPivot = GameObject.FindWithTag("AimPivot")?.gameObject;
@@ -81,7 +84,6 @@ public class Player_Movement : Singleton<Player_Movement>
     {
         if(Player_Controller.instance.IsDead)
         {
-            playerController.enabled = false;
             return;
         }
         isGroundedCheck();
@@ -124,7 +126,7 @@ public class Player_Movement : Singleton<Player_Movement>
     private bool isGroundedCheck()
     {
         RaycastHit hit;
-        float distance = (playerController.height / 2) + 0.2f;
+        float distance = (_playerController.height / 2) + 0.2f;
         Vector3 dir = -transform.up;
 
         if (Physics.Raycast(transform.position, dir, out hit, distance))
@@ -142,7 +144,7 @@ public class Player_Movement : Singleton<Player_Movement>
         if(!isGroundedCheck())
         {
             gravityForce.y += -gravity * Time.deltaTime;
-            playerController.Move(gravityForce * Time.deltaTime);
+            _playerController.Move(gravityForce * Time.deltaTime);
         }
         else
         {
@@ -191,7 +193,7 @@ public class Player_Movement : Singleton<Player_Movement>
                 return;
             }
 
-            playerController.Move(MoveDirection * Time.deltaTime * currentSpeed);
+            _playerController.Move(MoveDirection * Time.deltaTime * currentSpeed);
             timeForMaxAccel += Time.deltaTime;
         }
         else
@@ -242,17 +244,17 @@ public class Player_Movement : Singleton<Player_Movement>
         }
         if(movement.magnitude != 0)
         {
-            playerController.Move((transform.forward * (_maxSpeed * rollMultiplier)) * Time.deltaTime);
+            _playerController.Move((transform.forward * (_maxSpeed * rollMultiplier)) * Time.deltaTime);
         }
         timeForMaxAccel = timeToReachMaxAccel;
     }
 
     public void On_PlayerCollision()
     {
-        playerController.detectCollisions = true;
+        _playerController.detectCollisions = true;
     }
     public void Off_PlayerCollision()
     {
-        playerController.detectCollisions = false;
+        _playerController.detectCollisions = false;
     }
 }

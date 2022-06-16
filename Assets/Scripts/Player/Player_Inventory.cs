@@ -14,7 +14,7 @@ public class Player_Inventory : Singleton<Player_Inventory>
     //debug purposes remvoe serielzefield on final
     [SerializeField] private SlotClass[] startingItems;
 
-    private SlotClass[] items;
+    [SerializeField] private SlotClass[] items;
     private GameObject[] slots;
     private GameObject[] hotBar;
 
@@ -155,28 +155,28 @@ public class Player_Inventory : Singleton<Player_Inventory>
         {
             try
             {
-                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = true;
-                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = items[i].Item.ImageSprite;
-                slots[i].transform.GetChild(1).GetComponent<Text>().text = items[i].Quantity.ToString();
+                slots[i].transform.GetChild(1).GetComponent<Image>().enabled = true;
+                slots[i].transform.GetChild(1).GetComponent<Image>().sprite = items[i].Item.ImageSprite;
+                slots[i].transform.GetChild(2).GetComponent<Text>().text = items[i].Quantity.ToString();
                 if (i >= 30)
                 {
                     int h = i - 30;
-                    hotBar[h].transform.GetChild(0).GetComponent<Image>().enabled = true;
-                    hotBar[h].transform.GetChild(0).GetComponent<Image>().sprite = items[i].Item.ImageSprite;
-                    hotBar[h].transform.GetChild(1).GetComponent<Text>().text = items[i].Quantity.ToString();
+                    hotBar[h].transform.GetChild(1).GetComponent<Image>().enabled = true;
+                    hotBar[h].transform.GetChild(1).GetComponent<Image>().sprite = items[i].Item.ImageSprite;
+                    hotBar[h].transform.GetChild(2).GetComponent<Text>().text = items[i].Quantity.ToString();
                 }
             }
             catch
             {
-                slots[i].transform.GetChild(0).GetComponent<Image>().enabled = false;
-                slots[i].transform.GetChild(0).GetComponent<Image>().sprite = null;
-                slots[i].transform.GetChild(1).GetComponent<Text>().text = "";
+                slots[i].transform.GetChild(1).GetComponent<Image>().enabled = false;
+                slots[i].transform.GetChild(1).GetComponent<Image>().sprite = null;
+                slots[i].transform.GetChild(2).GetComponent<Text>().text = "";
                 if (i >= 30)
                 {
                     int h = i - 30;
-                    hotBar[h].transform.GetChild(0).GetComponent<Image>().enabled = false;
-                    hotBar[h].transform.GetChild(0).GetComponent<Image>().sprite = null;
-                    hotBar[h].transform.GetChild(1).GetComponent<Text>().text = "";
+                    hotBar[h].transform.GetChild(1).GetComponent<Image>().enabled = false;
+                    hotBar[h].transform.GetChild(1).GetComponent<Image>().sprite = null;
+                    hotBar[h].transform.GetChild(2).GetComponent<Text>().text = "";
                 }
             }
         }
@@ -214,6 +214,7 @@ public class Player_Inventory : Singleton<Player_Inventory>
         {
             return;
         }
+        Player_Variables.instance.Heal(25);
         RemoveItem(useItem.Item, 1);
         return;
     }

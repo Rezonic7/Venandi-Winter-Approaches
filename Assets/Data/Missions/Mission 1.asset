@@ -12,17 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a8cde1bb9bb9ba42af00009b16d94b0, type: 3}
   m_Name: Mission 1
   m_EditorClassIdentifier: 
-  _missionTime: 60
+  _missionTime: 1800
+  _playerLives: 3
   _animalsToSpawn:
   - _animal: {fileID: 6148907681418349080, guid: 7faa52ff7e8809845b781c14f1bcb6c4, type: 3}
     _quantity: 4
-    _areasToSpawn: 01000000
+    _areasToSpawn: 0100000005000000
   - _animal: {fileID: 2767667993249827924, guid: c4d66fdd303536c43a99a45a623f5e27, type: 3}
     _quantity: 3
-    _areasToSpawn: 0100000002000000
+    _areasToSpawn: 02000000
   - _animal: {fileID: 3261791823118486956, guid: b1986018d7303534899efd9c2cd3621e, type: 3}
     _quantity: 3
-    _areasToSpawn: 040000000600000007000000
+    _areasToSpawn: 07000000
   - _animal: {fileID: 6148907681418349080, guid: 7faa52ff7e8809845b781c14f1bcb6c4, type: 3}
-    _quantity: 1
-    _areasToSpawn: 010000000600000007000000
+    _quantity: 3
+    _areasToSpawn: 0100000005000000
+  _objectiveType: 0
+  _huntObjective: {fileID: 0}
+  _gatherObjective: {fileID: 11400000, guid: 8396a5578925ba9409f7fbad5311e305, type: 2}
+  _objectiveGoal: 9

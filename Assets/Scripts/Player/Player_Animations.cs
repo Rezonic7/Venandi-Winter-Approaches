@@ -12,7 +12,10 @@ public class Player_Animations : Singleton<Player_Animations>
     {
         anim = this.GetComponentInChildren<Animator>();
     }
-
+    public void Respawn()
+    {
+        anim.SetTrigger("Respawn");
+    }
     public void BowStart()
     {
         anim.SetTrigger("Bow_Start");
