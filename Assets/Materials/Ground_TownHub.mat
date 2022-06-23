@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ground_TownHub
+  m_Shader: {fileID: -6465566751694194690, guid: 083d37bf70610e043a0935fbe736a55f, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_a15971caa5ca4865b1ead7ad32abf812:
+        m_Texture: {fileID: 2800000, guid: ebbf98d4aa7686d47943719fbb9bcadd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_a9d658054a374b35bb814626a7a9c3f3:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_dc5523ea53054b9fbdc4c48d168d5add:
+        m_Texture: {fileID: 2800000, guid: 191e54a3c7fde4e4288b001c2e5446d8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_e84eb26e03b74c30b376ca77edb0c803:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_f13d725ba2134ab0ab63bc43cc02a9ee:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AlbedoTexture1:
+        m_Texture: {fileID: 2800000, guid: 7ded0a8996562014dac95041dbb5cbb2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AlbedoTexture2:
+        m_Texture: {fileID: 2800000, guid: d46441c6bfb0dfd4ea94235faa7049cb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AlbedoTexture3:
+        m_Texture: {fileID: 2800000, guid: 9b4ec3521e29a644180f8289ae86a879, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AlbedoTexture4:
+        m_Texture: {fileID: 2800000, guid: e3f372d91218e1549b1968d2e9c7c3b7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMapping_07f827b0c7894b90b8bd2c8cd8077928_Heightmap_1:
+        m_Texture: {fileID: 2800000, guid: 0c58f85528979e84fbc5fddaf491189a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_020258c4d05942eda0c9cff12dd95c5e: 0
+    - Vector1_0bb0e85470944515aa8f826460e08d14: 0
+    - Vector1_0c6dbcaa8a2448b98abba149ff57035b: 0
+    - Vector1_9340190d4e7849e7aca6cbe0fcd535dd: 0
+    - Vector1_fa933caaa3064e53b50f0f3737cb4c95: 0
+    - _Gloss: 0
+    - _Metallic: 0
+    m_Colors:
+    - Vector2_b8ba119491c744d389494d9c55059940: {r: 1.5, g: 1.5, b: 1.5, a: 1.5}
+    - Vector2_b8ba119491c744d389494d9c55059940_1: {r: 0.3, g: 0.3, b: 0, a: 0}
+    - Vector2_b8ba119491c744d389494d9c55059940_2: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - Vector2_b8ba119491c744d389494d9c55059940_3: {r: 0.1, g: 0.1, b: 0, a: 0}
+  m_BuildTextureStacks: []

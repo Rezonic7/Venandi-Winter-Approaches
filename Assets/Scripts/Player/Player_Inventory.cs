@@ -6,15 +6,17 @@ using UnityEngine.InputSystem;
 
 public class Player_Inventory : Singleton<Player_Inventory>
 {
-    private GameObject slotHolder;
-    private GameObject hotBarHolder;
-    private GameObject floatingItemIcon;
-    private GameObject hotBarSelecter;
+    [SerializeField] private GameObject slotHolder;
+    [SerializeField] private GameObject hotBarHolder;
+    [SerializeField] private GameObject floatingItemIcon;
+    [SerializeField] private GameObject hotBarSelecter;
+
+    [SerializeField] private Sprite nullSprite;
 
     //debug purposes remvoe serielzefield on final
-    [SerializeField] private SlotClass[] startingItems;
+    //[SerializeField] private SlotClass[] startingItems;
 
-    [SerializeField] private SlotClass[] items;
+    private SlotClass[] items;
     private GameObject[] slots;
     private GameObject[] hotBar;
 
@@ -35,10 +37,10 @@ public class Player_Inventory : Singleton<Player_Inventory>
 
     void Start()
     {
-        slotHolder = GameObject.FindWithTag("SlotHolder")?.gameObject;
-        hotBarHolder = GameObject.FindWithTag("HotBarHolder")?.gameObject;
-        floatingItemIcon = GameObject.FindWithTag("FloatingItemIcon")?.gameObject;
-        hotBarSelecter = GameObject.FindWithTag("HotBarSelecter")?.gameObject;
+        //slotHolder = GameObject.FindWithTag("SlotHolder")?.gameObject;
+        //hotBarHolder = GameObject.FindWithTag("HotBarHolder")?.gameObject;
+        //floatingItemIcon = GameObject.FindWithTag("FloatingItemIcon")?.gameObject;
+        //hotBarSelecter = GameObject.FindWithTag("HotBarSelecter")?.gameObject;
 
         if (!slotHolder || !hotBarHolder || !floatingItemIcon || !hotBarSelecter)
         {
@@ -57,9 +59,9 @@ public class Player_Inventory : Singleton<Player_Inventory>
         {
             items[i] = new SlotClass();
         }
-        for (int i = 0; i < startingItems.Length; i++)
+        //for (int i = 0; i < startingItems.Length; i++)
         {
-            items[i] = startingItems[i];
+          //  items[i] = startingItems[i];
         }
         for (int i = 0; i < slotHolder.transform.childCount; i++)
         {
@@ -169,13 +171,13 @@ public class Player_Inventory : Singleton<Player_Inventory>
             catch
             {
                 slots[i].transform.GetChild(1).GetComponent<Image>().enabled = false;
-                slots[i].transform.GetChild(1).GetComponent<Image>().sprite = null;
+                slots[i].transform.GetChild(1).GetComponent<Image>().sprite = nullSprite;
                 slots[i].transform.GetChild(2).GetComponent<Text>().text = "";
                 if (i >= 30)
                 {
                     int h = i - 30;
                     hotBar[h].transform.GetChild(1).GetComponent<Image>().enabled = false;
-                    hotBar[h].transform.GetChild(1).GetComponent<Image>().sprite = null;
+                    hotBar[h].transform.GetChild(1).GetComponent<Image>().sprite = nullSprite;
                     hotBar[h].transform.GetChild(2).GetComponent<Text>().text = "";
                 }
             }

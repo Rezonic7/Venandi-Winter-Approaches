@@ -4,14 +4,14 @@ using UnityEngine.UI;
 
 public class Player_Controller : Singleton<Player_Controller>
 {
-    private GameObject inventoryCinemachine;
-    private GameObject defCinemachine;
-    private GameObject aimCinemachine;
-    private GameObject reticle;
-    private GameObject inventory;
+    [SerializeField] private GameObject inventoryCinemachine;
+    [SerializeField] private GameObject defCinemachine;
+    [SerializeField] private GameObject aimCinemachine;
+    [SerializeField] private GameObject reticle;
+    [SerializeField] private GameObject inventory;
 
     //debug purposes remove when final
-    private Image chargingImage;
+    [SerializeField] private Image chargingImage;
 
     private Player_Movement pMovement;
     private Player_Animations pAnimations;
@@ -68,12 +68,12 @@ public class Player_Controller : Singleton<Player_Controller>
 
     private void Start()
     {
-        defCinemachine = GameObject.FindWithTag("DefaultCinemachin")?.gameObject;
-        inventoryCinemachine = GameObject.FindWithTag("InventoryCinemachine")?.gameObject;
-        aimCinemachine = GameObject.FindWithTag("AimCinemachine")?.gameObject;
-        reticle = GameObject.FindWithTag("Reticle")?.gameObject;
-        inventory = GameObject.FindWithTag("Inventory")?.gameObject;
-        chargingImage = GameObject.FindWithTag("ChargingImage")?.GetComponent<Image>();
+        //defCinemachine = GameObject.FindWithTag("DefaultCinemachin")?.gameObject;
+        //inventoryCinemachine = GameObject.FindWithTag("InventoryCinemachine")?.gameObject;
+        //aimCinemachine = GameObject.FindWithTag("AimCinemachine")?.gameObject;
+        //reticle = GameObject.FindWithTag("Reticle")?.gameObject;
+        //inventory = GameObject.FindWithTag("Inventory")?.gameObject;
+        //chargingImage = GameObject.FindWithTag("ChargingImage")?.GetComponent<Image>();
 
         if(reticle || chargingImage)
         {

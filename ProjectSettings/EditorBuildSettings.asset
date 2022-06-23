@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScreen.unity
     guid: e6df2473dfff16a4b9a9f5e2b116a37b
   - enabled: 1
-    path: Assets/Scenes/AnimalAIScene.unity
+    path: Assets/Scenes/Map1.unity
     guid: 307bffe2cc2e92c47821ceb05a737c64
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 5c215cc345e361c4fb0759192a11cd56, type: 2}
