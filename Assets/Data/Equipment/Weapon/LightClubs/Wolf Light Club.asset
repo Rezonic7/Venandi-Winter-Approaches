@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13bb4b7710363ff4b861c91494f25a71, type: 3}
   m_Name: Wolf Light Club
   m_EditorClassIdentifier: 
+  _iD: 0
   _weaponData: {fileID: 11400000, guid: 583587049e0554349aa82664631eebf1, type: 2}
   _weaponType: 0
   _modelPrefab: {fileID: 2328338290277235480, guid: 835813e5d2d4b5f4c91fe6812a7f6624, type: 3}
+  _imageSpirte: {fileID: 21300000, guid: 5da53d9209209a34eb36076b608a257c, type: 3}

@@ -111,7 +111,7 @@ MonoBehaviour:
     name: Bush 6
   - gameObject: {fileID: 8179439246364224064, guid: b3ea6ac8112d811459b97d79c64cb30d, type: 3}
     settings:
-      m_Strength: 100
+      m_Strength: 88.75
       m_RotationRangeMin: {x: 0, y: 0, z: 0}
       m_RotationRangeMax: {x: 0, y: 360, z: 0}
       m_ScaleRangeMin: {x: 1, y: 1, z: 1}
@@ -164,7 +164,7 @@ MonoBehaviour:
       m_RotationRangeMax: {x: 0, y: 0, z: 0}
       m_ScaleRangeMin: {x: 1, y: 1, z: 1}
       m_ScaleRangeMax: {x: 1, y: 1, z: 1}
-      m_UniformScale: {x: 10, y: 10}
+      m_UniformScale: {x: 0.5, y: 1.5}
       m_UniformBool: 1
       m_XRotationBool: 0
       m_YRotationBool: 0

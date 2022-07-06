@@ -15,3 +15,4 @@ MonoBehaviour:
   _weaponData: {fileID: 11400000, guid: 583587049e0554349aa82664631eebf1, type: 2}
   _weaponType: 1
   _modelPrefab: {fileID: 5651563203133411551, guid: a948366d9c455304ab13a2bf48187f1c, type: 3}
+  _imageSpirte: {fileID: 21300000, guid: cdf138edc669eba468760a4568acb21c, type: 3}

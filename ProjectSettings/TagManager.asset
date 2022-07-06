@@ -30,6 +30,7 @@ TagManager:
   - FadeTransition
   - TextGoal
   - WinPanel
+  - HighlightInfo
   layers:
   - Default
   - TransparentFX
@@ -43,7 +44,7 @@ TagManager:
   - Raycast
   - GatheringSpot
   - Foilage & Rock
-  - 
+  - Particles
   - 
   - 
   - 

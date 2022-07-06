@@ -11,8 +11,6 @@ public class Player_Inventory : Singleton<Player_Inventory>
     [SerializeField] private GameObject floatingItemIcon;
     [SerializeField] private GameObject hotBarSelecter;
 
-    [SerializeField] private Sprite nullSprite;
-
     //debug purposes remvoe serielzefield on final
     //[SerializeField] private SlotClass[] startingItems;
 
@@ -171,13 +169,13 @@ public class Player_Inventory : Singleton<Player_Inventory>
             catch
             {
                 slots[i].transform.GetChild(1).GetComponent<Image>().enabled = false;
-                slots[i].transform.GetChild(1).GetComponent<Image>().sprite = nullSprite;
+                slots[i].transform.GetChild(1).GetComponent<Image>().sprite = null;
                 slots[i].transform.GetChild(2).GetComponent<Text>().text = "";
                 if (i >= 30)
                 {
                     int h = i - 30;
                     hotBar[h].transform.GetChild(1).GetComponent<Image>().enabled = false;
-                    hotBar[h].transform.GetChild(1).GetComponent<Image>().sprite = nullSprite;
+                    hotBar[h].transform.GetChild(1).GetComponent<Image>().sprite = null;
                     hotBar[h].transform.GetChild(2).GetComponent<Text>().text = "";
                 }
             }

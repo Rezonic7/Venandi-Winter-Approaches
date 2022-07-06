@@ -15,3 +15,4 @@ MonoBehaviour:
   _armorName: Wolf Armor
   _defenceValue: 4
   _modelPrefab: {fileID: 4823866348035354009, guid: 69edde9b833b31b47976cdd8680a05ac, type: 3}
+  _imageSprite: {fileID: 21300000, guid: cf6723b79bea0e74ba4ad4bbc770c222, type: 3}

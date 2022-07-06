@@ -15,3 +15,4 @@ MonoBehaviour:
   _armorName: Base Armor
   _defenceValue: 1
   _modelPrefab: {fileID: 2279184472734261201, guid: ee9742e0198d98e41a202de2fac5741c, type: 3}
+  _imageSprite: {fileID: 21300000, guid: b116c3707c23ac2498833fcaa0dbdc24, type: 3}
