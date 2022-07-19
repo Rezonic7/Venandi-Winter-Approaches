@@ -15,3 +15,5 @@ MonoBehaviour:
   _ItemName: Mythril
   _imageSprite: {fileID: 21300000, guid: 6e3c0a803d107494c8a1e86c7159328e, type: 3}
   _maxStack: 99
+  _itemDescription: A very rare blue ore found only in places, where strong animals
+    reside. This can be used to forge very strong tools and equipments.

@@ -15,3 +15,5 @@ MonoBehaviour:
   _ItemName: Hard Wood
   _imageSprite: {fileID: 21300000, guid: 2ba41619b25e7bb4486ac25ce5bf4072, type: 3}
   _maxStack: 99
+  _itemDescription: A rare wood found in remains of the oldest of trees, it is used
+    to create strong and sturdy equipment.

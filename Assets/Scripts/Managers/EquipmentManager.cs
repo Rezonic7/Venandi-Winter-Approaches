@@ -115,8 +115,8 @@ public class EquipmentManager : Singleton<EquipmentManager>
         {
             if (listOfWeapons[i].WeaponTypeData == null)
             {
-                WeaponInventoryClass newWeaponClass = new WeaponInventoryClass(weaponDatabase.GetID[newWeapon], newWeapon);
-                //CanvasManager.instance.ShowInfo("You have recieved " + newItem.ItemName + " x" + amount + "!");
+                WeaponInventoryClass newWeaponClass = new WeaponInventoryClass(weaponDatabase.GetWeaponID[newWeapon], newWeapon);
+                CanvasManager.instance.ShowInfo("You have recieved " + newWeapon.name + "!");
                 listOfWeapons[i] = newWeaponClass;
                 PlayerProgress.instance.ListOfPlayerWeapons.Add(newWeaponClass);
                 break;
@@ -125,6 +125,25 @@ public class EquipmentManager : Singleton<EquipmentManager>
         UpdateEquipment();
         PlayerProgress.instance.SavePlayerProgress();
     }
+
+    public void AddArmor (ArmorData newArmor)
+    {
+        for(int i = 0; i < listOfArmors.Length; i++)
+        {
+            if(listOfArmors[i].ArmorData == null)
+            {
+                ArmorInventoryClass newArmorClass = new ArmorInventoryClass(armorDatabase.GetArmorID[newArmor], newArmor);
+                CanvasManager.instance.ShowInfo("You have received " + newArmor.name + "!");
+
+                listOfArmors[i] = newArmorClass;
+                PlayerProgress.instance.ListOfPlayerArmors.Add(newArmorClass);
+                break;
+            }
+        }
+        UpdateEquipment();
+        PlayerProgress.instance.SavePlayerProgress();
+    }
+
     public void UpdateEquippedWeapon(WeaponEquipment newWeaponData, bool showPreview)
     {
         equippedWeaponName.text = newWeaponData.WeaponData.name;

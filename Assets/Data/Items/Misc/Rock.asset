@@ -15,3 +15,4 @@ MonoBehaviour:
   _ItemName: Rock
   _imageSprite: {fileID: 21300000, guid: ad2fdbd114b7ee14395881e66225bbca, type: 3}
   _maxStack: 99
+  _itemDescription: A very crude material, used for making makeshift tools and equipment.

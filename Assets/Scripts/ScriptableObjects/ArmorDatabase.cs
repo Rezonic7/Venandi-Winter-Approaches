@@ -6,17 +6,17 @@ using UnityEngine;
 public class ArmorDatabase : ScriptableObject, ISerializationCallbackReceiver
 {
     public ArmorData[] armors;
-    public Dictionary<ArmorData, int> GetID = new Dictionary<ArmorData, int>();
-    public Dictionary<int, ArmorData> GetArmors = new Dictionary<int, ArmorData>();
+    public Dictionary<ArmorData, int> GetArmorID = new Dictionary<ArmorData, int>();
+    public Dictionary<int, ArmorData> GetArmorData = new Dictionary<int, ArmorData>();
     public void OnAfterDeserialize()
     {
-        GetID = new Dictionary<ArmorData, int>();
-        GetArmors = new Dictionary<int, ArmorData>();
+        GetArmorID = new Dictionary<ArmorData, int>();
+        GetArmorData = new Dictionary<int, ArmorData>();
 
         for (int i = 0; i < armors.Length; i++)
         {
-            GetID.Add(armors[i], i);
-            GetArmors.Add(i, armors[i]);
+            GetArmorID.Add(armors[i], i);
+            GetArmorData.Add(i, armors[i]);
         }
     }
 

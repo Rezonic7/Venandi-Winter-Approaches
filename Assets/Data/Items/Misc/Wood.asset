@@ -15,3 +15,5 @@ MonoBehaviour:
   _ItemName: Wood
   _imageSprite: {fileID: 21300000, guid: 80c8e6727e7591b4190cbd1f1c794b5a, type: 3}
   _maxStack: 99
+  _itemDescription: Your Typical wood found in trees, used to make your everyday
+    tools and equipment.

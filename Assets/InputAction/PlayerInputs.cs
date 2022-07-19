@@ -390,6 +390,54 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Town"",
+            ""id"": ""ee93a526-efc1-4010-87b2-6fa28a315dd6"",
+            ""actions"": [
+                {
+                    ""name"": ""LeftClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""072ba667-1c2d-4ccd-915d-499fbb5158a0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""57cf9b56-f6c9-4a40-987a-bd75ec29964d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""255b8dab-e3ac-4155-950d-c1eca8cd4dbc"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""028376f6-936d-4d42-8ea1-29b40b458e72"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -415,6 +463,10 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         // DeathScreen
         m_DeathScreen = asset.FindActionMap("DeathScreen", throwIfNotFound: true);
         m_DeathScreen_MousePosition = m_DeathScreen.FindAction("MousePosition", throwIfNotFound: true);
+        // Town
+        m_Town = asset.FindActionMap("Town", throwIfNotFound: true);
+        m_Town_LeftClick = m_Town.FindAction("LeftClick", throwIfNotFound: true);
+        m_Town_RightClick = m_Town.FindAction("RightClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -665,6 +717,47 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         }
     }
     public DeathScreenActions @DeathScreen => new DeathScreenActions(this);
+
+    // Town
+    private readonly InputActionMap m_Town;
+    private ITownActions m_TownActionsCallbackInterface;
+    private readonly InputAction m_Town_LeftClick;
+    private readonly InputAction m_Town_RightClick;
+    public struct TownActions
+    {
+        private @PlayerInputs m_Wrapper;
+        public TownActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @LeftClick => m_Wrapper.m_Town_LeftClick;
+        public InputAction @RightClick => m_Wrapper.m_Town_RightClick;
+        public InputActionMap Get() { return m_Wrapper.m_Town; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TownActions set) { return set.Get(); }
+        public void SetCallbacks(ITownActions instance)
+        {
+            if (m_Wrapper.m_TownActionsCallbackInterface != null)
+            {
+                @LeftClick.started -= m_Wrapper.m_TownActionsCallbackInterface.OnLeftClick;
+                @LeftClick.performed -= m_Wrapper.m_TownActionsCallbackInterface.OnLeftClick;
+                @LeftClick.canceled -= m_Wrapper.m_TownActionsCallbackInterface.OnLeftClick;
+                @RightClick.started -= m_Wrapper.m_TownActionsCallbackInterface.OnRightClick;
+                @RightClick.performed -= m_Wrapper.m_TownActionsCallbackInterface.OnRightClick;
+                @RightClick.canceled -= m_Wrapper.m_TownActionsCallbackInterface.OnRightClick;
+            }
+            m_Wrapper.m_TownActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @LeftClick.started += instance.OnLeftClick;
+                @LeftClick.performed += instance.OnLeftClick;
+                @LeftClick.canceled += instance.OnLeftClick;
+                @RightClick.started += instance.OnRightClick;
+                @RightClick.performed += instance.OnRightClick;
+                @RightClick.canceled += instance.OnRightClick;
+            }
+        }
+    }
+    public TownActions @Town => new TownActions(this);
     public interface IPlayer3DMovementActions
     {
         void OnWalk(InputAction.CallbackContext context);
@@ -688,5 +781,10 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     public interface IDeathScreenActions
     {
         void OnMousePosition(InputAction.CallbackContext context);
+    }
+    public interface ITownActions
+    {
+        void OnLeftClick(InputAction.CallbackContext context);
+        void OnRightClick(InputAction.CallbackContext context);
     }
 }

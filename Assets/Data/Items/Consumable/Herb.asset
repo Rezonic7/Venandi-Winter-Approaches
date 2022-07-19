@@ -15,3 +15,6 @@ MonoBehaviour:
   _ItemName: Herb
   _imageSprite: {fileID: 21300000, guid: 62b2179c5efd3574686b3e03885d4fcf, type: 3}
   _maxStack: 10
+  _itemDescription: A healing herb, can be consumed to restore health
+  _itemBuyPrice: 1
+  _amountPerBuyIteration: 0

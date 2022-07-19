@@ -15,3 +15,5 @@ MonoBehaviour:
   _ItemName: Iron
   _imageSprite: {fileID: 21300000, guid: 563e9d58e5e291341a9d8097569fecec, type: 3}
   _maxStack: 99
+  _itemDescription: A slightly rare sturdy common ore found everywhere, at least
+    it's better a rock.

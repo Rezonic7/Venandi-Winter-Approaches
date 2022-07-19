@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3460eb9114b04d949b74e9ea09693ec0, type: 3}
-  m_Name: Armor Database
+  m_Script: {fileID: 11500000, guid: 5019bd141b25e8549bb3d77c1658f2f6, type: 3}
+  m_Name: Null Item
   m_EditorClassIdentifier: 
-  armors:
-  - {fileID: 11400000, guid: 5d40c45ad6a750e4ea76fc016e0d18dc, type: 2}
-  - {fileID: 11400000, guid: 149a07e2cc0120f4a8d209bd2644a46c, type: 2}
+  _ItemName: 
+  _imageSprite: {fileID: 21300000, guid: 867ccab32d024444fb7d4ef14b171600, type: 3}
+  _maxStack: 0
+  _itemDescription: 

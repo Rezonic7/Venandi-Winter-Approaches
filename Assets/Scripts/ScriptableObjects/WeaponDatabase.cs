@@ -6,18 +6,18 @@ using UnityEngine;
 public class WeaponDatabase : ScriptableObject, ISerializationCallbackReceiver
 {
     public WeaponTypeData[] weapons;
-    public Dictionary<WeaponTypeData, int> GetID = new Dictionary<WeaponTypeData, int>();
-    public Dictionary<int, WeaponTypeData> GetWeapon = new Dictionary<int, WeaponTypeData>();
+    public Dictionary<WeaponTypeData, int> GetWeaponID = new Dictionary<WeaponTypeData, int>();
+    public Dictionary<int, WeaponTypeData> GetWeaponData = new Dictionary<int, WeaponTypeData>();
 
     public void OnAfterDeserialize()
     {
-        GetID = new Dictionary<WeaponTypeData, int>();
-        GetWeapon = new Dictionary<int, WeaponTypeData>();
+        GetWeaponID = new Dictionary<WeaponTypeData, int>();
+        GetWeaponData = new Dictionary<int, WeaponTypeData>();
 
         for(int i = 0; i < weapons.Length; i++)
         {
-            GetID.Add(weapons[i], i);
-            GetWeapon.Add(i, weapons[i]);
+            GetWeaponID.Add(weapons[i], i);
+            GetWeaponData.Add(i, weapons[i]);
         }
     }
 

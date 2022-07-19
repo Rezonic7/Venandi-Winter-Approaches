@@ -15,3 +15,5 @@ MonoBehaviour:
   _ItemName: Wolf Pelt
   _imageSprite: {fileID: 21300000, guid: cf6723b79bea0e74ba4ad4bbc770c222, type: 3}
   _maxStack: 99
+  _itemDescription: A pelt carved from a Wolf, Can be used to create armor and clothing
+    to keep you warm at night and to protect yourself.

@@ -15,3 +15,5 @@ MonoBehaviour:
   _ItemName: Deer Antler
   _imageSprite: {fileID: 21300000, guid: 5f6fe48e70224ed4fbc2c066d994ea16, type: 3}
   _maxStack: 99
+  _itemDescription: A sturdy horn used by Deers to protect themselves, maybe it could
+    be used to make weapons.

@@ -9,4 +9,6 @@ public class MiscClass : ItemClass
     public override ItemClass GetItem() { return this; }
     public override MiscClass GetMisc() { return this; }
     public override ConsumableClass GetConsumable() { return null; }
+    public override AmmoClass GetAmmo() { return null; }
+
 }

@@ -15,3 +15,5 @@ MonoBehaviour:
   _ItemName: Deer Pelt
   _imageSprite: {fileID: 21300000, guid: d1bebccd4b427654daeb137676f0cec0, type: 3}
   _maxStack: 99
+  _itemDescription: A skin carved from a deer. Can be used to make light clothings
+    or armors.

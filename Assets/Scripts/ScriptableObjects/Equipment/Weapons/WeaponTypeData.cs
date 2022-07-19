@@ -6,13 +6,11 @@ using UnityEngine;
 [System.Serializable]
 public class WeaponTypeData : ScriptableObject
 {
-    [SerializeField] private int _iD;
     [SerializeField] private WeaponData _weaponData;
     [SerializeField] private WeaponTypes _weaponType;
     [SerializeField] private GameObject _modelPrefab;
     [SerializeField] private Sprite _imageSpirte;
     
-    public int ID { get { return _iD; } set { _iD = value; } }
     public WeaponData WeaponData { get { return _weaponData; } set { _weaponData = value; } }
     public WeaponTypes WeaponType { get { return _weaponType; } set { _weaponType = value; } }
     public GameObject ModelPrefab { get { return _modelPrefab; } set { _modelPrefab = value; } }

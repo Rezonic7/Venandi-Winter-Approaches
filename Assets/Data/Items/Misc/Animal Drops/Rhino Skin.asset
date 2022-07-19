@@ -15,3 +15,5 @@ MonoBehaviour:
   _ItemName: Rhino Skin
   _imageSprite: {fileID: 21300000, guid: 8baf7535afdf4824f89fc93798834889, type: 3}
   _maxStack: 99
+  _itemDescription: A tough skin carved from a Rhino, can be use to make tough enough
+    armors.

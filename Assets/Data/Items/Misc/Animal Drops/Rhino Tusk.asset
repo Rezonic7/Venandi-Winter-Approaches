@@ -15,3 +15,5 @@ MonoBehaviour:
   _ItemName: Rhino Tusk
   _imageSprite: {fileID: 21300000, guid: efd3b40cee9e08b45be1d26d79d9336f, type: 3}
   _maxStack: 99
+  _itemDescription: A tusk gathered from a Rhino, can be use to create powerful puncture
+    weapons.

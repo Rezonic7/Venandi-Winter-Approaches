@@ -7,18 +7,6 @@ public class PlayerData
 {
     public WeaponDatabase weaponDatabase;
 
-    private List<SaveWeaponsClass> _listOfPlayerWeapons;
-
-    public string[] _weaponNameList;
-    public int[] _attackValueList;
-
-    public WeaponTypeData.WeaponTypes[] _weaponTypeList;
-    public GameObject[] _modelPrefabList;
-    public Sprite[] _imageSpirteList;
-
-
-    public List<SaveWeaponsClass> ListofPlayerWeapons { get { return _listOfPlayerWeapons; } set { _listOfPlayerWeapons = value; } }
-
     public PlayerData(PlayerProgress playerProgress)
     {
 
